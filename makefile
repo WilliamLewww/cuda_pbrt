@@ -13,9 +13,9 @@ NVCC=$(CUDA_PATH)/bin/nvcc
 CUDA_FLAGS=--gpu-architecture=sm_30
 
 EXEC=fourier_transform.out
-EXEC_ARGS=
+EXEC_ARGS=res/example.scene
 
-all: clean $(EXEC) run
+all: clean $(EXEC)
 
 SRCS := $(wildcard src/*.cpp)
 OBJS := $(SRCS:src/%.cpp=%.o)
