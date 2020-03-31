@@ -7,6 +7,7 @@ TransformationMatrix::TransformationMatrix() {
 
 TransformationMatrix::TransformationMatrix(Matrix4x4* matrix) {
   this->matrix = matrix;
+  inverseMatrix = inverseMatrix4x4(matrix);
 }
 
 TransformationMatrix::~TransformationMatrix() {

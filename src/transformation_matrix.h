@@ -8,6 +8,5 @@ private:
 public:
   TransformationMatrix();
   TransformationMatrix(Matrix4x4* matrix);
-  
   ~TransformationMatrix();
 };
