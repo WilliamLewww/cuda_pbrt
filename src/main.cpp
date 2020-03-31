@@ -1,11 +1,15 @@
-#include "scene.h"
+#include "parser.h"
 
 int main(int argn, const char** argv) {
   const char* filename = argv[1];
 
-  Scene* scene = new Scene(filename);
-  scene->render();
-  delete(scene);
-  
+  Parser* parser = new Parser();
+  Scene* scene = parser->createSceneFromFile(filename);
+  char* image = scene->render();
+
+  delete image;
+  delete scene;
+  delete parser;
+
   return 0;
 }
