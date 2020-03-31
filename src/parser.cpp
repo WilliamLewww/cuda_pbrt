@@ -10,6 +10,8 @@ Parser::~Parser() {
 }
 
 Scene* Parser::createSceneFromFile(const char* filename) {
+  Scene* scene = new Scene();
+
   printf("%s\n", filename);
   return nullptr;
 }
