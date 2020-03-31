@@ -1,0 +1,9 @@
+World world {
+  Sphere sphereA {
+
+  }
+
+  Sphere sphereB {
+
+  }
+}
