@@ -15,14 +15,15 @@ struct RST {
 };
 
 struct ShapeRST : RST {
-  std::string* type;
-  std::string* identifier;
+  std::string type;
+  std::string identifier;
 
   std::string getName() override { return "ShapeRST"; }
 };
 
 struct PropertyRST : RST {
-  std::map<std::string, std::vector<std::string>*> dataMap;
+  std::string identifier;
+  std::vector<std::string> dataList;
 
   std::string getName() override { return "PropertyRST"; }
 };

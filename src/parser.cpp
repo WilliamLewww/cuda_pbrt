@@ -109,10 +109,10 @@ RST* Parser::parseBlock() {
 RST* Parser::parseShape() {
   RST* tree = new ShapeRST;
 
-  ((ShapeRST*)tree)->type = new std::string(*currentToken);
+  ((ShapeRST*)tree)->type = *currentToken;
   nextToken();
   expectIdentifier();
-  ((ShapeRST*)tree)->identifier = new std::string(*currentToken);
+  ((ShapeRST*)tree)->identifier = *currentToken;
   tree->childrenList.push_back(parseStructure());
 
   return tree;
@@ -139,13 +139,13 @@ RST* Parser::parseProperty() {
   RST* tree = new PropertyRST;
 
   std::string identifier = *currentToken;
-  ((PropertyRST*)tree)->dataMap.insert(std::make_pair(identifier, new std::vector<std::string>));
+  ((PropertyRST*)tree)->identifier = *currentToken;
   nextToken();
   expectToken("=");
   nextToken();
 
   if (checkTokenType() == TokenType::Constant) {
-    ((PropertyRST*)tree)->dataMap[identifier]->push_back(*currentToken);
+    ((PropertyRST*)tree)->dataList.push_back(*currentToken);
     nextToken();
   }
   else {
@@ -153,7 +153,7 @@ RST* Parser::parseProperty() {
     nextToken();
 
     while (checkTokenType() == TokenType::Constant) {
-      ((PropertyRST*)tree)->dataMap[identifier]->push_back(*currentToken);
+      ((PropertyRST*)tree)->dataList.push_back(*currentToken);
       nextToken();
     }
 
