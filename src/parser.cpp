@@ -128,7 +128,16 @@ RST* Parser::ParseStructure() {
       nextToken();
     }
     else {
+      expectToken("[");
+      nextToken();
 
+      while (checkTokenType() == TokenType::Constant) {
+        ((StructureRST*)tree)->dataMap[identifier]->push_back(*currentToken);
+        nextToken();
+      }
+
+      expectToken("]");
+      nextToken();
     }
   }
 
