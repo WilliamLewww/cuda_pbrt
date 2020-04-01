@@ -16,9 +16,9 @@ Parser::~Parser() {
 Scene* Parser::createSceneFromFile(const char* filename) {
   Scene* scene = new Scene();
   file->open(filename);
-  RST* rootTree;
 
-  rootTree = ParseWorld();
+  RST* rootTree = parseWorld();
+  printTree(rootTree, 0);
 
   return nullptr;
 }
@@ -73,43 +73,51 @@ void Parser::expectIdentifier() {
   }
 }
 
-RST* Parser::ParseWorld() {
+void Parser::printTree(RST* root, int offset = 0) {
+  std::string offsetString(offset, ' ');
+  printf("%s%s\n", offsetString.c_str(), root->getName().c_str());
+  for (int x = 0; x < root->childrenList.size(); x++) {
+    printTree(root->childrenList[x], offset + 2);
+  }
+}
+
+RST* Parser::parseWorld() {
   RST* tree = new WorldRST;
 
   nextToken();
   expectToken("World");
-  tree->childrenList.push_back(ParseBlock());
+  tree->childrenList.push_back(parseBlock());
 
   return tree;
 }
 
-RST* Parser::ParseBlock() {
+RST* Parser::parseBlock() {
   RST* tree = new BlockRST;
 
   nextToken();
   expectToken("{");
   nextToken();
   while (checkTokenType() == TokenType::Type) {
-    tree->childrenList.push_back(ParseShape());
+    tree->childrenList.push_back(parseShape());
   }
   expectToken("}");
 
   return tree;
 }
 
-RST* Parser::ParseShape() {
+RST* Parser::parseShape() {
   RST* tree = new ShapeRST;
 
   ((ShapeRST*)tree)->type = new std::string(*currentToken);
   nextToken();
   expectIdentifier();
   ((ShapeRST*)tree)->identifier = new std::string(*currentToken);
-  tree->childrenList.push_back(ParseStructure());
+  tree->childrenList.push_back(parseStructure());
 
   return tree;
 }
 
-RST* Parser::ParseStructure() {
+RST* Parser::parseStructure() {
   RST* tree = new StructureRST;
 
   nextToken();

@@ -10,19 +10,30 @@ enum class TokenType {
 
 struct RST {
   std::vector<RST*> childrenList;
+
+  virtual std::string getName() { return "RST"; }
 };
 
 struct ShapeRST : RST {
   std::string* type;
   std::string* identifier;
+
+  std::string getName() override { return "ShapeRST"; }
 };
 
 struct StructureRST : RST {
   std::map<std::string, std::vector<std::string>*> dataMap;
+
+  std::string getName() override { return "StructureRST"; }
 };
 
-struct WorldRST : RST {};
-struct BlockRST : RST {};
+struct WorldRST : RST {
+  std::string getName() override { return "WorldRST"; }
+};
+
+struct BlockRST : RST {
+  std::string getName() override { return "BlockRST"; }
+};
 
 class Parser {
 private:
@@ -35,10 +46,12 @@ private:
   void expectToken(std::string token);
   void expectIdentifier();
 
-  RST* ParseWorld();
-  RST* ParseBlock();
-  RST* ParseShape();
-  RST* ParseStructure();
+  void printTree(RST* root, int offset);
+
+  RST* parseWorld();
+  RST* parseBlock();
+  RST* parseShape();
+  RST* parseStructure();
 public:
   Parser();
   ~Parser();
