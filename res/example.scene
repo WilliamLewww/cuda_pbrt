@@ -1,6 +1,6 @@
-World world {
+World {
   Sphere sphereA {
-
+    Radius = 50
   }
 
   Sphere sphereB {
