@@ -21,9 +21,13 @@ struct ShapeRST : RST {
   std::string getName() override { return "ShapeRST"; }
 };
 
-struct StructureRST : RST {
+struct PropertyRST : RST {
   std::map<std::string, std::vector<std::string>*> dataMap;
 
+  std::string getName() override { return "PropertyRST"; }
+};
+
+struct StructureRST : RST {
   std::string getName() override { return "StructureRST"; }
 };
 
@@ -52,6 +56,7 @@ private:
   RST* parseBlock();
   RST* parseShape();
   RST* parseStructure();
+  RST* parseProperty();
 public:
   Parser();
   ~Parser();

@@ -36,10 +36,11 @@ TokenType Parser::checkTokenType() {
 
   int x = 0;
   while (x < currentToken->length()) {
-    if (!std::isalnum((*currentToken)[x])) {
+    if (!std::isalnum((*currentToken)[x]) && ((*currentToken)[x] != '.')) {
       return TokenType::Terminal;
     }
-    if (std::isalpha((*currentToken)[x]) || (*currentToken)[x] == '.') {
+
+    if (std::isalpha((*currentToken)[x]) && ((*currentToken)[x] != '.')) {
       isConstant = false;
     }
 
@@ -73,7 +74,7 @@ void Parser::expectIdentifier() {
   }
 }
 
-void Parser::printTree(RST* root, int offset = 0) {
+void Parser::printTree(RST* root, int offset) {
   std::string offsetString(offset, ' ');
   printf("%s%s\n", offsetString.c_str(), root->getName().c_str());
   for (int x = 0; x < root->childrenList.size(); x++) {
@@ -125,32 +126,40 @@ RST* Parser::parseStructure() {
   nextToken();
 
   while (checkTokenType() == TokenType::Type) {
-    std::string identifier = *currentToken;
-    ((StructureRST*)tree)->dataMap.insert(std::make_pair(identifier, new std::vector<std::string>));
-    nextToken();
-    expectToken("=");
-    nextToken();
-
-    if (checkTokenType() == TokenType::Constant) {
-      ((StructureRST*)tree)->dataMap[identifier]->push_back(*currentToken);
-      nextToken();
-    }
-    else {
-      expectToken("[");
-      nextToken();
-
-      while (checkTokenType() == TokenType::Constant) {
-        ((StructureRST*)tree)->dataMap[identifier]->push_back(*currentToken);
-        nextToken();
-      }
-
-      expectToken("]");
-      nextToken();
-    }
+    tree->childrenList.push_back(parseProperty());
   }
 
   expectToken("}");
   nextToken();
+
+  return tree;
+}
+
+RST* Parser::parseProperty() {
+  RST* tree = new PropertyRST;
+
+  std::string identifier = *currentToken;
+  ((PropertyRST*)tree)->dataMap.insert(std::make_pair(identifier, new std::vector<std::string>));
+  nextToken();
+  expectToken("=");
+  nextToken();
+
+  if (checkTokenType() == TokenType::Constant) {
+    ((PropertyRST*)tree)->dataMap[identifier]->push_back(*currentToken);
+    nextToken();
+  }
+  else {
+    expectToken("[");
+    nextToken();
+
+    while (checkTokenType() == TokenType::Constant) {
+      ((PropertyRST*)tree)->dataMap[identifier]->push_back(*currentToken);
+      nextToken();
+    }
+
+    expectToken("]");
+    nextToken();
+  }
 
   return tree;
 }
