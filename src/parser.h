@@ -3,14 +3,7 @@
 #include <string>
 #include <map>
 #include "scene.h"
-
-enum class TokenType {
-  Type, Terminal, Identifier, Constant
-};
-
-enum class Token {
-  World, Camera, Sphere, Radius, Translate, Rotate, Scale, Equals, OpenCurlyBracket, CloseCurlyBracket, OpenSquareBracket, CloseSquareBracket
-};
+#include "token.h"
 
 struct RST {
   std::vector<RST*> childrenList;
@@ -49,8 +42,7 @@ private:
   std::fstream* file;
   std::string* currentWord;
 
-  bool nextToken();
-  TokenType checkTokenType();
+  bool nextWord();
 
   void expectToken(Token token);
   void expectIdentifier();
@@ -62,9 +54,6 @@ private:
   RST* parseShape();
   RST* parseStructure();
   RST* parseProperty();
-
-  static std::map<std::string, Token> stringTokenMap;
-  static std::map<Token, TokenType> tokenTypeMap;
 public:
   Parser();
   ~Parser();

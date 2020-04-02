@@ -1,19 +1,6 @@
 #include "parser.h"
 #include <stdio.h>
 
-std::map<std::string, Token> Parser::stringTokenMap = {
-  {"World", Token::World}, {"Camera", Token::Camera}, {"Sphere", Token::Sphere}, {"Radius", Token::Radius}, {"Translate", Token::Translate},
-  {"Rotate", Token::Rotate}, {"Scale", Token::Scale}, {"=", Token::Equals}, {"{", Token::OpenCurlyBracket}, {"}", Token::CloseCurlyBracket}, 
-  {"[", Token::OpenSquareBracket}, {"]", Token::CloseSquareBracket}
-};
-
-std::map<Token, TokenType> Parser::tokenTypeMap = {
-  {Token::World, TokenType::Type}, {Token::Camera, TokenType::Type}, {Token::Sphere, TokenType::Type}, {Token::Radius, TokenType::Type},
-  {Token::Translate, TokenType::Type}, {Token::Rotate, TokenType::Type}, {Token::Scale, TokenType::Type}, {Token::Equals, TokenType::Terminal}, 
-  {Token::OpenCurlyBracket, TokenType::Terminal}, {Token::CloseCurlyBracket, TokenType::Terminal}, {Token::OpenSquareBracket, TokenType::Terminal}, 
-  {Token::CloseSquareBracket, TokenType::Terminal}
-};
-
 std::string RST::toString() {
   std::string printOut = "RST";
   return printOut;
@@ -79,7 +66,7 @@ Scene* Parser::createSceneFromFile(const char* filename) {
   return nullptr;
 }
 
-bool Parser::nextToken() {
+bool Parser::nextWord() {
   if (*file >> *currentWord) {
     return true;
   }
@@ -87,29 +74,14 @@ bool Parser::nextToken() {
   return false;
 }
 
-TokenType Parser::checkTokenType() {
-  if (stringTokenMap.find(*currentWord) != stringTokenMap.end()) {
-    return tokenTypeMap[stringTokenMap[*currentWord]];
-  }
-  else {
-    for (int x = 0; x < currentWord->length(); x++) {
-      if (std::isalpha((*currentWord)[x])) {
-        return TokenType::Identifier;
-      }
-    }
-  }
-
-  return TokenType::Constant;
-}
-
 void Parser::expectToken(Token token) {
-  if (stringTokenMap[*currentWord] != token) {
+  if (TokenGenerator::stringTokenMap[*currentWord] != token) {
     throw;
   }
 }
 
 void Parser::expectIdentifier() {
-  if (checkTokenType() != TokenType::Identifier) {
+  if (TokenGenerator::getTokenFromWord(*currentWord) != TokenType::Identifier) {
     throw;
   }
 }
@@ -125,7 +97,7 @@ void Parser::printTree(RST* root, int offset) {
 RST* Parser::parseWorld() {
   RST* tree = new WorldRST;
 
-  nextToken();
+  nextWord();
   expectToken(Token::World);
   tree->childrenList.push_back(parseBlock());
 
@@ -135,10 +107,10 @@ RST* Parser::parseWorld() {
 RST* Parser::parseBlock() {
   RST* tree = new BlockRST;
 
-  nextToken();
+  nextWord();
   expectToken(Token::OpenCurlyBracket);
-  nextToken();
-  while (checkTokenType() == TokenType::Type) {
+  nextWord();
+  while (TokenGenerator::getTokenFromWord(*currentWord) == TokenType::Type) {
     tree->childrenList.push_back(parseShape());
   }
   expectToken(Token::CloseCurlyBracket);
@@ -150,7 +122,7 @@ RST* Parser::parseShape() {
   RST* tree = new ShapeRST;
 
   ((ShapeRST*)tree)->type = *currentWord;
-  nextToken();
+  nextWord();
   expectIdentifier();
   ((ShapeRST*)tree)->identifier = *currentWord;
   tree->childrenList.push_back(parseStructure());
@@ -161,16 +133,16 @@ RST* Parser::parseShape() {
 RST* Parser::parseStructure() {
   RST* tree = new StructureRST;
 
-  nextToken();
+  nextWord();
   expectToken(Token::OpenCurlyBracket);
-  nextToken();
+  nextWord();
 
-  while (checkTokenType() == TokenType::Type) {
+  while (TokenGenerator::getTokenFromWord(*currentWord) == TokenType::Type) {
     tree->childrenList.push_back(parseProperty());
   }
 
   expectToken(Token::CloseCurlyBracket);
-  nextToken();
+  nextWord();
 
   return tree;
 }
@@ -180,25 +152,25 @@ RST* Parser::parseProperty() {
 
   std::string identifier = *currentWord;
   ((PropertyRST*)tree)->identifier = *currentWord;
-  nextToken();
+  nextWord();
   expectToken(Token::Equals);
-  nextToken();
+  nextWord();
 
-  if (checkTokenType() == TokenType::Constant) {
+  if (TokenGenerator::getTokenFromWord(*currentWord) == TokenType::Constant) {
     ((PropertyRST*)tree)->dataList.push_back(*currentWord);
-    nextToken();
+    nextWord();
   }
   else {
     expectToken(Token::OpenSquareBracket);
-    nextToken();
+    nextWord();
 
-    while (checkTokenType() == TokenType::Constant) {
+    while (TokenGenerator::getTokenFromWord(*currentWord) == TokenType::Constant) {
       ((PropertyRST*)tree)->dataList.push_back(*currentWord);
-      nextToken();
+      nextWord();
     }
 
     expectToken(Token::CloseSquareBracket);
-    nextToken();
+    nextWord();
   }
 
   return tree;
