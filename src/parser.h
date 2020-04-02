@@ -5,7 +5,11 @@
 #include "scene.h"
 
 enum class TokenType {
-  Type, Identifier, Constant, Terminal
+  Type, Terminal, Identifier, Constant
+};
+
+enum class Token {
+  World, Camera, Sphere, Radius, Translate, Rotate, Scale, Equals, OpenCurlyBracket, CloseCurlyBracket, OpenSquareBracket, CloseSquareBracket
 };
 
 struct RST {
@@ -43,12 +47,12 @@ struct BlockRST : RST {
 class Parser {
 private:
   std::fstream* file;
-  std::string* currentToken;
+  std::string* currentWord;
 
   bool nextToken();
   TokenType checkTokenType();
 
-  void expectToken(std::string token);
+  void expectToken(Token token);
   void expectIdentifier();
 
   void printTree(RST* root, int offset);
@@ -58,6 +62,9 @@ private:
   RST* parseShape();
   RST* parseStructure();
   RST* parseProperty();
+
+  static std::map<std::string, Token> stringTokenMap;
+  static std::map<Token, TokenType> tokenTypeMap;
 public:
   Parser();
   ~Parser();

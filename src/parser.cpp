@@ -1,6 +1,19 @@
 #include "parser.h"
 #include <stdio.h>
 
+std::map<std::string, Token> Parser::stringTokenMap = {
+  {"World", Token::World}, {"Camera", Token::Camera}, {"Sphere", Token::Sphere}, {"Radius", Token::Radius}, {"Translate", Token::Translate},
+  {"Rotate", Token::Rotate}, {"Scale", Token::Scale}, {"=", Token::Equals}, {"{", Token::OpenCurlyBracket}, {"}", Token::CloseCurlyBracket}, 
+  {"[", Token::OpenSquareBracket}, {"]", Token::CloseSquareBracket}
+};
+
+std::map<Token, TokenType> Parser::tokenTypeMap = {
+  {Token::World, TokenType::Type}, {Token::Camera, TokenType::Type}, {Token::Sphere, TokenType::Type}, {Token::Radius, TokenType::Type},
+  {Token::Translate, TokenType::Type}, {Token::Rotate, TokenType::Type}, {Token::Scale, TokenType::Type}, {Token::Equals, TokenType::Terminal}, 
+  {Token::OpenCurlyBracket, TokenType::Terminal}, {Token::CloseCurlyBracket, TokenType::Terminal}, {Token::OpenSquareBracket, TokenType::Terminal}, 
+  {Token::CloseSquareBracket, TokenType::Terminal}
+};
+
 std::string RST::toString() {
   std::string printOut = "RST";
   return printOut;
@@ -46,11 +59,11 @@ std::string BlockRST::toString() {
 
 Parser::Parser() {
   file = new std::fstream;
-  currentToken = new std::string;
+  currentWord = new std::string;
 }
 
 Parser::~Parser() {
-  delete currentToken;
+  delete currentWord;
 
   file->close();
   delete file;
@@ -67,7 +80,7 @@ Scene* Parser::createSceneFromFile(const char* filename) {
 }
 
 bool Parser::nextToken() {
-  if (*file >> *currentToken) {
+  if (*file >> *currentWord) {
     return true;
   }
 
@@ -75,45 +88,29 @@ bool Parser::nextToken() {
 }
 
 TokenType Parser::checkTokenType() {
-  bool isConstant = true;
-
-  int x = 0;
-  while (x < currentToken->length()) {
-    if (!std::isalnum((*currentToken)[x]) && ((*currentToken)[x] != '.')) {
-      return TokenType::Terminal;
+  if (stringTokenMap.find(*currentWord) != stringTokenMap.end()) {
+    return tokenTypeMap[stringTokenMap[*currentWord]];
+  }
+  else {
+    for (int x = 0; x < currentWord->length(); x++) {
+      if (std::isalpha((*currentWord)[x])) {
+        return TokenType::Identifier;
+      }
     }
-
-    if (std::isalpha((*currentToken)[x]) && ((*currentToken)[x] != '.')) {
-      isConstant = false;
-    }
-
-    x++;
   }
 
-  if (isConstant) {
-    return TokenType::Constant;
-  }
-
-  if (std::isupper((*currentToken)[0])) {
-    return TokenType::Type;
-  }
-
-  return TokenType::Identifier;
+  return TokenType::Constant;
 }
 
-void Parser::expectToken(std::string token) {
-  if (*currentToken != token) {
+void Parser::expectToken(Token token) {
+  if (stringTokenMap[*currentWord] != token) {
     throw;
   }
 }
 
 void Parser::expectIdentifier() {
-  int x = 0;
-  while (x < currentToken->length()) {
-    if (!std::isalnum((*currentToken)[x])) {
-      throw;
-    }
-    x++;
+  if (checkTokenType() != TokenType::Identifier) {
+    throw;
   }
 }
 
@@ -129,7 +126,7 @@ RST* Parser::parseWorld() {
   RST* tree = new WorldRST;
 
   nextToken();
-  expectToken("World");
+  expectToken(Token::World);
   tree->childrenList.push_back(parseBlock());
 
   return tree;
@@ -139,12 +136,12 @@ RST* Parser::parseBlock() {
   RST* tree = new BlockRST;
 
   nextToken();
-  expectToken("{");
+  expectToken(Token::OpenCurlyBracket);
   nextToken();
   while (checkTokenType() == TokenType::Type) {
     tree->childrenList.push_back(parseShape());
   }
-  expectToken("}");
+  expectToken(Token::CloseCurlyBracket);
 
   return tree;
 }
@@ -152,10 +149,10 @@ RST* Parser::parseBlock() {
 RST* Parser::parseShape() {
   RST* tree = new ShapeRST;
 
-  ((ShapeRST*)tree)->type = *currentToken;
+  ((ShapeRST*)tree)->type = *currentWord;
   nextToken();
   expectIdentifier();
-  ((ShapeRST*)tree)->identifier = *currentToken;
+  ((ShapeRST*)tree)->identifier = *currentWord;
   tree->childrenList.push_back(parseStructure());
 
   return tree;
@@ -165,14 +162,14 @@ RST* Parser::parseStructure() {
   RST* tree = new StructureRST;
 
   nextToken();
-  expectToken("{");
+  expectToken(Token::OpenCurlyBracket);
   nextToken();
 
   while (checkTokenType() == TokenType::Type) {
     tree->childrenList.push_back(parseProperty());
   }
 
-  expectToken("}");
+  expectToken(Token::CloseCurlyBracket);
   nextToken();
 
   return tree;
@@ -181,26 +178,26 @@ RST* Parser::parseStructure() {
 RST* Parser::parseProperty() {
   RST* tree = new PropertyRST;
 
-  std::string identifier = *currentToken;
-  ((PropertyRST*)tree)->identifier = *currentToken;
+  std::string identifier = *currentWord;
+  ((PropertyRST*)tree)->identifier = *currentWord;
   nextToken();
-  expectToken("=");
+  expectToken(Token::Equals);
   nextToken();
 
   if (checkTokenType() == TokenType::Constant) {
-    ((PropertyRST*)tree)->dataList.push_back(*currentToken);
+    ((PropertyRST*)tree)->dataList.push_back(*currentWord);
     nextToken();
   }
   else {
-    expectToken("[");
+    expectToken(Token::OpenSquareBracket);
     nextToken();
 
     while (checkTokenType() == TokenType::Constant) {
-      ((PropertyRST*)tree)->dataList.push_back(*currentToken);
+      ((PropertyRST*)tree)->dataList.push_back(*currentWord);
       nextToken();
     }
 
-    expectToken("]");
+    expectToken(Token::CloseSquareBracket);
     nextToken();
   }
 
