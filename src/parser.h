@@ -13,12 +13,12 @@ private:
   std::fstream* file;
   std::string* currentWord;
 
+  void printTree(RST* root, int offset);
+
   bool nextWord();
 
   void expectToken(Token token);
   void expectIdentifier();
-
-  void printTree(RST* root, int offset);
 
   RST* parseWorld();
   RST* parseBlock();

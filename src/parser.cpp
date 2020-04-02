@@ -22,6 +22,14 @@ Scene* Parser::createSceneFromFile(const char* filename) {
   return nullptr;
 }
 
+void Parser::printTree(RST* root, int offset) {
+  std::string offsetString(offset, ' ');
+  printf("%s%s\n", offsetString.c_str(), root->toString().c_str());
+  for (int x = 0; x < root->childrenList.size(); x++) {
+    printTree(root->childrenList[x], offset + 2);
+  }
+}
+
 bool Parser::nextWord() {
   if (*file >> *currentWord) {
     return true;
@@ -39,14 +47,6 @@ void Parser::expectToken(Token token) {
 void Parser::expectIdentifier() {
   if (TokenHelper::getTokenFromWord(*currentWord) != TokenType::Identifier) {
     throw;
-  }
-}
-
-void Parser::printTree(RST* root, int offset) {
-  std::string offsetString(offset, ' ');
-  printf("%s%s\n", offsetString.c_str(), root->toString().c_str());
-  for (int x = 0; x < root->childrenList.size(); x++) {
-    printTree(root->childrenList[x], offset + 2);
   }
 }
 
