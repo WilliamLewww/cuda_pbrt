@@ -2,27 +2,45 @@
 #include <stdio.h>
 
 std::string RST::toString() {
-  return "RST";
+  std::string printOut = "RST";
+  return printOut;
 }
 
 std::string ShapeRST::toString() {
-  return "ShapeRST";
+  std::string printOut = "ShapeRST: ";
+  printOut += type + " -> " + identifier;
+  return printOut;
 }
 
 std::string PropertyRST::toString() {
-  return "PropertyRST";
+  std::string printOut = "PropertyRST: ";
+  printOut += identifier + " -> [";
+  for (int x = 0; x < dataList.size(); x++) {
+    printOut += dataList[x];
+    if (x == dataList.size() - 1) {
+      printOut += "]";
+    }
+    else {
+      printOut += ", ";
+    }
+  }
+
+  return printOut;
 }
 
 std::string StructureRST::toString() {
-  return "StructureRST";
+  std::string printOut = "StructureRST";
+  return printOut;
 }
 
 std::string WorldRST::toString() {
-  return "WorldRST";
+  std::string printOut = "WorldRST";
+  return printOut;
 }
 
 std::string BlockRST::toString() {
-  return "BlockRST";
+  std::string printOut = "BlockRST";
+  return printOut;
 }
 
 
