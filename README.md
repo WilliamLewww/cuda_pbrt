@@ -1,3 +1,4 @@
 # cuda_pbrt
 
-Book progress: 179 / 1060
+Book progress:
+██░░░░░░░░░░ 16.8% (179 / 1060)
