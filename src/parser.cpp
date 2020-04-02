@@ -1,6 +1,31 @@
 #include "parser.h"
 #include <stdio.h>
 
+std::string RST::toString() {
+  return "RST";
+}
+
+std::string ShapeRST::toString() {
+  return "ShapeRST";
+}
+
+std::string PropertyRST::toString() {
+  return "PropertyRST";
+}
+
+std::string StructureRST::toString() {
+  return "StructureRST";
+}
+
+std::string WorldRST::toString() {
+  return "WorldRST";
+}
+
+std::string BlockRST::toString() {
+  return "BlockRST";
+}
+
+
 Parser::Parser() {
   file = new std::fstream;
   currentToken = new std::string;
@@ -76,7 +101,7 @@ void Parser::expectIdentifier() {
 
 void Parser::printTree(RST* root, int offset) {
   std::string offsetString(offset, ' ');
-  printf("%s%s\n", offsetString.c_str(), root->getName().c_str());
+  printf("%s%s\n", offsetString.c_str(), root->toString().c_str());
   for (int x = 0; x < root->childrenList.size(); x++) {
     printTree(root->childrenList[x], offset + 2);
   }

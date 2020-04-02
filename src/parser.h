@@ -11,33 +11,33 @@ enum class TokenType {
 struct RST {
   std::vector<RST*> childrenList;
 
-  virtual std::string getName() { return "RST"; }
+  virtual std::string toString();
 };
 
 struct ShapeRST : RST {
   std::string type;
   std::string identifier;
 
-  std::string getName() override { return "ShapeRST"; }
+  std::string toString() override;
 };
 
 struct PropertyRST : RST {
   std::string identifier;
   std::vector<std::string> dataList;
 
-  std::string getName() override { return "PropertyRST"; }
+  std::string toString() override;
 };
 
 struct StructureRST : RST {
-  std::string getName() override { return "StructureRST"; }
+  std::string toString() override;
 };
 
 struct WorldRST : RST {
-  std::string getName() override { return "WorldRST"; }
+  std::string toString() override;
 };
 
 struct BlockRST : RST {
-  std::string getName() override { return "BlockRST"; }
+  std::string toString() override;
 };
 
 class Parser {
