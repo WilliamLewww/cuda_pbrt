@@ -17,9 +17,13 @@ Scene* Parser::createSceneFromFile(const char* filename) {
   file->open(filename);
 
   RST* rootTree = parseWorld();
-  printTree(rootTree, 0);
+  printTree(rootTree);
 
   return nullptr;
+}
+
+void Parser::parseTree(RST* root, ParserStack* parserStack) {
+
 }
 
 void Parser::printTree(RST* root, int offset) {

@@ -8,12 +8,17 @@
 #include "token.h"
 #include "rst.h"
 
+class ParserStack {
+
+};
+
 class Parser {
 private:
   std::fstream* file;
   std::string* currentWord;
 
-  void printTree(RST* root, int offset);
+  void parseTree(RST* root, ParserStack* parserStack);
+  void printTree(RST* root, int offset = 0);
 
   bool nextWord();
 
