@@ -4,13 +4,10 @@
 #include <string>
 #include <map>
 
-#include "scene.h"
+#include "parser_stack.h"
 #include "token.h"
 #include "rst.h"
-
-class ParserStack {
-
-};
+#include "../scene.h"
 
 class Parser {
 private:

@@ -1,4 +1,4 @@
-#include "parser.h"
+#include "parser/parser.h"
 
 int main(int argn, const char** argv) {
   const char* filename = argv[1];

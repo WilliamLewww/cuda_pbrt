@@ -12,16 +12,16 @@ NVCC=$(CUDA_PATH)/bin/nvcc
 
 CUDA_FLAGS=--gpu-architecture=sm_30
 
-EXEC=fourier_transform.out
+EXEC=cuda-rst.out
 EXEC_ARGS=res/example.scene
 
 all: clean $(EXEC)
 
-SRCS := $(wildcard src/*.cpp)
-OBJS := $(SRCS:src/%.cpp=%.o)
+SRCS := $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)
+OBJS := $(notdir $(SRCS:%.cpp=%.o))
 
 CUDA_SRCS := $(wildcard src/*.cu)
-CUDA_OBJS := $(CUDA_SRCS:src/%.cu=%.o)
+CUDA_OBJS := $(notdir $(CUDA_SRCS:%.cu=%.o))
 
 $(EXEC): $(OBJS) $(CUDA_OBJS)
 	$(NVCC) $(CUDA_FLAGS) $(BUILD_PATH)/*.o -o $(BIN_PATH)/$(EXEC)
@@ -29,7 +29,13 @@ $(EXEC): $(OBJS) $(CUDA_OBJS)
 %.o: $(SRC_PATH)/%.cpp
 	$(NVCC) $(CUDA_FLAGS) --device-c $^ -o $(BUILD_PATH)/$@
 
+%.o: $(SRC_PATH)/*/%.cpp
+	$(NVCC) $(CUDA_FLAGS) --device-c $^ -o $(BUILD_PATH)/$@
+
 %.o: $(SRC_PATH)/%.cu
+	$(NVCC) $(CUDA_FLAGS) --device-c $^ -o $(BUILD_PATH)/$@
+
+%.o: $(SRC_PATH)/*/%.cu
 	$(NVCC) $(CUDA_FLAGS) --device-c $^ -o $(BUILD_PATH)/$@
 
 run:
