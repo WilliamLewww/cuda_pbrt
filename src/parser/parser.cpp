@@ -22,7 +22,7 @@ Scene* Parser::createSceneFromFile(const char* filename) {
   return nullptr;
 }
 
-void Parser::parseTree(RST* root, ParserStack* parserStack) {
+void Parser::parseTree(RST* root, ParserMemory* parserMemory) {
 
 }
 

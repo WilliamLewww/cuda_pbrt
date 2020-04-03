@@ -4,7 +4,7 @@
 #include <string>
 #include <map>
 
-#include "parser_stack.h"
+#include "parser_memory.h"
 #include "token.h"
 #include "rst.h"
 #include "../scene.h"
@@ -14,7 +14,7 @@ private:
   std::fstream* file;
   std::string* currentWord;
 
-  void parseTree(RST* root, ParserStack* parserStack);
+  void parseTree(RST* root, ParserMemory* parserMemory);
   void printTree(RST* root, int offset = 0);
 
   bool nextWord();
