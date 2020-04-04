@@ -1,5 +1,12 @@
 #include "rst.h"
 
+std::string RST::getTypeString() { return "RST"; }
+std::string ShapeRST::getTypeString() { return "ShapeRST"; }
+std::string PropertyRST::getTypeString() { return "PropertyRST"; }
+std::string StructureRST::getTypeString() { return "StructureRST"; }
+std::string WorldRST::getTypeString() { return "WorldRST"; }
+std::string BlockRST::getTypeString() { return "BlockRST"; }
+
 std::string RST::toString() {
   std::string printOut = "RST";
   return printOut;

@@ -6,6 +6,7 @@ struct RST {
   std::vector<RST*> childrenList;
 
   virtual std::string toString();
+  virtual std::string getTypeString();
 };
 
 struct ShapeRST : RST {
@@ -13,6 +14,7 @@ struct ShapeRST : RST {
   std::string identifier;
 
   std::string toString() override;
+  std::string getTypeString() override;
 };
 
 struct PropertyRST : RST {
@@ -20,16 +22,20 @@ struct PropertyRST : RST {
   std::vector<std::string> dataList;
 
   std::string toString() override;
+  std::string getTypeString() override;
 };
 
 struct StructureRST : RST {
   std::string toString() override;
+  std::string getTypeString() override;
 };
 
 struct WorldRST : RST {
   std::string toString() override;
+  std::string getTypeString() override;
 };
 
 struct BlockRST : RST {
   std::string toString() override;
+  std::string getTypeString() override;
 };

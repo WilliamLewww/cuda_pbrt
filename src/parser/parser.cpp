@@ -17,13 +17,17 @@ Scene* Parser::createSceneFromFile(const char* filename) {
   file->open(filename);
 
   RST* rootTree = parseWorld();
+  ParserMemory* parserMemory = new ParserMemory();
   printTree(rootTree);
+  parseTree(rootTree, parserMemory);
 
   return nullptr;
 }
 
-void Parser::parseTree(RST* root, ParserMemory* parserMemory) {
-
+void Parser::parseTree(RST* root, ParserMemory* memory) {
+  for (int x = 0; x < root->childrenList.size(); x++) {
+    parseTree(root->childrenList[x], memory);
+  }
 }
 
 void Parser::printTree(RST* root, int offset) {
