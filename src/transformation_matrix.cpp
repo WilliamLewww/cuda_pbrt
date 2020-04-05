@@ -14,3 +14,11 @@ TransformationMatrix::~TransformationMatrix() {
   delete matrix;
   delete inverseMatrix;
 }
+
+Matrix4x4* TransformationMatrix::getMatrix() {
+  return matrix;
+}
+
+Matrix4x4* TransformationMatrix::getInverseMatrix() {
+  return inverseMatrix;
+}

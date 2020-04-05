@@ -25,6 +25,14 @@ Scene* Parser::createSceneFromFile(const char* filename) {
 }
 
 void Parser::parseTree(RST* root, ParserMemory* memory) {
+  if (root->getTypeString() == "ShapeRST") {
+
+  }
+
+  if (root->getTypeString() == "PropertyRST") {
+
+  }
+
   for (int x = 0; x < root->childrenList.size(); x++) {
     parseTree(root->childrenList[x], memory);
   }

@@ -9,4 +9,7 @@ public:
   TransformationMatrix();
   TransformationMatrix(Matrix4x4* matrix);
   ~TransformationMatrix();
+
+  Matrix4x4* getMatrix();
+  Matrix4x4* getInverseMatrix();
 };

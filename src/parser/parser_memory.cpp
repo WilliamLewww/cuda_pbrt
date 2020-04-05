@@ -11,3 +11,8 @@ ParserMemory::~ParserMemory() {
 
   shapeList.clear();
 }
+
+void ParserMemory::pushShape(Shape* shape, std::string identifier) {
+  shapeList.push_back(shape);
+  shapeMap.insert(std::pair<std::string, Shape*>(identifier, shape));
+}
