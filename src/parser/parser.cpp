@@ -27,13 +27,17 @@ Scene* Parser::createSceneFromFile(const char* filename) {
 
 void Parser::parseTree(RST* root, ParserMemory* memory) {
   if (root->getTypeString() == "ShapeRST") {
+    ShapeRST* rootCast = (ShapeRST*)root;
+
     memory->pushTransformationMatrix(new TransformationMatrix());
-    memory->pushShape(ShapeFactory::generateShapeFromString(((ShapeRST*)root)->type), ((ShapeRST*)root)->identifier);
+    memory->pushShape(ShapeFactory::generateShapeFromString(rootCast->type), rootCast->identifier);
     memory->mapLastShapeTransformationMatrix();
   }
 
   if (root->getTypeString() == "PropertyRST") {
-
+    PropertyRST* rootCast = (PropertyRST*)root;
+    
+    printf("%s\n", rootCast->identifier.c_str());
   }
 
   for (int x = 0; x < root->childrenList.size(); x++) {
