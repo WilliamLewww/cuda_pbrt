@@ -17,12 +17,12 @@ public:
   ParserMemory();
   ~ParserMemory();
 
-  void pushTransformationMatrix(TransformationMatrix* transformationMatrix);
   void pushShape(Shape* shape, std::string identifier);
+  void pushTransformationMatrix(TransformationMatrix* transformationMatrix);
   void mapLastShapeTransformationMatrix();
 
   void linkAllShapeTransformationMatrix();
 
-  TransformationMatrix* getLastTransformationMatrix();
   Shape* getLastShape();
+  TransformationMatrix* getLastTransformationMatrix();
 };
