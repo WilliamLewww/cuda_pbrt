@@ -4,6 +4,15 @@ float& Matrix4x4::operator[](int x) {
   return this->data[x];
 }
 
+void printMatrix4x4(Matrix4x4* matrix) {
+  for (int y = 0; y < 4; y++) {
+    for (int x = 0; x < 4; x++) {
+      printf("%f ", (*matrix)[y * 4 + x]);
+    }
+    printf("\n");
+  }
+}
+
 Matrix4x4* inverseMatrix4x4(Matrix4x4* matrix) {
   Matrix4x4* inverseMatrix = new Matrix4x4;
   (*inverseMatrix)[0] = (*matrix)[5]  * (*matrix)[10] * (*matrix)[15] - (*matrix)[5]  * (*matrix)[11] * (*matrix)[14] - (*matrix)[9]  * (*matrix)[6]  * (*matrix)[15] + (*matrix)[9]  * (*matrix)[7]  * (*matrix)[14] +(*matrix)[13] * (*matrix)[6]  * (*matrix)[11] - (*matrix)[13] * (*matrix)[7]  * (*matrix)[10];

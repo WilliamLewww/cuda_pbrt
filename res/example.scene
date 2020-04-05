@@ -1,12 +1,12 @@
 World {
   Sphere sphereA {
     Radius = 1.0
-    Translate = [ 0.0 1.0 2.0 ]
+    Translate = [ 5.0 1.0 2.0 ]
   }
 
   Sphere sphereB {
     Radius = 0.5
-    Translate = [ 1.0 0.0 0.0 ]
+    Translate = [ 7.0 12.0 3.0 ]
     Scale = [ 1.5 1.5 1.5 ]
   }
 }
