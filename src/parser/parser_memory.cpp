@@ -33,3 +33,11 @@ void ParserMemory::linkAllShapeTransformationMatrix() {
     shape->setTransformationMatrix(transformationMatrix, new TransformationMatrix(transformationMatrix->getInverseMatrix()));
   }
 }
+
+TransformationMatrix* ParserMemory::getLastTransformationMatrix() {
+  return transformationMatrixList[transformationMatrixList.size() - 1];
+}
+
+Shape* ParserMemory::getLastShape() {
+  return shapeList[shapeList.size() - 1];
+}

@@ -22,4 +22,7 @@ public:
   void mapLastShapeTransformationMatrix();
 
   void linkAllShapeTransformationMatrix();
+
+  TransformationMatrix* getLastTransformationMatrix();
+  Shape* getLastShape();
 };
