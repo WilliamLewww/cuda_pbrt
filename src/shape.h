@@ -8,4 +8,6 @@ private:
 public:
   Shape(TransformationMatrix* objectToWorld, TransformationMatrix* worldToObject);
   ~Shape();
+
+  void setTransformationMatrix(TransformationMatrix* objectToWorld, TransformationMatrix* worldToObject);
 };

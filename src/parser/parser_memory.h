@@ -9,7 +9,7 @@
 class ParserMemory {
 private:
   std::map<std::string, Shape*> shapeMap;
-  
+
   std::vector<Shape*> shapeList;
   std::vector<TransformationMatrix*> transformationMatrixList;
 public:
@@ -19,6 +19,5 @@ public:
   void pushTransformationMatrix(TransformationMatrix* transformationMatrix);
   void pushShape(Shape* shape, std::string identifier);
 
-  TransformationMatrix* getLastTransformationMatrix();
-  Shape* getLastShape();
+  void connectLastShapeTransformationMatrix();
 };

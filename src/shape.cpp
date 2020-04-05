@@ -8,3 +8,8 @@ Shape::Shape(TransformationMatrix* objectToWorld, TransformationMatrix* worldToO
 Shape::~Shape() {
 
 }
+
+void Shape::setTransformationMatrix(TransformationMatrix* objectToWorld, TransformationMatrix* worldToObject) {
+  this->objectToWorld = objectToWorld;
+  this->worldToObject = worldToObject;
+}

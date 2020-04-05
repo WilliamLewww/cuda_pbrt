@@ -1,13 +1,14 @@
 #pragma once
-#include <stdio.h>
 #include <fstream>
-#include <string>
 #include <map>
+#include <stdio.h>
+#include <string>
 
-#include "parser_memory.h"
-#include "token.h"
-#include "rst.h"
 #include "../scene.h"
+#include "parser_memory.h"
+#include "rst.h"
+#include "shape_generator.h"
+#include "token.h"
 
 class Parser {
 private:

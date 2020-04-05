@@ -26,7 +26,9 @@ Scene* Parser::createSceneFromFile(const char* filename) {
 
 void Parser::parseTree(RST* root, ParserMemory* memory) {
   if (root->getTypeString() == "ShapeRST") {
-
+    memory->pushTransformationMatrix(new TransformationMatrix());
+    memory->pushShape(ShapeGenerator::generateShapeFromString(((ShapeRST*)root)->type), ((ShapeRST*)root)->identifier);
+    memory->connectLastShapeTransformationMatrix();
   }
 
   if (root->getTypeString() == "PropertyRST") {

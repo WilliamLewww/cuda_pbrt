@@ -17,10 +17,7 @@ void ParserMemory::pushShape(Shape* shape, std::string identifier) {
   shapeMap.insert(std::pair<std::string, Shape*>(identifier, shape));
 }
 
-TransformationMatrix* ParserMemory::getLastTransformationMatrix() {
-  return transformationMatrixList[transformationMatrixList.size() - 1];
-}
-
-Shape* ParserMemory::getLastShape() {
-  return shapeList[shapeList.size() - 1];
+void ParserMemory::connectLastShapeTransformationMatrix() {
+  TransformationMatrix* transformationMatrix = transformationMatrixList[transformationMatrixList.size() - 1];
+  shapeList[shapeList.size() - 1]->setTransformationMatrix(transformationMatrix, new TransformationMatrix(transformationMatrix->getInverseMatrix()));
 }
