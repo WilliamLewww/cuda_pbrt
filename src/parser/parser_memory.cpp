@@ -23,10 +23,13 @@ void ParserMemory::mapLastShapeTransformationMatrix() {
   shapeTransformationMatrixMap.insert(std::pair<Shape*, TransformationMatrix*>(lastShape, lastTransformationMatrix));
 }
 
-void ParserMemory::connectAllShapeTransformationMatrix() {
+void ParserMemory::linkAllShapeTransformationMatrix() {
   std::map<Shape*, TransformationMatrix*>::iterator mapIterator;
 
   for (mapIterator = shapeTransformationMatrixMap.begin(); mapIterator != shapeTransformationMatrixMap.end(); mapIterator++) {
-    
+    Shape* shape = mapIterator->first;
+    TransformationMatrix* transformationMatrix = mapIterator->second;
+
+    shape->setTransformationMatrix(transformationMatrix, new TransformationMatrix(transformationMatrix->getInverseMatrix()));
   }
 }

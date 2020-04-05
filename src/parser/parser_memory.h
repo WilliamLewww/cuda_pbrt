@@ -21,5 +21,5 @@ public:
   void pushShape(Shape* shape, std::string identifier);
   void mapLastShapeTransformationMatrix();
 
-  void connectAllShapeTransformationMatrix();
+  void linkAllShapeTransformationMatrix();
 };

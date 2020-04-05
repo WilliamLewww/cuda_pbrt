@@ -20,7 +20,7 @@ Scene* Parser::createSceneFromFile(const char* filename) {
   ParserMemory* parserMemory = new ParserMemory();
   printTree(rootTree);
   parseTree(rootTree, parserMemory);
-  parserMemory->connectAllShapeTransformationMatrix();
+  parserMemory->linkAllShapeTransformationMatrix();
 
   return nullptr;
 }
