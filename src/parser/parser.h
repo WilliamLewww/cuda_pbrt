@@ -7,7 +7,7 @@
 #include "../scene.h"
 #include "parser_memory.h"
 #include "rst.h"
-#include "shape_generator.h"
+#include "shape_factory.h"
 #include "token.h"
 
 class Parser {
