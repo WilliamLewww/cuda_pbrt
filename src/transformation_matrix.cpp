@@ -22,3 +22,11 @@ Matrix4x4* TransformationMatrix::getMatrix() {
 Matrix4x4* TransformationMatrix::getInverseMatrix() {
   return inverseMatrix;
 }
+
+void TransformationMatrix::setMatrix(Matrix4x4* matrix) {
+  delete this->matrix;
+  delete inverseMatrix;
+
+  this->matrix = matrix;
+  inverseMatrix = inverseMatrix4x4(matrix);
+}

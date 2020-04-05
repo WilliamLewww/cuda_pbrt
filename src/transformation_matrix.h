@@ -12,4 +12,6 @@ public:
 
   Matrix4x4* getMatrix();
   Matrix4x4* getInverseMatrix();
+
+  void setMatrix(Matrix4x4* matrix);
 };
