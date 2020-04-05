@@ -36,8 +36,13 @@ void Parser::parseTree(RST* root, ParserMemory* memory) {
 
   if (root->getTypeString() == "PropertyRST") {
     PropertyRST* rootCast = (PropertyRST*)root;
-    
-    printf("%s\n", rootCast->identifier.c_str());
+
+    if (rootCast->identifier == "Translate") {
+      Vector3 position(std::stof(rootCast->dataList[0]), std::stof(rootCast->dataList[1]), std::stof(rootCast->dataList[2]));
+
+      TransformationMatrix* transformationMatrix = memory->getLastTransformationMatrix();
+      transformationMatrix->setMatrix(multiplyMatrix4x4(createTranslateMatrix4x4(position), transformationMatrix->getMatrix()));
+    }
   }
 
   for (int x = 0; x < root->childrenList.size(); x++) {
