@@ -41,3 +41,7 @@ Shape* ParserMemory::getLastShape() {
 TransformationMatrix* ParserMemory::getLastTransformationMatrix() {
   return transformationMatrixList[transformationMatrixList.size() - 1];
 }
+
+Scene* ParserMemory::createScene() {
+  return nullptr;
+}

@@ -5,6 +5,7 @@
 
 #include "../shape.h"
 #include "../transformation_matrix.h"
+#include "../scene.h"
 
 class ParserMemory {
 private:
@@ -25,4 +26,6 @@ public:
 
   Shape* getLastShape();
   TransformationMatrix* getLastTransformationMatrix();
+
+  Scene* createScene();
 };

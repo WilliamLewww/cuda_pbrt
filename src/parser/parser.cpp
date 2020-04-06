@@ -13,7 +13,6 @@ Parser::~Parser() {
 }
 
 Scene* Parser::createSceneFromFile(const char* filename) {
-  Scene* scene = new Scene();
   file->open(filename);
 
   RST* rootTree = parseWorld();
@@ -22,7 +21,19 @@ Scene* Parser::createSceneFromFile(const char* filename) {
   parseTree(rootTree, parserMemory);
   parserMemory->linkAllShapeTransformationMatrix();
 
-  return nullptr;
+  Scene* scene = parserMemory->createScene();
+  delete parserMemory;
+  deleteTree(rootTree);
+
+  return scene;
+}
+
+void Parser::deleteTree(RST* root) {
+  for (int x = 0; x < root->childrenList.size(); x++) {
+    deleteTree(root->childrenList[x]);
+  }
+
+  delete root;
 }
 
 void Parser::parseTree(RST* root, ParserMemory* memory) {

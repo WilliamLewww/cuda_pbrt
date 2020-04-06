@@ -15,6 +15,7 @@ private:
   std::fstream* file;
   std::string* currentWord;
 
+  void deleteTree(RST* root);
   void parseTree(RST* root, ParserMemory* memory);
   void printTree(RST* root, int offset = 0);
 
