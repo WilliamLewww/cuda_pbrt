@@ -8,4 +8,6 @@ public:
   Vector3(float x, float y, float z);
   
   float& operator[](int index);
+  Vector3 operator*(float value);
+  Vector3 operator+(Vector3 b);
 };
