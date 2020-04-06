@@ -16,6 +16,6 @@ void Scene::addShape(Shape* shape) {
   shapeList.push_back(shape);
 }
 
-char* Scene::render() {
+char* Scene::render(int resolutionWidth, int resolutionHeight) {
   return nullptr;
 }

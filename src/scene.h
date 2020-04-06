@@ -11,5 +11,5 @@ public:
 
   void addShape(Shape* shape);
 
-  char* render();
+  char* render(int resolutionWidth, int resolutionHeight);
 };
