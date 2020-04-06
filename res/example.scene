@@ -1,4 +1,8 @@
 World {
+  Camera cameraA {
+
+  }
+  
   Sphere sphereA {
     Radius = 1.0
     Translate = [ 5.0 1.0 2.0 ]

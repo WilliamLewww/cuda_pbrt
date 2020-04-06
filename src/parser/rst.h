@@ -17,6 +17,14 @@ struct ShapeRST : RST {
   std::string getTypeString() override;
 };
 
+struct CameraRST : RST {
+  std::string type;
+  std::string identifier;
+
+  std::string toString() override;
+  std::string getTypeString() override;
+};
+
 struct PropertyRST : RST {
   std::string identifier;
   std::vector<std::string> dataList;

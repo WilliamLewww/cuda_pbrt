@@ -4,6 +4,7 @@ std::string RST::getTypeString() { return "RST"; }
 std::string ShapeRST::getTypeString() { return "ShapeRST"; }
 std::string PropertyRST::getTypeString() { return "PropertyRST"; }
 std::string StructureRST::getTypeString() { return "StructureRST"; }
+std::string CameraRST::getTypeString() { return "CameraRST"; }
 std::string WorldRST::getTypeString() { return "WorldRST"; }
 std::string BlockRST::getTypeString() { return "BlockRST"; }
 
@@ -14,6 +15,12 @@ std::string RST::toString() {
 
 std::string ShapeRST::toString() {
   std::string printOut = "ShapeRST: ";
+  printOut += type + " -> " + identifier;
+  return printOut;
+}
+
+std::string CameraRST::toString() {
+  std::string printOut = "CameraRST: ";
   printOut += type + " -> " + identifier;
   return printOut;
 }

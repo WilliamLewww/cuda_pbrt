@@ -84,7 +84,7 @@ void Parser::expectToken(Token token) {
 }
 
 void Parser::expectIdentifier() {
-  if (TokenHelper::getTokenFromWord(*currentWord) != TokenType::Identifier) {
+  if (TokenHelper::getTokenTypeFromString(*currentWord) != TokenType::Identifier) {
     throw;
   }
 }
@@ -105,8 +105,14 @@ RST* Parser::parseBlock() {
   nextWord();
   expectToken(Token::OpenCurlyBracket);
   nextWord();
-  while (TokenHelper::getTokenFromWord(*currentWord) == TokenType::Type) {
-    tree->childrenList.push_back(parseShape());
+  while (TokenHelper::getTokenTypeFromString(*currentWord) == TokenType::Type) {
+    if (TokenHelper::getTokenBaseFromString(*currentWord) == Token::Camera) {
+      tree->childrenList.push_back(parseCamera());
+    }
+
+    if (TokenHelper::getTokenBaseFromString(*currentWord) == Token::Shape) {
+      tree->childrenList.push_back(parseShape());
+    }
   }
   expectToken(Token::CloseCurlyBracket);
 
@@ -125,6 +131,18 @@ RST* Parser::parseShape() {
   return tree;
 }
 
+RST* Parser::parseCamera() {
+  RST* tree = new CameraRST;
+
+  ((CameraRST*)tree)->type = *currentWord;
+  nextWord();
+  expectIdentifier();
+  ((CameraRST*)tree)->identifier = *currentWord;
+  tree->childrenList.push_back(parseStructure());
+
+  return tree;
+}
+
 RST* Parser::parseStructure() {
   RST* tree = new StructureRST;
 
@@ -132,7 +150,7 @@ RST* Parser::parseStructure() {
   expectToken(Token::OpenCurlyBracket);
   nextWord();
 
-  while (TokenHelper::getTokenFromWord(*currentWord) == TokenType::Type) {
+  while (TokenHelper::getTokenTypeFromString(*currentWord) == TokenType::Type) {
     tree->childrenList.push_back(parseProperty());
   }
 
@@ -151,7 +169,7 @@ RST* Parser::parseProperty() {
   expectToken(Token::Equals);
   nextWord();
 
-  if (TokenHelper::getTokenFromWord(*currentWord) == TokenType::Constant) {
+  if (TokenHelper::getTokenTypeFromString(*currentWord) == TokenType::Constant) {
     ((PropertyRST*)tree)->dataList.push_back(*currentWord);
     nextWord();
   }
@@ -159,7 +177,7 @@ RST* Parser::parseProperty() {
     expectToken(Token::OpenSquareBracket);
     nextWord();
 
-    while (TokenHelper::getTokenFromWord(*currentWord) == TokenType::Constant) {
+    while (TokenHelper::getTokenTypeFromString(*currentWord) == TokenType::Constant) {
       ((PropertyRST*)tree)->dataList.push_back(*currentWord);
       nextWord();
     }
