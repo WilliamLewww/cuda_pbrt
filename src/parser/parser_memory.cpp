@@ -43,5 +43,11 @@ TransformationMatrix* ParserMemory::getLastTransformationMatrix() {
 }
 
 Scene* ParserMemory::createScene() {
-  return nullptr;
+  Scene* scene = new Scene();
+
+  for (int x = 0; x < shapeList.size(); x++) {
+    scene->addShape(shapeList[x]);
+  }
+
+  return scene;
 }

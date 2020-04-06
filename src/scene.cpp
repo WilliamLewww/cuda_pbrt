@@ -17,5 +17,5 @@ void Scene::addShape(Shape* shape) {
 }
 
 char* Scene::render() {
-
+  return nullptr;
 }
