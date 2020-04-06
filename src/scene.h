@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+
+#include "vector.h"
 #include "shape.h"
 
 class Scene {
@@ -11,5 +13,5 @@ public:
 
   void addShape(Shape* shape);
 
-  char* render(int resolutionWidth, int resolutionHeight);
+  char* render(Vector2 resolution);
 };

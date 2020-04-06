@@ -8,7 +8,7 @@ enum class TokenType {
 
 enum class Token {
   World, Camera, Sphere, Radius, Translate, Rotate, Scale, Equals, OpenCurlyBracket, CloseCurlyBracket, OpenSquareBracket, CloseSquareBracket,
-  Shape
+  Shape, SimpleCamera
 };
 
 class TokenHelper {

@@ -1,5 +1,20 @@
 #include "vector.h"
 
+Vector2::Vector2() {
+  x = 0.0;
+  y = 0.0;
+}
+
+Vector2::Vector2(float x, float y) {
+  this->x = x;
+  this->y = y;
+}
+
+float& Vector2::operator[](int index) {
+  if (index == 0) { return x; }
+  if (index == 1) { return y; }
+}
+
 Vector3::Vector3() {
   x = 0.0;
   y = 0.0;

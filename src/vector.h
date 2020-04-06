@@ -1,5 +1,15 @@
 #pragma once
 
+class Vector2 {
+private:
+  float x, y;
+public:
+  Vector2();
+  Vector2(float x, float y);
+
+  float& operator[](int index);
+};
+
 class Vector3 {
 private:
   float x, y, z;

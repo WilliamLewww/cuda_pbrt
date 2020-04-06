@@ -5,7 +5,7 @@ int main(int argn, const char** argv) {
 
   Parser* parser = new Parser();
   Scene* scene = parser->createSceneFromFile(filename);
-  char* image = scene->render(250, 250);
+  char* image = scene->render(Vector2(250, 250));
 
   delete image;
   delete scene;
