@@ -54,13 +54,12 @@ void Parser::parseTree(RST* root, ParserMemory* memory) {
     memory->mapLastCameraTransformationMatrix();
   }
 
-  if (root->getTypeString() == "PropertyRST") {
-    PropertyRST* rootCast = (PropertyRST*)root;
+  if (root->getTypeString() == "FunctionRST") {
 
   }
 
-  if (root->getTypeString() == "FunctionRST") {
-
+  if (root->getTypeString() == "PropertyRST") {
+    PropertyRST* rootCast = (PropertyRST*)root;
   }
 
   for (int x = 0; x < root->childrenList.size(); x++) {
@@ -97,7 +96,7 @@ void Parser::expectIdentifier() {
 }
 
 RST* Parser::parseWorld() {
-  RST* tree = new WorldRST;
+  WorldRST* tree = new WorldRST;
 
   nextWord();
   expectToken(Token::World);
@@ -107,7 +106,7 @@ RST* Parser::parseWorld() {
 }
 
 RST* Parser::parseBlock() {
-  RST* tree = new BlockRST;
+  BlockRST* tree = new BlockRST;
 
   nextWord();
   expectToken(Token::OpenCurlyBracket);
@@ -127,31 +126,31 @@ RST* Parser::parseBlock() {
 }
 
 RST* Parser::parseShape() {
-  RST* tree = new ShapeRST;
+  ShapeRST* tree = new ShapeRST;
 
-  ((ShapeRST*)tree)->type = *currentWord;
+  tree->type = *currentWord;
   nextWord();
   expectIdentifier();
-  ((ShapeRST*)tree)->identifier = *currentWord;
+  tree->identifier = *currentWord;
   tree->childrenList.push_back(parseStructure());
 
   return tree;
 }
 
 RST* Parser::parseCamera() {
-  RST* tree = new CameraRST;
+  CameraRST* tree = new CameraRST;
 
-  ((CameraRST*)tree)->type = *currentWord;
+  tree->type = *currentWord;
   nextWord();
   expectIdentifier();
-  ((CameraRST*)tree)->identifier = *currentWord;
+  tree->identifier = *currentWord;
   tree->childrenList.push_back(parseStructure());
 
   return tree;
 }
 
 RST* Parser::parseStructure() {
-  RST* tree = new StructureRST;
+  StructureRST* tree = new StructureRST;
 
   nextWord();
   expectToken(Token::OpenCurlyBracket);
@@ -172,10 +171,10 @@ RST* Parser::parseStructure() {
 }
 
 RST* Parser::parseFunction() {
-  RST* tree = new FunctionRST;
+  FunctionRST* tree = new FunctionRST;
 
   nextWord();
-  ((FunctionRST*)tree)->identifier = *currentWord;
+  tree->identifier = *currentWord;
   nextWord();
   expectToken(Token::OpenParentheses);
   nextWord();
@@ -191,17 +190,17 @@ RST* Parser::parseFunction() {
 }
 
 RST* Parser::parseProperty() {
-  RST* tree = new PropertyRST;
+  PropertyRST* tree = new PropertyRST;
 
   std::string identifier = *currentWord;
-  ((PropertyRST*)tree)->identifier = *currentWord;
+  tree->identifier = *currentWord;
 
   nextWord();
   expectToken(Token::Equals);
   nextWord();
 
   if (TokenHelper::getTokenTypeFromString(*currentWord) == TokenType::Constant) {
-    ((PropertyRST*)tree)->dataList.push_back(*currentWord);
+    tree->dataList.push_back(*currentWord);
     nextWord();
   }
   else {
@@ -209,7 +208,7 @@ RST* Parser::parseProperty() {
     nextWord();
 
     while (TokenHelper::getTokenTypeFromString(*currentWord) == TokenType::Constant) {
-      ((PropertyRST*)tree)->dataList.push_back(*currentWord);
+      tree->dataList.push_back(*currentWord);
       nextWord();
     }
 

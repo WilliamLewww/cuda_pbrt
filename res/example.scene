@@ -21,7 +21,7 @@ World {
     )
 
     Function scale (
-      position = [ 1.5 1.5 1.5 ]
+      size = [ 1.5 1.5 1.5 ]
     )
 
     radius = 0.5
