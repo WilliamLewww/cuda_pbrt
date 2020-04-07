@@ -68,14 +68,7 @@ void Parser::parseTree(RST* root, ParserMemory* memory) {
       memory->pushProperty(property);
 
       if (memory->checkPropertyStackFull()) {
-        std::vector<Property> propertyList;
-
-        while (!memory->checkPropertyStackEmpty()) {
-          propertyList.push_back(memory->getPropertyStackTop());
-          memory->popProperty();
-        }
-
-        memory->setCurrentFunctionFromString("None");
+        parseFunctionStack(memory);
       }
     }
   }
@@ -83,6 +76,24 @@ void Parser::parseTree(RST* root, ParserMemory* memory) {
   for (int x = 0; x < root->childrenList.size(); x++) {
     parseTree(root->childrenList[x], memory);
   }
+}
+
+void Parser::parseFunctionStack(ParserMemory* memory) {
+  std::vector<Property> propertyList;
+
+  while (!memory->checkPropertyStackEmpty()) {
+    propertyList.push_back(memory->getPropertyStackTop());
+    memory->popProperty();
+  }
+
+  if (memory->getCurrentFunction() == Function::Translate) {
+    Vector3 position(std::stof(propertyList[0].dataList[0]), std::stof(propertyList[0].dataList[1]), std::stof(propertyList[0].dataList[2]));
+  
+    TransformationMatrix* transformationMatrix = memory->getLastTransformationMatrix();
+    transformationMatrix->setMatrix(multiplyMatrix4x4(createTranslateMatrix4x4(position), transformationMatrix->getMatrix()));
+  }
+
+  memory->setCurrentFunctionFromString("None");
 }
 
 void Parser::printTree(RST* root, int offset) {

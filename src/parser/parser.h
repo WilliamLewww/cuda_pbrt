@@ -20,6 +20,8 @@ private:
   void parseTree(RST* root, ParserMemory* memory);
   void printTree(RST* root, int offset = 0);
 
+  void parseFunctionStack(ParserMemory* memory);
+
   bool nextWord();
 
   void expectToken(Token token);
