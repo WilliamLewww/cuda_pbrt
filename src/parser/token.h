@@ -3,12 +3,12 @@
 #include <string>
 
 enum class TokenType {
-  Type, Terminal, Identifier, Constant
+  Type, Terminal, Identifier, Constant, Function
 };
 
 enum class Token {
   World, Camera, Sphere, Radius, Translate, Rotate, Scale, Equals, OpenCurlyBracket, CloseCurlyBracket, OpenSquareBracket, CloseSquareBracket,
-  Shape, SimpleCamera
+  Shape, SimpleCamera, Function, OpenParentheses, CloseParentheses, Position, Target, Up
 };
 
 class TokenHelper {

@@ -3,14 +3,18 @@
 std::map<std::string, Token> TokenHelper::stringTokenMap = {
   {"World", Token::World}, {"Camera", Token::Camera}, {"Sphere", Token::Sphere}, {"Radius", Token::Radius}, {"Translate", Token::Translate},
   {"Rotate", Token::Rotate}, {"Scale", Token::Scale}, {"=", Token::Equals}, {"{", Token::OpenCurlyBracket}, {"}", Token::CloseCurlyBracket}, 
-  {"[", Token::OpenSquareBracket}, {"]", Token::CloseSquareBracket}, {"Shape", Token::Shape}, {"SimpleCamera", Token::SimpleCamera}
+  {"[", Token::OpenSquareBracket}, {"]", Token::CloseSquareBracket}, {"Shape", Token::Shape}, {"SimpleCamera", Token::SimpleCamera},
+  {"Function", Token::Function}, {"(", Token::OpenParentheses}, {")", Token::CloseParentheses}, {"Position", Token::Position},
+  {"Target", Token::Target}, {"Up", Token::Up}
 };
 
 std::map<Token, TokenType> TokenHelper::tokenTypeMap = {
   {Token::World, TokenType::Type}, {Token::Camera, TokenType::Type}, {Token::Sphere, TokenType::Type}, {Token::Radius, TokenType::Type},
   {Token::Translate, TokenType::Type}, {Token::Rotate, TokenType::Type}, {Token::Scale, TokenType::Type}, {Token::Equals, TokenType::Terminal}, 
   {Token::OpenCurlyBracket, TokenType::Terminal}, {Token::CloseCurlyBracket, TokenType::Terminal}, {Token::OpenSquareBracket, TokenType::Terminal}, 
-  {Token::CloseSquareBracket, TokenType::Terminal}, {Token::Shape, TokenType::Type}, {Token::SimpleCamera, TokenType::Type}
+  {Token::CloseSquareBracket, TokenType::Terminal}, {Token::Shape, TokenType::Type}, {Token::SimpleCamera, TokenType::Type},
+  {Token::Function, TokenType::Function}, {Token::OpenParentheses, TokenType::Terminal}, {Token::CloseParentheses, TokenType::Terminal},
+  {Token::Position, TokenType::Type}, {Token::Target, TokenType::Type}, {Token::Up, TokenType::Type}
 };
 
 std::map<Token, Token> TokenHelper::tokenBaseMap = {

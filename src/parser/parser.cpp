@@ -156,11 +156,34 @@ RST* Parser::parseStructure() {
   expectToken(Token::OpenCurlyBracket);
   nextWord();
 
+  while (TokenHelper::getTokenTypeFromString(*currentWord) == TokenType::Function) {
+    tree->childrenList.push_back(parseFunction());
+  }
+
   while (TokenHelper::getTokenTypeFromString(*currentWord) == TokenType::Type) {
     tree->childrenList.push_back(parseProperty());
   }
 
   expectToken(Token::CloseCurlyBracket);
+  nextWord();
+
+  return tree;
+}
+
+RST* Parser::parseFunction() {
+  RST* tree = new FunctionRST;
+
+  nextWord();
+  ((FunctionRST*)tree)->identifier = *currentWord;
+  nextWord();
+  expectToken(Token::OpenParentheses);
+  nextWord();
+
+  while (TokenHelper::getTokenTypeFromString(*currentWord) == TokenType::Type) {
+    tree->childrenList.push_back(parseProperty());
+  }
+
+  expectToken(Token::CloseParentheses);
   nextWord();
 
   return tree;

@@ -25,6 +25,13 @@ struct CameraRST : RST {
   std::string getTypeString() override;
 };
 
+struct FunctionRST : RST {
+  std::string identifier;
+
+  std::string toString() override;
+  std::string getTypeString() override;
+};
+
 struct PropertyRST : RST {
   std::string identifier;
   std::vector<std::string> dataList;

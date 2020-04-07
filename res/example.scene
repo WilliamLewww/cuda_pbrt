@@ -1,6 +1,10 @@
 World {
   SimpleCamera cameraA {
-
+    Function lookAt (
+      Position = [ 0.0 0.0 0.0 ]
+      Target = [ 0.0 0.0 0.0 ]
+      Up = [ 0.0 0.0 0.0 ]
+    )
   }
   
   Sphere sphereA {

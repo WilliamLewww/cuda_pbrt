@@ -29,6 +29,7 @@ private:
   RST* parseBlock();
   RST* parseShape();
   RST* parseCamera();
+  RST* parseFunction();
   RST* parseStructure();
   RST* parseProperty();
 public:

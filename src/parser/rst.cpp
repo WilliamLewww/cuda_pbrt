@@ -2,6 +2,7 @@
 
 std::string RST::getTypeString() { return "RST"; }
 std::string ShapeRST::getTypeString() { return "ShapeRST"; }
+std::string FunctionRST::getTypeString() { return "FunctionRST"; }
 std::string PropertyRST::getTypeString() { return "PropertyRST"; }
 std::string StructureRST::getTypeString() { return "StructureRST"; }
 std::string CameraRST::getTypeString() { return "CameraRST"; }
@@ -22,6 +23,12 @@ std::string ShapeRST::toString() {
 std::string CameraRST::toString() {
   std::string printOut = "CameraRST: ";
   printOut += type + " -> " + identifier;
+  return printOut;
+}
+
+std::string FunctionRST::toString() {
+  std::string printOut = "FunctionRST: ";
+  printOut += identifier;
   return printOut;
 }
 
