@@ -55,11 +55,29 @@ void Parser::parseTree(RST* root, ParserMemory* memory) {
   }
 
   if (root->getTypeString() == "FunctionRST") {
+    FunctionRST* rootCast = (FunctionRST*)root;
 
+    memory->setCurrentFunctionFromString(rootCast->identifier);
   }
 
   if (root->getTypeString() == "PropertyRST") {
     PropertyRST* rootCast = (PropertyRST*)root;
+
+    if (memory->getCurrentFunction() != Function::None) {
+      Property property = { rootCast->identifier, rootCast->dataList };
+      memory->pushProperty(property);
+
+      if (memory->checkPropertyStackFull()) {
+        std::vector<Property> propertyList;
+
+        while (!memory->checkPropertyStackEmpty()) {
+          propertyList.push_back(memory->getPropertyStackTop());
+          memory->popProperty();
+        }
+
+        memory->setCurrentFunctionFromString("None");
+      }
+    }
   }
 
   for (int x = 0; x < root->childrenList.size(); x++) {
