@@ -14,6 +14,7 @@ private:
   std::map<std::string, Camera*> stringCameraMap;
 
   std::map<Shape*, TransformationMatrix*> shapeTransformationMatrixMap;
+  std::map<Camera*, TransformationMatrix*> cameraTransformationMatrixMap;
 
   std::vector<Shape*> shapeList;
   std::vector<Camera*> cameraList;
@@ -28,10 +29,13 @@ public:
   
   void pushTransformationMatrix(TransformationMatrix* transformationMatrix);
   void mapLastShapeTransformationMatrix();
+  void mapLastCameraTransformationMatrix();
 
   void linkAllShapeTransformationMatrix();
+  void linkAllCameraTransformationMatrix();
 
   Shape* getLastShape();
+  Camera* getLastCamera();
   TransformationMatrix* getLastTransformationMatrix();
 
   Scene* createScene();

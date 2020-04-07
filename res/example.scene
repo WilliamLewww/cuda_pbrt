@@ -1,20 +1,29 @@
 World {
   SimpleCamera cameraA {
     Function lookAt (
-      Position = [ 0.0 0.0 0.0 ]
-      Target = [ 0.0 0.0 0.0 ]
-      Up = [ 0.0 0.0 0.0 ]
+      position = [ 0.0 0.0 0.0 ]
+      target = [ 0.0 0.0 0.0 ]
+      up = [ 0.0 0.0 0.0 ]
     )
   }
   
   Sphere sphereA {
-    Radius = 1.0
-    Translate = [ 5.0 1.0 2.0 ]
+    Function translate (
+      position = [ 5.0 1.0 2.0 ]
+    )
+
+    radius = 1.0
   }
 
   Sphere sphereB {
-    Radius = 0.5
-    Translate = [ 7.0 12.0 3.0 ]
-    Scale = [ 1.5 1.5 1.5 ]
+    Function translate (
+      position = [ 7.0 12.0 3.0 ]
+    )
+
+    Function scale (
+      position = [ 1.5 1.5 1.5 ]
+    )
+
+    radius = 0.5
   }
 }

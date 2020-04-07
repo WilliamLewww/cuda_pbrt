@@ -10,4 +10,6 @@ public:
   ~Shape();
 
   void setTransformationMatrix(TransformationMatrix* objectToWorld, TransformationMatrix* worldToObject);
+
+  TransformationMatrix* getObjectToWorld();
 };

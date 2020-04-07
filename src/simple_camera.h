@@ -4,7 +4,7 @@
 class SimpleCamera : public Camera {
 private:
 public:
-  SimpleCamera();
+  SimpleCamera(TransformationMatrix* cameraToWorld);
   ~SimpleCamera();
   
   Ray* generateRay(CameraSample sample) override;

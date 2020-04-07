@@ -1,11 +1,11 @@
 #include "camera_factory.h"
 
 Camera* CameraGenerator::create() {
-  return new Camera();
+  return new Camera(nullptr);
 }
 
 Camera* SimpleCameraGenerator::create() {
-  return new SimpleCamera();
+  return new SimpleCamera(nullptr);
 }
 
 std::map<std::string, CameraGenerator*> CameraFactory::stringCameraGeneratorMap = {

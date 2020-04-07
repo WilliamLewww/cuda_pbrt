@@ -28,6 +28,12 @@ void ParserMemory::mapLastShapeTransformationMatrix() {
   shapeTransformationMatrixMap.insert(std::pair<Shape*, TransformationMatrix*>(lastShape, lastTransformationMatrix));
 }
 
+void ParserMemory::mapLastCameraTransformationMatrix() {
+  Camera* lastCamera = cameraList[cameraList.size() - 1];
+  TransformationMatrix* lastTransformationMatrix = transformationMatrixList[transformationMatrixList.size() -1];
+  cameraTransformationMatrixMap.insert(std::pair<Camera*, TransformationMatrix*>(lastCamera, lastTransformationMatrix));
+}
+
 void ParserMemory::linkAllShapeTransformationMatrix() {
   std::map<Shape*, TransformationMatrix*>::iterator mapIterator;
 
@@ -39,8 +45,23 @@ void ParserMemory::linkAllShapeTransformationMatrix() {
   }
 }
 
+void ParserMemory::linkAllCameraTransformationMatrix() {
+  std::map<Camera*, TransformationMatrix*>::iterator mapIterator;
+
+  for (mapIterator = cameraTransformationMatrixMap.begin(); mapIterator != cameraTransformationMatrixMap.end(); mapIterator++) {
+    Camera* camera = mapIterator->first;
+    TransformationMatrix* transformationMatrix = mapIterator->second;
+
+    camera->setTransformationMatrix(transformationMatrix);
+  }
+}
+
 Shape* ParserMemory::getLastShape() {
   return shapeList[shapeList.size() - 1];
+}
+
+Camera* ParserMemory::getLastCamera() {
+  return cameraList[cameraList.size() - 1];
 }
 
 TransformationMatrix* ParserMemory::getLastTransformationMatrix() {

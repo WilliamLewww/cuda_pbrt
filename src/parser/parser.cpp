@@ -20,6 +20,7 @@ Scene* Parser::createSceneFromFile(const char* filename) {
   printTree(rootTree);
   parseTree(rootTree, parserMemory);
   parserMemory->linkAllShapeTransformationMatrix();
+  parserMemory->linkAllCameraTransformationMatrix();
 
   Scene* scene = parserMemory->createScene();
   delete parserMemory;
@@ -48,18 +49,18 @@ void Parser::parseTree(RST* root, ParserMemory* memory) {
   if (root->getTypeString() == "CameraRST") {
     CameraRST* rootCast = (CameraRST*)root;
 
+    memory->pushTransformationMatrix(new TransformationMatrix());
     memory->pushCamera(CameraFactory::generateCameraFromString(rootCast->type), rootCast->identifier);
+    memory->mapLastCameraTransformationMatrix();
   }
 
   if (root->getTypeString() == "PropertyRST") {
     PropertyRST* rootCast = (PropertyRST*)root;
 
-    if (rootCast->identifier == "Translate") {
-      Vector3 position(std::stof(rootCast->dataList[0]), std::stof(rootCast->dataList[1]), std::stof(rootCast->dataList[2]));
+  }
 
-      TransformationMatrix* transformationMatrix = memory->getLastTransformationMatrix();
-      transformationMatrix->setMatrix(multiplyMatrix4x4(createTranslateMatrix4x4(position), transformationMatrix->getMatrix()));
-    }
+  if (root->getTypeString() == "FunctionRST") {
+
   }
 
   for (int x = 0; x < root->childrenList.size(); x++) {
@@ -160,7 +161,7 @@ RST* Parser::parseStructure() {
     tree->childrenList.push_back(parseFunction());
   }
 
-  while (TokenHelper::getTokenTypeFromString(*currentWord) == TokenType::Type) {
+  while (TokenHelper::getTokenTypeFromString(*currentWord) == TokenType::Identifier) {
     tree->childrenList.push_back(parseProperty());
   }
 
@@ -179,7 +180,7 @@ RST* Parser::parseFunction() {
   expectToken(Token::OpenParentheses);
   nextWord();
 
-  while (TokenHelper::getTokenTypeFromString(*currentWord) == TokenType::Type) {
+  while (TokenHelper::getTokenTypeFromString(*currentWord) == TokenType::Identifier) {
     tree->childrenList.push_back(parseProperty());
   }
 
@@ -194,6 +195,7 @@ RST* Parser::parseProperty() {
 
   std::string identifier = *currentWord;
   ((PropertyRST*)tree)->identifier = *currentWord;
+
   nextWord();
   expectToken(Token::Equals);
   nextWord();

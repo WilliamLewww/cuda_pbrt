@@ -1,4 +1,5 @@
 #pragma once
+#include "transformation_matrix.h"
 #include "vector.h"
 #include "ray.h"
 
@@ -10,9 +11,12 @@ struct CameraSample {
 
 class Camera {
 private:
+  TransformationMatrix* cameraToWorld;
 public:
-  Camera();
+  Camera(TransformationMatrix* cameraToWorld);
   ~Camera();
+
+  void setTransformationMatrix(TransformationMatrix* cameraToWorld);
   
   virtual Ray* generateRay(CameraSample sample);
 };

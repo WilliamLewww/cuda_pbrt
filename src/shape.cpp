@@ -13,3 +13,7 @@ void Shape::setTransformationMatrix(TransformationMatrix* objectToWorld, Transfo
   this->objectToWorld = objectToWorld;
   this->worldToObject = worldToObject;
 }
+
+TransformationMatrix* Shape::getObjectToWorld() {
+  return objectToWorld;
+}

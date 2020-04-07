@@ -1,6 +1,6 @@
 #include "simple_camera.h"
 
-SimpleCamera::SimpleCamera() : Camera() {
+SimpleCamera::SimpleCamera(TransformationMatrix* cameraToWorld) : Camera(cameraToWorld) {
 
 }
 
