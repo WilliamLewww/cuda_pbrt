@@ -28,7 +28,6 @@ private:
   void expectIdentifier();
 
   RST* parseWorld();
-  RST* parseBlock();
   RST* parseShape();
   RST* parseCamera();
   RST* parseFunction();

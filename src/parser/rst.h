@@ -49,8 +49,3 @@ struct WorldRST : RST {
   std::string toString() override;
   std::string getTypeString() override;
 };
-
-struct BlockRST : RST {
-  std::string toString() override;
-  std::string getTypeString() override;
-};

@@ -145,13 +145,6 @@ RST* Parser::parseWorld() {
 
   nextWord();
   expectToken(Token::World);
-  tree->childrenList.push_back(parseBlock());
-
-  return tree;
-}
-
-RST* Parser::parseBlock() {
-  BlockRST* tree = new BlockRST;
 
   nextWord();
   expectToken(Token::OpenCurlyBracket);
