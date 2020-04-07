@@ -8,6 +8,7 @@
 #include "parser_memory.h"
 #include "rst.h"
 #include "shape_factory.h"
+#include "camera_factory.h"
 #include "token.h"
 
 class Parser {

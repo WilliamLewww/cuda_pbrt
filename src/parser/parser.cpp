@@ -45,6 +45,12 @@ void Parser::parseTree(RST* root, ParserMemory* memory) {
     memory->mapLastShapeTransformationMatrix();
   }
 
+  if (root->getTypeString() == "CameraRST") {
+    CameraRST* rootCast = (CameraRST*)root;
+
+    memory->pushCamera(CameraFactory::generateCameraFromString(rootCast->type), rootCast->identifier);
+  }
+
   if (root->getTypeString() == "PropertyRST") {
     PropertyRST* rootCast = (PropertyRST*)root;
 

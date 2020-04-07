@@ -11,5 +11,8 @@ struct CameraSample {
 class Camera {
 private:
 public:
+  Camera();
+  ~Camera();
+  
   virtual Ray* generateRay(CameraSample sample);
 };

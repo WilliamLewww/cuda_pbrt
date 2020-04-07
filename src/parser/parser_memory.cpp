@@ -13,6 +13,11 @@ void ParserMemory::pushShape(Shape* shape, std::string identifier) {
   stringShapeMap.insert(std::pair<std::string, Shape*>(identifier, shape));
 }
 
+void ParserMemory::pushCamera(Camera* camera, std::string identifier) {
+  cameraList.push_back(camera);
+  stringCameraMap.insert(std::pair<std::string, Camera*>(identifier, camera));
+}
+
 void ParserMemory::pushTransformationMatrix(TransformationMatrix* transformationMatrix) {
   transformationMatrixList.push_back(transformationMatrix);
 }
