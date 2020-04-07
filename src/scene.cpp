@@ -17,10 +17,5 @@ void Scene::addShape(Shape* shape) {
 }
 
 char* Scene::render(Vector2 resolution) {
-  for (int x = 0; x < shapeList.size(); x++) {
-    printMatrix4x4(shapeList[x]->getObjectToWorld()->getMatrix());
-    printf("\n");
-  }
-
   return nullptr;
 }

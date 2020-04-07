@@ -1,4 +1,5 @@
 #pragma once
+#include <math.h>
 
 class Vector2 {
 private:
@@ -16,8 +17,15 @@ private:
 public:
   Vector3();
   Vector3(float x, float y, float z);
+
+  float getLength();
   
   float& operator[](int index);
   Vector3 operator*(float value);
+  Vector3 operator/(float value);
   Vector3 operator+(Vector3 b);
+  Vector3 operator-(Vector3 b);
 };
+
+Vector3 normalize(Vector3 a);
+Vector3 cross(Vector3 a, Vector3 b);

@@ -82,3 +82,17 @@ Matrix4x4* createTranslateMatrix4x4(Vector3 position) {
 
   return matrix;
 }
+
+Matrix4x4* createLookAtMatrix4x4(Vector3 position, Vector3 target, Vector3 up) {
+  Vector3 direction = normalize(target - position);
+  Vector3 left = normalize(cross(normalize(up), direction));
+  Vector3 updatedUp = cross(direction, left);
+
+  Matrix4x4* matrix = new Matrix4x4;
+  (*matrix)[0] = left[0];  (*matrix)[1] = updatedUp[0];  (*matrix)[2] = direction[0];  (*matrix)[3] = position[0];
+  (*matrix)[4] = left[1];  (*matrix)[5] = updatedUp[1];  (*matrix)[6] = direction[1];  (*matrix)[7] = position[1];
+  (*matrix)[8] = left[2];  (*matrix)[9] = updatedUp[2];  (*matrix)[10] = direction[2]; (*matrix)[11] = position[2];
+  (*matrix)[12] = 0.0; (*matrix)[13] = 0.0; (*matrix)[14] = 0.0; (*matrix)[15] = 1.0;
+
+  return matrix;
+}
