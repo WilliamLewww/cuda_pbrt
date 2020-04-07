@@ -28,7 +28,7 @@ Vector3::Vector3(float x, float y, float z) {
 }
 
 float Vector3::getLength() {
-  return sqrt(x * x + y * y + z * z);
+  return sqrt((x * x) + (y * y) + (z * z));
 }
 
 float& Vector3::operator[](int index) {

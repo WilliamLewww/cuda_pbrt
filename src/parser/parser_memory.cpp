@@ -25,7 +25,7 @@ Function ParserMemory::getCurrentFunction() {
 }
 
 bool ParserMemory::checkPropertyStackFull() {
-  return functionPropertyCountRequirementMap[currentFunction] >= propertyStack.size();
+  return propertyStack.size() >= functionPropertyCountRequirementMap[currentFunction];
 }
 
 bool ParserMemory::checkPropertyStackEmpty() {

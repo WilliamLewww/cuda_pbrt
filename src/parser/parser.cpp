@@ -93,6 +93,17 @@ void Parser::parseFunctionStack(ParserMemory* memory) {
     transformationMatrix->setMatrix(multiplyMatrix4x4(createTranslateMatrix4x4(position), transformationMatrix->getMatrix()));
   }
 
+  if (memory->getCurrentFunction() == Function::LookAt) {
+    Vector3 position(std::stof(propertyList[2].dataList[0]), std::stof(propertyList[2].dataList[1]), std::stof(propertyList[2].dataList[2]));
+    Vector3 target(std::stof(propertyList[1].dataList[0]), std::stof(propertyList[1].dataList[1]), std::stof(propertyList[1].dataList[2]));
+    Vector3 up(std::stof(propertyList[0].dataList[0]), std::stof(propertyList[0].dataList[1]), std::stof(propertyList[0].dataList[2]));
+
+    TransformationMatrix* transformationMatrix = memory->getLastTransformationMatrix();
+    transformationMatrix->setMatrix(multiplyMatrix4x4(createLookAtMatrix4x4(position, target, up), transformationMatrix->getMatrix()));
+
+    printMatrix4x4(transformationMatrix->getMatrix());
+  }
+
   memory->setCurrentFunctionFromString("None");
 }
 
