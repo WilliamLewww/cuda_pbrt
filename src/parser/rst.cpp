@@ -15,25 +15,25 @@ std::string RST::toString() {
 }
 
 std::string ShapeRST::toString() {
-  std::string printOut = "ShapeRST: ";
+  std::string printOut = "Shape: ";
   printOut += type + " -> " + identifier;
   return printOut;
 }
 
 std::string CameraRST::toString() {
-  std::string printOut = "CameraRST: ";
+  std::string printOut = "Camera: ";
   printOut += type + " -> " + identifier;
   return printOut;
 }
 
 std::string FunctionRST::toString() {
-  std::string printOut = "FunctionRST: ";
+  std::string printOut = "Function: ";
   printOut += identifier;
   return printOut;
 }
 
 std::string PropertyRST::toString() {
-  std::string printOut = "PropertyRST: ";
+  std::string printOut = "Property: ";
   printOut += identifier + " -> [";
   for (int x = 0; x < dataList.size(); x++) {
     printOut += dataList[x];
@@ -49,16 +49,16 @@ std::string PropertyRST::toString() {
 }
 
 std::string StructureRST::toString() {
-  std::string printOut = "StructureRST";
+  std::string printOut = "Structure";
   return printOut;
 }
 
 std::string WorldRST::toString() {
-  std::string printOut = "WorldRST";
+  std::string printOut = "World";
   return printOut;
 }
 
 std::string BlockRST::toString() {
-  std::string printOut = "BlockRST";
+  std::string printOut = "Block";
   return printOut;
 }
