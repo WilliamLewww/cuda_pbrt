@@ -83,6 +83,16 @@ Matrix4x4* createTranslateMatrix4x4(Vector3 position) {
   return matrix;
 }
 
+Matrix4x4* createScaleMatrix4x4(Vector3 size) {
+  Matrix4x4* matrix = new Matrix4x4;
+  (*matrix)[0] = size[0];  (*matrix)[1] = 0.0;  (*matrix)[2] = 0.0;  (*matrix)[3] = 0.0;
+  (*matrix)[4] = 0.0;  (*matrix)[5] = size[1];  (*matrix)[6] = 0.0;  (*matrix)[7] = 0.0;
+  (*matrix)[8] = 0.0;  (*matrix)[9] = 0.0;  (*matrix)[10] = size[2]; (*matrix)[11] = 0.0;
+  (*matrix)[12] = 0.0; (*matrix)[13] = 0.0; (*matrix)[14] = 0.0; (*matrix)[15] = 1.0;
+
+  return matrix;
+}
+
 Matrix4x4* createLookAtMatrix4x4(Vector3 position, Vector3 target, Vector3 up) {
   Vector3 direction = normalize(target - position);
   Vector3 left = normalize(cross(normalize(up), direction));
