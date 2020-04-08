@@ -22,5 +22,16 @@ void Scene::addShape(Shape* shape) {
 }
 
 char* Scene::render(Vector2 resolution) {
+  for (int x = 0; x < resolution[0]; x++) {
+    for (int y = 0; y < resolution[1]; y++) {
+      CameraSample sample = { 
+        Vector2(x, y),
+        Vector2(resolution[0] / 2, resolution[1] / 2),
+        0.0
+      };
+
+
+    }
+  }
   return nullptr;
 }
