@@ -13,6 +13,9 @@ World {
     )
 
     radius = 1.0
+    zMax = 1.5
+    zMin = 1.5
+    phiMax = 360
   }
 
   Sphere sphereB {
@@ -25,5 +28,8 @@ World {
     )
 
     radius = 0.5
+    zMax = 1.0
+    zMin = 1.0
+    phiMax = 180
   }
 }

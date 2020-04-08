@@ -6,6 +6,7 @@ private:
   TransformationMatrix* objectToWorld;
   TransformationMatrix* worldToObject;
 public:
+  Shape();
   Shape(TransformationMatrix* objectToWorld, TransformationMatrix* worldToObject);
   ~Shape();
 

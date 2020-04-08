@@ -1,5 +1,10 @@
 #include "shape.h"
 
+Shape::Shape() {
+  this->objectToWorld = nullptr;
+  this->worldToObject = nullptr;
+}
+
 Shape::Shape(TransformationMatrix* objectToWorld, TransformationMatrix* worldToObject) {
   this->objectToWorld = objectToWorld;
   this->worldToObject = worldToObject;

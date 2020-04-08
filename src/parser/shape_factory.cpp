@@ -1,11 +1,11 @@
 #include "shape_factory.h"
 
 Shape* ShapeGenerator::create() {
-  return new Shape(nullptr, nullptr);
+  return new Shape();
 }
 
 Shape* SphereGenerator::create() {
-  return new Sphere(nullptr, nullptr);
+  return new Sphere();
 }
 
 std::map<std::string, ShapeGenerator*> ShapeFactory::stringShapeGeneratorMap = {
