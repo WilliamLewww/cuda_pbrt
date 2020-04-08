@@ -1,6 +1,6 @@
 #include "ray.h"
 
-Ray::Ray(Vector3 origin, Vector3 direction, float tMax = std::numeric_limits<int>::max(), float time = 0.0f) {
+Ray::Ray(Vector3 origin, Vector3 direction, float tMax, float time) {
   this->origin = origin;
   this->direction = direction;
   this->tMax = tMax;

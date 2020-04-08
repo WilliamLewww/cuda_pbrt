@@ -10,7 +10,7 @@ struct CameraSample {
 };
 
 class Camera {
-private:
+protected:
   TransformationMatrix* cameraToWorld;
 public:
   Camera(TransformationMatrix* cameraToWorld);
