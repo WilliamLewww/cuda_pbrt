@@ -14,4 +14,6 @@ public:
   Matrix4x4* getInverseMatrix();
 
   void setMatrix(Matrix4x4* matrix);
+
+  Vector3 operator()(Vector3 b);
 };

@@ -30,3 +30,13 @@ void TransformationMatrix::setMatrix(Matrix4x4* matrix) {
   this->matrix = matrix;
   inverseMatrix = inverseMatrix4x4(matrix);
 }
+
+Vector3 TransformationMatrix::operator()(Vector3 b) {
+  Vector3 vector(
+    (*matrix)[0] * b[0] + (*matrix)[1] * b[1] + (*matrix)[2] * b[2],
+    (*matrix)[4] * b[0] + (*matrix)[5] * b[1] + (*matrix)[6] * b[2],
+    (*matrix)[7] * b[0] + (*matrix)[9] * b[1] + (*matrix)[10] * b[2]
+  );
+
+  return vector;
+}
