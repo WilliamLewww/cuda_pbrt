@@ -12,10 +12,6 @@ enum class FunctionType {
   None, Translate, Scale, LookAt
 };
 
-enum class ConstructorType {
-  None, Sphere
-};
-
 struct Property {
   std::string identifier;
   std::vector<std::string> dataList;
@@ -24,15 +20,10 @@ struct Property {
 class ParserMemory {
 private:
   static std::map<std::string, FunctionType> stringFunctionTypeMap;
-  static std::map<std::string, ConstructorType> stringConstructorTypeMap;
   static std::map<FunctionType, int> functionTypePropertyCountRequirementMap;
-  static std::map<ConstructorType, int> shapeTypeConstructorCountRequirementMap;
 
   FunctionType currentFunctionType;
   std::stack<Property> propertyFunctionStack;
-
-  ConstructorType currentConstructorType;
-  std::stack<Property> propertyConstructorStack;
 
   std::map<std::string, Shape*> stringShapeMap;
   std::map<std::string, Camera*> stringCameraMap;

@@ -4,16 +4,8 @@ std::map<std::string, FunctionType> ParserMemory::stringFunctionTypeMap = {
   {"none", FunctionType::None}, {"translate", FunctionType::Translate}, {"scale", FunctionType::Scale}, {"lookAt", FunctionType::LookAt}
 };
 
-std::map<std::string, ConstructorType> ParserMemory::stringConstructorTypeMap = {
-  {"none", ConstructorType::None}, {"Sphere", ConstructorType::Sphere}
-};
-
 std::map<FunctionType, int> ParserMemory::functionTypePropertyCountRequirementMap = {
   {FunctionType::None, 0}, {FunctionType::Translate, 1}, {FunctionType::Scale, 1}, {FunctionType::LookAt, 3}
-};
-
-std::map<ConstructorType, int> ParserMemory::shapeTypeConstructorCountRequirementMap = {
-  {ConstructorType::Sphere, 4}
 };
 
 ParserMemory::ParserMemory() {
