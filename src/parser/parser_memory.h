@@ -3,27 +3,19 @@
 #include <stack>
 #include <map>
 
+#include "parser_stack.h"
+
 #include "../shape.h"
 #include "../camera.h"
 #include "../transformation_matrix.h"
 #include "../scene.h"
-
-enum class FunctionType {
-  None, Translate, Scale, LookAt
-};
-
-struct Property {
-  std::string identifier;
-  std::vector<std::string> dataList;
-};
 
 class ParserMemory {
 private:
   static std::map<std::string, FunctionType> stringFunctionTypeMap;
   static std::map<FunctionType, int> functionTypePropertyCountRequirementMap;
 
-  FunctionType currentFunctionType;
-  std::stack<Property> propertyFunctionStack;
+  ParserStack<FunctionType>* functionParserStack;
 
   std::map<std::string, Shape*> stringShapeMap;
   std::map<std::string, Camera*> stringCameraMap;

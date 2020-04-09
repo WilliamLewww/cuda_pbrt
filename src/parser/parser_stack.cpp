@@ -1,5 +1,7 @@
 #include "parser_stack.h"
 
+template class ParserStack<FunctionType>;
+
 template <typename Type>
 ParserStack<Type>::ParserStack(std::map<std::string, Type>* stringTypeMap, std::map<Type, int>* typePropertyCountRequirementMap) {
   this->stringTypeMap = stringTypeMap;

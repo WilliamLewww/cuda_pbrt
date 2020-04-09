@@ -33,5 +33,6 @@ char* Scene::render(Vector2 resolution) {
       Ray* ray = cameraList[0]->generateRay(sample);
     }
   }
+
   return nullptr;
 }

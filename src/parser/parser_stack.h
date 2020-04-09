@@ -4,6 +4,10 @@
 #include <string>
 #include <vector>
 
+enum class FunctionType {
+  None, Translate, Scale, LookAt
+};
+
 struct Property {
   std::string identifier;
   std::vector<std::string> dataList;

@@ -9,39 +9,40 @@ std::map<FunctionType, int> ParserMemory::functionTypePropertyCountRequirementMa
 };
 
 ParserMemory::ParserMemory() {
-  currentFunctionType = FunctionType::None;
+  functionParserStack = new ParserStack<FunctionType>(&stringFunctionTypeMap, &functionTypePropertyCountRequirementMap);
+  functionParserStack->setCurrentTypeFromString("none");
 }
 
 ParserMemory::~ParserMemory() {
-
+  delete functionParserStack;
 }
 
 void ParserMemory::setCurrentFunctionTypeFromString(std::string word) {
-  currentFunctionType = stringFunctionTypeMap[word];
+  functionParserStack->setCurrentTypeFromString(word);
 }
 
 FunctionType ParserMemory::getCurrentFunctionType() {
-  return currentFunctionType;
+  return functionParserStack->getCurrentType();
 }
 
 bool ParserMemory::checkPropertyFunctionStackFull() {
-  return propertyFunctionStack.size() >= functionTypePropertyCountRequirementMap[currentFunctionType];
+  return functionParserStack->checkPropertyStackFull();
 }
 
 bool ParserMemory::checkPropertyFunctionStackEmpty() {
-  return propertyFunctionStack.empty();
+  return functionParserStack->checkPropertyStackEmpty();
 }
 
 void ParserMemory::pushPropertyFunction(Property property) {
-  propertyFunctionStack.push(property);
+  functionParserStack->pushProperty(property);
 }
 
 void ParserMemory::popPropertyFunction() {
-  propertyFunctionStack.pop();
+  functionParserStack->popProperty();
 }
 
 Property ParserMemory::getPropertyFunctionStackTop() {
-  return propertyFunctionStack.top();
+  return functionParserStack->getPropertyStackTop();
 }
 
 void ParserMemory::pushShape(Shape* shape, std::string identifier) {
