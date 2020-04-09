@@ -1,47 +1,55 @@
 #include "parser_memory.h"
 
-std::map<std::string, Function> ParserMemory::stringFunctionMap = {
-  {"none", Function::None}, {"translate", Function::Translate}, {"scale", Function::Scale}, {"lookAt", Function::LookAt}
+std::map<std::string, FunctionType> ParserMemory::stringFunctionTypeMap = {
+  {"none", FunctionType::None}, {"translate", FunctionType::Translate}, {"scale", FunctionType::Scale}, {"lookAt", FunctionType::LookAt}
 };
 
-std::map<Function, int> ParserMemory::functionPropertyCountRequirementMap = {
-  {Function::None, 0}, {Function::Translate, 1}, {Function::Scale, 1}, {Function::LookAt, 3}
+std::map<std::string, ConstructorType> ParserMemory::stringConstructorTypeMap = {
+  {"none", ConstructorType::None}, {"Sphere", ConstructorType::Sphere}
+};
+
+std::map<FunctionType, int> ParserMemory::functionTypePropertyCountRequirementMap = {
+  {FunctionType::None, 0}, {FunctionType::Translate, 1}, {FunctionType::Scale, 1}, {FunctionType::LookAt, 3}
+};
+
+std::map<ConstructorType, int> ParserMemory::shapeTypeConstructorCountRequirementMap = {
+  {ConstructorType::Sphere, 4}
 };
 
 ParserMemory::ParserMemory() {
-  currentFunction = Function::None;
+  currentFunctionType = FunctionType::None;
 }
 
 ParserMemory::~ParserMemory() {
 
 }
 
-void ParserMemory::setCurrentFunctionFromString(std::string word) {
-  currentFunction = stringFunctionMap[word];
+void ParserMemory::setCurrentFunctionTypeFromString(std::string word) {
+  currentFunctionType = stringFunctionTypeMap[word];
 }
 
-Function ParserMemory::getCurrentFunction() {
-  return currentFunction;
+FunctionType ParserMemory::getCurrentFunctionType() {
+  return currentFunctionType;
 }
 
-bool ParserMemory::checkPropertyStackFull() {
-  return propertyStack.size() >= functionPropertyCountRequirementMap[currentFunction];
+bool ParserMemory::checkPropertyFunctionStackFull() {
+  return propertyFunctionStack.size() >= functionTypePropertyCountRequirementMap[currentFunctionType];
 }
 
-bool ParserMemory::checkPropertyStackEmpty() {
-  return propertyStack.empty();
+bool ParserMemory::checkPropertyFunctionStackEmpty() {
+  return propertyFunctionStack.empty();
 }
 
-void ParserMemory::pushProperty(Property property) {
-  propertyStack.push(property);
+void ParserMemory::pushPropertyFunction(Property property) {
+  propertyFunctionStack.push(property);
 }
 
-void ParserMemory::popProperty() {
-  propertyStack.pop();
+void ParserMemory::popPropertyFunction() {
+  propertyFunctionStack.pop();
 }
 
-Property ParserMemory::getPropertyStackTop() {
-  return propertyStack.top();
+Property ParserMemory::getPropertyFunctionStackTop() {
+  return propertyFunctionStack.top();
 }
 
 void ParserMemory::pushShape(Shape* shape, std::string identifier) {

@@ -57,19 +57,22 @@ void Parser::parseTree(RST* root, ParserMemory* memory) {
   if (root->getTypeString() == "FunctionRST") {
     FunctionRST* rootCast = (FunctionRST*)root;
 
-    memory->setCurrentFunctionFromString(rootCast->identifier);
+    memory->setCurrentFunctionTypeFromString(rootCast->identifier);
   }
 
   if (root->getTypeString() == "PropertyRST") {
     PropertyRST* rootCast = (PropertyRST*)root;
 
-    if (memory->getCurrentFunction() != Function::None) {
+    if (memory->getCurrentFunctionType() != FunctionType::None) {
       Property property = { rootCast->identifier, rootCast->dataList };
-      memory->pushProperty(property);
+      memory->pushPropertyFunction(property);
 
-      if (memory->checkPropertyStackFull()) {
+      if (memory->checkPropertyFunctionStackFull()) {
         parseFunctionStack(memory);
       }
+    }
+    else {
+
     }
   }
 
@@ -81,26 +84,26 @@ void Parser::parseTree(RST* root, ParserMemory* memory) {
 void Parser::parseFunctionStack(ParserMemory* memory) {
   std::vector<Property> propertyList;
 
-  while (!memory->checkPropertyStackEmpty()) {
-    propertyList.push_back(memory->getPropertyStackTop());
-    memory->popProperty();
+  while (!memory->checkPropertyFunctionStackEmpty()) {
+    propertyList.push_back(memory->getPropertyFunctionStackTop());
+    memory->popPropertyFunction();
   }
 
-  if (memory->getCurrentFunction() == Function::Translate) {
+  if (memory->getCurrentFunctionType() == FunctionType::Translate) {
     Vector3 position(std::stof(propertyList[0].dataList[0]), std::stof(propertyList[0].dataList[1]), std::stof(propertyList[0].dataList[2]));
   
     TransformationMatrix* transformationMatrix = memory->getLastTransformationMatrix();
     transformationMatrix->setMatrix(multiplyMatrix4x4(createTranslateMatrix4x4(position), transformationMatrix->getMatrix()));
   }
 
-  if (memory->getCurrentFunction() == Function::Scale) {
+  if (memory->getCurrentFunctionType() == FunctionType::Scale) {
     Vector3 size(std::stof(propertyList[0].dataList[0]), std::stof(propertyList[0].dataList[1]), std::stof(propertyList[0].dataList[2]));
   
     TransformationMatrix* transformationMatrix = memory->getLastTransformationMatrix();
     transformationMatrix->setMatrix(multiplyMatrix4x4(createScaleMatrix4x4(size), transformationMatrix->getMatrix()));
   }
 
-  if (memory->getCurrentFunction() == Function::LookAt) {
+  if (memory->getCurrentFunctionType() == FunctionType::LookAt) {
     Vector3 position(std::stof(propertyList[2].dataList[0]), std::stof(propertyList[2].dataList[1]), std::stof(propertyList[2].dataList[2]));
     Vector3 target(std::stof(propertyList[1].dataList[0]), std::stof(propertyList[1].dataList[1]), std::stof(propertyList[1].dataList[2]));
     Vector3 up(std::stof(propertyList[0].dataList[0]), std::stof(propertyList[0].dataList[1]), std::stof(propertyList[0].dataList[2]));
@@ -109,7 +112,7 @@ void Parser::parseFunctionStack(ParserMemory* memory) {
     transformationMatrix->setMatrix(multiplyMatrix4x4(createLookAtMatrix4x4(position, target, up), transformationMatrix->getMatrix()));
   }
 
-  memory->setCurrentFunctionFromString("None");
+  memory->setCurrentFunctionTypeFromString("None");
 }
 
 void Parser::printTree(RST* root, int offset) {

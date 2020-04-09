@@ -8,8 +8,12 @@
 #include "../transformation_matrix.h"
 #include "../scene.h"
 
-enum Function {
+enum class FunctionType {
   None, Translate, Scale, LookAt
+};
+
+enum class ConstructorType {
+  None, Sphere
 };
 
 struct Property {
@@ -19,11 +23,16 @@ struct Property {
 
 class ParserMemory {
 private:
-  static std::map<std::string, Function> stringFunctionMap;
-  static std::map<Function, int> functionPropertyCountRequirementMap;
+  static std::map<std::string, FunctionType> stringFunctionTypeMap;
+  static std::map<std::string, ConstructorType> stringConstructorTypeMap;
+  static std::map<FunctionType, int> functionTypePropertyCountRequirementMap;
+  static std::map<ConstructorType, int> shapeTypeConstructorCountRequirementMap;
 
-  Function currentFunction;
-  std::stack<Property> propertyStack;
+  FunctionType currentFunctionType;
+  std::stack<Property> propertyFunctionStack;
+
+  ConstructorType currentConstructorType;
+  std::stack<Property> propertyConstructorStack;
 
   std::map<std::string, Shape*> stringShapeMap;
   std::map<std::string, Camera*> stringCameraMap;
@@ -39,14 +48,14 @@ public:
   ParserMemory();
   ~ParserMemory();
 
-  void setCurrentFunctionFromString(std::string word);
-  Function getCurrentFunction();
-  bool checkPropertyStackFull();
-  bool checkPropertyStackEmpty();
+  void setCurrentFunctionTypeFromString(std::string word);
+  FunctionType getCurrentFunctionType();
+  bool checkPropertyFunctionStackFull();
+  bool checkPropertyFunctionStackEmpty();
 
-  void pushProperty(Property property);
-  void popProperty();
-  Property getPropertyStackTop();
+  void pushPropertyFunction(Property property);
+  void popPropertyFunction();
+  Property getPropertyFunctionStackTop();
 
   void pushShape(Shape* shape, std::string identifier);
   void pushCamera(Camera* camera, std::string identifier);
