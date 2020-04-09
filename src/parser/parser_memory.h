@@ -12,9 +12,6 @@
 
 class ParserMemory {
 private:
-  static std::map<std::string, FunctionType> stringFunctionTypeMap;
-  static std::map<FunctionType, int> functionTypePropertyCountRequirementMap;
-
   ParserStack<FunctionType>* functionParserStack;
 
   std::map<std::string, Shape*> stringShapeMap;

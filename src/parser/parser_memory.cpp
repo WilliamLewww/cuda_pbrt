@@ -1,15 +1,7 @@
 #include "parser_memory.h"
 
-std::map<std::string, FunctionType> ParserMemory::stringFunctionTypeMap = {
-  {"none", FunctionType::None}, {"translate", FunctionType::Translate}, {"scale", FunctionType::Scale}, {"lookAt", FunctionType::LookAt}
-};
-
-std::map<FunctionType, int> ParserMemory::functionTypePropertyCountRequirementMap = {
-  {FunctionType::None, 0}, {FunctionType::Translate, 1}, {FunctionType::Scale, 1}, {FunctionType::LookAt, 3}
-};
-
 ParserMemory::ParserMemory() {
-  functionParserStack = new ParserStack<FunctionType>(&stringFunctionTypeMap, &functionTypePropertyCountRequirementMap);
+  functionParserStack = new ParserStack<FunctionType>(StackType::Function);
   functionParserStack->setCurrentTypeFromString("none");
 }
 

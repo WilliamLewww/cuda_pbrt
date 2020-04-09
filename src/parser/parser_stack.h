@@ -4,6 +4,10 @@
 #include <string>
 #include <vector>
 
+enum class StackType {
+  Function
+};
+
 enum class FunctionType {
   None, Translate, Scale, LookAt
 };
@@ -22,7 +26,7 @@ private:
   Type currentType;
   std::stack<Property> propertyStack;
 public:
-  ParserStack(std::map<std::string, Type>* stringTypeMap, std::map<Type, int>* typePropertyCountRequirementMap);
+  ParserStack(StackType stackType);
   ~ParserStack();
 
   void setCurrentTypeFromString(std::string word);
@@ -36,9 +40,7 @@ public:
   Property getPropertyStackTop();
 };
 
-class ParserStackHelper {
-private:
+struct ParserStackMaps {
   static std::map<std::string, FunctionType> stringFunctionTypeMap;
   static std::map<FunctionType, int> functionTypePropertyCountRequirementMap;
-public:
 };

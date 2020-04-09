@@ -3,9 +3,11 @@
 template class ParserStack<FunctionType>;
 
 template <typename Type>
-ParserStack<Type>::ParserStack(std::map<std::string, Type>* stringTypeMap, std::map<Type, int>* typePropertyCountRequirementMap) {
-  this->stringTypeMap = stringTypeMap;
-  this->typePropertyCountRequirementMap = typePropertyCountRequirementMap;
+ParserStack<Type>::ParserStack(StackType stackType) {
+  if (stackType == StackType::Function) {
+    this->stringTypeMap = &ParserStackMaps::stringFunctionTypeMap;
+    this->typePropertyCountRequirementMap = &ParserStackMaps::functionTypePropertyCountRequirementMap;
+  }
 }
 
 template <typename Type>
@@ -48,10 +50,10 @@ Property ParserStack<Type>::getPropertyStackTop() {
   return propertyStack.top();
 }
 
-std::map<std::string, FunctionType> ParserStackHelper::stringFunctionTypeMap = {
+std::map<std::string, FunctionType> ParserStackMaps::stringFunctionTypeMap = {
   {"none", FunctionType::None}, {"translate", FunctionType::Translate}, {"scale", FunctionType::Scale}, {"lookAt", FunctionType::LookAt}
 };
 
-std::map<FunctionType, int> ParserStackHelper::functionTypePropertyCountRequirementMap = {
+std::map<FunctionType, int> ParserStackMaps::functionTypePropertyCountRequirementMap = {
   {FunctionType::None, 0}, {FunctionType::Translate, 1}, {FunctionType::Scale, 1}, {FunctionType::LookAt, 3}
 };
