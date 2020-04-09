@@ -1,7 +1,7 @@
 #include "parser_memory.h"
 
 ParserMemory::ParserMemory() {
-  functionParserStack = new ParserStack<FunctionType>(StackType::Function);
+  functionParserStack = new ParserStack<FunctionType>(&ParserStackMaps::stringFunctionTypeMap, &ParserStackMaps::functionTypePropertyCountRequirementMap);
   functionParserStack->setCurrentTypeFromString("none");
 }
 

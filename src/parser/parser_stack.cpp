@@ -3,11 +3,9 @@
 template class ParserStack<FunctionType>;
 
 template <typename Type>
-ParserStack<Type>::ParserStack(StackType stackType) {
-  if (stackType == StackType::Function) {
-    this->stringTypeMap = &ParserStackMaps::stringFunctionTypeMap;
-    this->typePropertyCountRequirementMap = &ParserStackMaps::functionTypePropertyCountRequirementMap;
-  }
+ParserStack<Type>::ParserStack(std::map<std::string, Type>* stringTypeMap, std::map<Type, int>* typePropertyCountRequirementMap) {
+  this->stringTypeMap = stringTypeMap;
+  this->typePropertyCountRequirementMap = typePropertyCountRequirementMap;
 }
 
 template <typename Type>

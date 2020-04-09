@@ -26,7 +26,7 @@ private:
   Type currentType;
   std::stack<Property> propertyStack;
 public:
-  ParserStack(StackType stackType);
+  ParserStack(std::map<std::string, Type>* stringTypeMap, std::map<Type, int>* typePropertyCountRequirementMap);
   ~ParserStack();
 
   void setCurrentTypeFromString(std::string word);
