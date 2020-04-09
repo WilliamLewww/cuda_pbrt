@@ -47,3 +47,11 @@ template <typename Type>
 Property ParserStack<Type>::getPropertyStackTop() {
   return propertyStack.top();
 }
+
+std::map<std::string, FunctionType> ParserStackHelper::stringFunctionTypeMap = {
+  {"none", FunctionType::None}, {"translate", FunctionType::Translate}, {"scale", FunctionType::Scale}, {"lookAt", FunctionType::LookAt}
+};
+
+std::map<FunctionType, int> ParserStackHelper::functionTypePropertyCountRequirementMap = {
+  {FunctionType::None, 0}, {FunctionType::Translate, 1}, {FunctionType::Scale, 1}, {FunctionType::LookAt, 3}
+};

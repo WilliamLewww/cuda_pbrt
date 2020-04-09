@@ -37,5 +37,8 @@ public:
 };
 
 class ParserStackHelper {
+private:
+  static std::map<std::string, FunctionType> stringFunctionTypeMap;
+  static std::map<FunctionType, int> functionTypePropertyCountRequirementMap;
 public:
 };
