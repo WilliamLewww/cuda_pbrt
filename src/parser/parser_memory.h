@@ -13,6 +13,7 @@
 class ParserMemory {
 private:
   ParserStack<FunctionType>* functionParserStack;
+  ParserStack<ConstructorType>* constructorParserStack;
 
   std::map<std::string, Shape*> stringShapeMap;
   std::map<std::string, Camera*> stringCameraMap;

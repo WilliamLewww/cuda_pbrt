@@ -12,6 +12,10 @@ enum class FunctionType {
   None, Translate, Scale, LookAt
 };
 
+enum class ConstructorType {
+  None, Sphere
+};
+
 struct Property {
   std::string identifier;
   std::vector<std::string> dataList;
@@ -21,12 +25,12 @@ template <class Type>
 class ParserStack {
 private:
   std::map<std::string, Type>* stringTypeMap;
-  std::map<Type, int>* typePropertyCountRequirementMap;
+  std::map<Type, int>* typePropertyCountMap;
 
   Type currentType;
   std::stack<Property> propertyStack;
 public:
-  ParserStack(std::map<std::string, Type>* stringTypeMap, std::map<Type, int>* typePropertyCountRequirementMap);
+  ParserStack(std::map<std::string, Type>* stringTypeMap, std::map<Type, int>* typePropertyCountMap);
   ~ParserStack();
 
   void setCurrentTypeFromString(std::string word);
@@ -42,5 +46,8 @@ public:
 
 struct ParserStackMaps {
   static std::map<std::string, FunctionType> stringFunctionTypeMap;
-  static std::map<FunctionType, int> functionTypePropertyCountRequirementMap;
+  static std::map<std::string, ConstructorType> stringConstructorTypeMap;
+
+  static std::map<FunctionType, int> functionTypePropertyCountMap;
+  static std::map<ConstructorType, int> constructorTypePropertyCountMap;
 };

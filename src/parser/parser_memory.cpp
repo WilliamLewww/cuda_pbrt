@@ -1,12 +1,16 @@
 #include "parser_memory.h"
 
 ParserMemory::ParserMemory() {
-  functionParserStack = new ParserStack<FunctionType>(&ParserStackMaps::stringFunctionTypeMap, &ParserStackMaps::functionTypePropertyCountRequirementMap);
+  functionParserStack = new ParserStack<FunctionType>(&ParserStackMaps::stringFunctionTypeMap, &ParserStackMaps::functionTypePropertyCountMap);
   functionParserStack->setCurrentTypeFromString("none");
+
+  constructorParserStack = new ParserStack<ConstructorType>(&ParserStackMaps::stringConstructorTypeMap, &ParserStackMaps::constructorTypePropertyCountMap);
+  constructorParserStack->setCurrentTypeFromString("none");
 }
 
 ParserMemory::~ParserMemory() {
   delete functionParserStack;
+  delete constructorParserStack;
 }
 
 void ParserMemory::setCurrentFunctionTypeFromString(std::string word) {

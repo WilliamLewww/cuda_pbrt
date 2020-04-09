@@ -1,11 +1,12 @@
 #include "parser_stack.h"
 
 template class ParserStack<FunctionType>;
+template class ParserStack<ConstructorType>;
 
 template <typename Type>
-ParserStack<Type>::ParserStack(std::map<std::string, Type>* stringTypeMap, std::map<Type, int>* typePropertyCountRequirementMap) {
+ParserStack<Type>::ParserStack(std::map<std::string, Type>* stringTypeMap, std::map<Type, int>* typePropertyCountMap) {
   this->stringTypeMap = stringTypeMap;
-  this->typePropertyCountRequirementMap = typePropertyCountRequirementMap;
+  this->typePropertyCountMap = typePropertyCountMap;
 }
 
 template <typename Type>
@@ -25,7 +26,7 @@ Type ParserStack<Type>::getCurrentType() {
 
 template <typename Type>
 bool ParserStack<Type>::checkPropertyStackFull() {
-  return propertyStack.size() >= (*typePropertyCountRequirementMap)[currentType];
+  return propertyStack.size() >= (*typePropertyCountMap)[currentType];
 }
 
 template <typename Type>
@@ -52,6 +53,14 @@ std::map<std::string, FunctionType> ParserStackMaps::stringFunctionTypeMap = {
   {"none", FunctionType::None}, {"translate", FunctionType::Translate}, {"scale", FunctionType::Scale}, {"lookAt", FunctionType::LookAt}
 };
 
-std::map<FunctionType, int> ParserStackMaps::functionTypePropertyCountRequirementMap = {
+std::map<std::string, ConstructorType> ParserStackMaps::stringConstructorTypeMap = {
+  {"none", ConstructorType::None}, {"Sphere", ConstructorType::Sphere}
+};
+
+std::map<FunctionType, int> ParserStackMaps::functionTypePropertyCountMap = {
   {FunctionType::None, 0}, {FunctionType::Translate, 1}, {FunctionType::Scale, 1}, {FunctionType::LookAt, 3}
+};
+
+std::map<ConstructorType, int> ParserStackMaps::constructorTypePropertyCountMap = {
+  {ConstructorType::None, 0}, {ConstructorType::Sphere, 4}
 };
