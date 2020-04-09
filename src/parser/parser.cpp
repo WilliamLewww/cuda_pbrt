@@ -132,7 +132,7 @@ bool Parser::nextWord() {
 }
 
 void Parser::expectToken(Token token) {
-  if (TokenHelper::stringTokenMap[*currentWord] != token) {
+  if (TokenHelper::getTokenFromString(*currentWord) != token) {
     throw;
   }
 }

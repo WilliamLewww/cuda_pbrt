@@ -35,3 +35,7 @@ public:
   void popProperty();
   Property getPropertyStackTop();
 };
+
+class ParserStackHelper {
+public:
+};
