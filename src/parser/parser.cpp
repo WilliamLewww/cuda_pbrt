@@ -44,6 +44,8 @@ void Parser::parseTree(RST* root, ParserMemory* memory) {
     memory->pushTransformationMatrix(new TransformationMatrix());
     memory->pushShape(ShapeFactory::generateShapeFromString(rootCast->type), rootCast->identifier);
     memory->mapLastShapeTransformationMatrix();
+
+    memory->setCurrentConstructorTypeFromString(rootCast->type);
   }
 
   if (root->getTypeString() == "CameraRST") {
@@ -72,7 +74,14 @@ void Parser::parseTree(RST* root, ParserMemory* memory) {
       }
     }
     else {
+      if (memory->getCurrentConstructorType() != ConstructorType::None) {
+        Property property = { rootCast->identifier, rootCast->dataList };
+        memory->pushPropertyConstructor(property);
 
+        if (memory->checkPropertyConstructorStackFull()) {
+          parseConstructorStack(memory);
+        }
+      }
     }
   }
 
@@ -82,37 +91,62 @@ void Parser::parseTree(RST* root, ParserMemory* memory) {
 }
 
 void Parser::parseFunctionStack(ParserMemory* memory) {
-  std::vector<Property> propertyList;
+  std::map<std::string, std::vector<std::string>> propertyMap;
 
   while (!memory->checkPropertyFunctionStackEmpty()) {
-    propertyList.push_back(memory->getPropertyFunctionStackTop());
+    Property property = memory->getPropertyFunctionStackTop();
+    propertyMap[property.identifier] = property.dataList;
+
     memory->popPropertyFunction();
   }
 
   if (memory->getCurrentFunctionType() == FunctionType::Translate) {
-    Vector3 position(std::stof(propertyList[0].dataList[0]), std::stof(propertyList[0].dataList[1]), std::stof(propertyList[0].dataList[2]));
+    Vector3 position(std::stof(propertyMap["position"][0]), std::stof(propertyMap["position"][1]), std::stof(propertyMap["position"][2]));
   
     TransformationMatrix* transformationMatrix = memory->getLastTransformationMatrix();
     transformationMatrix->setMatrix(multiplyMatrix4x4(createTranslateMatrix4x4(position), transformationMatrix->getMatrix()));
   }
 
   if (memory->getCurrentFunctionType() == FunctionType::Scale) {
-    Vector3 size(std::stof(propertyList[0].dataList[0]), std::stof(propertyList[0].dataList[1]), std::stof(propertyList[0].dataList[2]));
+    Vector3 size(std::stof(propertyMap["size"][0]), std::stof(propertyMap["size"][1]), std::stof(propertyMap["size"][2]));
   
     TransformationMatrix* transformationMatrix = memory->getLastTransformationMatrix();
     transformationMatrix->setMatrix(multiplyMatrix4x4(createScaleMatrix4x4(size), transformationMatrix->getMatrix()));
   }
 
   if (memory->getCurrentFunctionType() == FunctionType::LookAt) {
-    Vector3 position(std::stof(propertyList[2].dataList[0]), std::stof(propertyList[2].dataList[1]), std::stof(propertyList[2].dataList[2]));
-    Vector3 target(std::stof(propertyList[1].dataList[0]), std::stof(propertyList[1].dataList[1]), std::stof(propertyList[1].dataList[2]));
-    Vector3 up(std::stof(propertyList[0].dataList[0]), std::stof(propertyList[0].dataList[1]), std::stof(propertyList[0].dataList[2]));
+    Vector3 position(std::stof(propertyMap["position"][0]), std::stof(propertyMap["position"][1]), std::stof(propertyMap["position"][2]));
+    Vector3 target(std::stof(propertyMap["target"][0]), std::stof(propertyMap["target"][1]), std::stof(propertyMap["target"][2]));
+    Vector3 up(std::stof(propertyMap["up"][0]), std::stof(propertyMap["up"][1]), std::stof(propertyMap["up"][2]));
 
     TransformationMatrix* transformationMatrix = memory->getLastTransformationMatrix();
     transformationMatrix->setMatrix(multiplyMatrix4x4(createLookAtMatrix4x4(position, target, up), transformationMatrix->getMatrix()));
   }
 
   memory->setCurrentFunctionTypeFromString("None");
+}
+
+void Parser::parseConstructorStack(ParserMemory* memory) {
+  std::map<std::string, std::vector<std::string>> propertyMap;
+
+  while (!memory->checkPropertyConstructorStackEmpty()) {
+    Property property = memory->getPropertyConstructorStackTop();
+    propertyMap[property.identifier] = property.dataList;
+
+    memory->popPropertyConstructor();
+  }
+
+  if (memory->getCurrentConstructorType() == ConstructorType::Sphere) {
+    float radius = std::stof(propertyMap["radius"][0]);
+    float zMax = std::stof(propertyMap["zMax"][0]);
+    float zMin = std::stof(propertyMap["zMin"][0]);
+    float phiMax = std::stof(propertyMap["phiMax"][0]);
+
+    Sphere* shape = (Sphere*)memory->getLastShape();
+    shape->setConstructorDataMembers(radius, zMax, zMin, phiMax);
+  }
+
+  memory->setCurrentConstructorTypeFromString("None");
 }
 
 void Parser::printTree(RST* root, int offset) {

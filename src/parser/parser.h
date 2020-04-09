@@ -21,6 +21,7 @@ private:
   void printTree(RST* root, int offset = 0);
 
   void parseFunctionStack(ParserMemory* memory);
+  void parseConstructorStack(ParserMemory* memory);
 
   bool nextWord();
 

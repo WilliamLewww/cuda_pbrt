@@ -38,6 +38,15 @@ public:
   void popPropertyFunction();
   Property getPropertyFunctionStackTop();
 
+  void setCurrentConstructorTypeFromString(std::string word);
+  ConstructorType getCurrentConstructorType();
+  bool checkPropertyConstructorStackFull();
+  bool checkPropertyConstructorStackEmpty();
+
+  void pushPropertyConstructor(Property property);
+  void popPropertyConstructor();
+  Property getPropertyConstructorStackTop();
+
   void pushShape(Shape* shape, std::string identifier);
   void pushCamera(Camera* camera, std::string identifier);
   

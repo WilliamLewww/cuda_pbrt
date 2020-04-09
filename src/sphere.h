@@ -10,4 +10,6 @@ public:
   Sphere();
   Sphere(TransformationMatrix* objectToWorld, TransformationMatrix* worldToObject, float radius, float zMin, float zMax, float phiMax);
   ~Sphere();
+
+  void setConstructorDataMembers(float radius, float zMin, float zMax, float phiMax);
 };

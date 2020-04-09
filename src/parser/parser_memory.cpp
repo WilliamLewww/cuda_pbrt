@@ -41,6 +41,34 @@ Property ParserMemory::getPropertyFunctionStackTop() {
   return functionParserStack->getPropertyStackTop();
 }
 
+void ParserMemory::setCurrentConstructorTypeFromString(std::string word) {
+  constructorParserStack->setCurrentTypeFromString(word);
+}
+
+ConstructorType ParserMemory::getCurrentConstructorType() {
+  return constructorParserStack->getCurrentType();
+}
+
+bool ParserMemory::checkPropertyConstructorStackFull() {
+  return constructorParserStack->checkPropertyStackFull();
+}
+
+bool ParserMemory::checkPropertyConstructorStackEmpty() {
+  return constructorParserStack->checkPropertyStackEmpty();
+}
+
+void ParserMemory::pushPropertyConstructor(Property property) {
+  constructorParserStack->pushProperty(property);
+}
+
+void ParserMemory::popPropertyConstructor() {
+  constructorParserStack->popProperty();
+}
+
+Property ParserMemory::getPropertyConstructorStackTop() {
+  return constructorParserStack->getPropertyStackTop();
+}
+
 void ParserMemory::pushShape(Shape* shape, std::string identifier) {
   shapeList.push_back(shape);
   stringShapeMap.insert(std::pair<std::string, Shape*>(identifier, shape));
