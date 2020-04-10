@@ -21,6 +21,10 @@ void Scene::addShape(Shape* shape) {
   shapeList.push_back(shape);
 }
 
+char Scene::intersect(Ray* ray) {
+
+}
+
 char* Scene::render(Vector2 resolution) {
   for (int x = 0; x < resolution[0]; x++) {
     for (int y = 0; y < resolution[1]; y++) {

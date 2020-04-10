@@ -27,6 +27,14 @@ Vector3::Vector3(float x, float y, float z) {
   this->z = z;
 }
 
+Vector3& Vector3::operator=(Vector3 b) {
+  this->x = b[0];
+  this->y = b[1];
+  this->z = b[2];
+  
+  return *this;
+}
+
 float Vector3::getLength() {
   return sqrt((x * x) + (y * y) + (z * z));
 }

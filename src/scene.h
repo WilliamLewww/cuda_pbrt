@@ -16,5 +16,6 @@ public:
   void addCamera(Camera* camera);
   void addShape(Shape* shape);
 
+  char intersect(Ray* ray);
   char* render(Vector2 resolution);
 };
