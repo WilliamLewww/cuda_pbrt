@@ -46,3 +46,39 @@ Bounds3 Bounds3::getUnion(Vector3 b) {
 
   return Bounds3(Vector3(minX, minY, minZ), Vector3(maxX, maxY, maxZ));
 }
+
+bool Bounds3::checkRayIntersection(Ray* ray, float* firstHit, float* secondHit) {
+  float t0 = 0;
+  float t1 = ray->tMax;
+
+  for (int x = 0; x < 3; x++) {
+    float inverseRayDirection = 1.0 / ray->direction[x];
+    float tNear = (pointMin[x] - ray->origin[x]) * inverseRayDirection;
+    float tFar = (pointMax[x] - ray->origin[x]) * inverseRayDirection;
+
+    if (tNear > tFar) {
+      float temp = tNear;
+      tNear = tFar;
+      tFar = temp;
+    }
+
+    tFar *= 1.0 + 2.0 * ((3.0 * std::numeric_limits<float>::epsilon() * 0.5) / (1.0 - 3.0 * std::numeric_limits<float>::epsilon() * 0.5));
+
+    t0 = tNear > t0 ? tNear : t0;
+    t1 = tFar < t1 ? tFar : t1;
+
+    if (t0 > t1) {
+      return false;
+    }
+  }
+
+  if (firstHit) {
+    *firstHit = t0;
+  }
+
+  if (secondHit) {
+    *secondHit = t1;
+  }
+
+  return true;
+}
