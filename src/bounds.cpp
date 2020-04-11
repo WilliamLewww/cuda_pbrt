@@ -34,3 +34,15 @@ Vector3& Bounds3::operator[](int index) {
 Vector3 Bounds3::getCorner(int corner) {
   return Vector3((*this)[(corner & 1)][0], (*this)[(corner & 2) ? 1 : 0][1], (*this)[(corner & 4) ? 1 : 0][2]);
 }
+
+Bounds3 Bounds3::getUnion(Vector3 b) {
+  float minX = fmin((*this)[0][0], b[0]);
+  float minY = fmin((*this)[0][1], b[1]);
+  float minZ = fmin((*this)[0][2], b[2]);
+
+  float maxX = fmin((*this)[1][0], b[0]);
+  float maxY = fmin((*this)[1][1], b[1]);
+  float maxZ = fmin((*this)[1][2], b[2]);
+
+  return Bounds3(Vector3(minX, minY, minZ), Vector3(maxX, maxY, maxZ));
+}

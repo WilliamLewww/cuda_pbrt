@@ -22,3 +22,11 @@ void Shape::setTransformationMatrix(TransformationMatrix* objectToWorld, Transfo
 TransformationMatrix* Shape::getObjectToWorld() {
   return objectToWorld;
 }
+
+Bounds3 Shape::objectBounds() {
+  return Bounds3();
+}
+
+Bounds3 Shape::worldBounds() {
+  return (*objectToWorld)(objectBounds());
+}

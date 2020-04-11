@@ -14,4 +14,6 @@ public:
 
   Vector3& operator[](int index);
   Vector3 getCorner(int corner);
+
+  Bounds3 getUnion(Vector3 b);
 };

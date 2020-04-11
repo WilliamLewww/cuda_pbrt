@@ -40,3 +40,16 @@ Vector3 TransformationMatrix::operator()(Vector3 b) {
 
   return vector;
 }
+
+Bounds3 TransformationMatrix::operator()(Bounds3 b) {
+  Bounds3 bounds((*this)(Vector3(b[0][0], b[0][1], b[0][2])));
+  bounds = bounds.getUnion((*this)(Vector3(b[1][0], b[0][1],b[0][2])));
+  bounds = bounds.getUnion((*this)(Vector3(b[0][0], b[1][1],b[0][2])));
+  bounds = bounds.getUnion((*this)(Vector3(b[0][0], b[0][1],b[1][2])));
+  bounds = bounds.getUnion((*this)(Vector3(b[0][0], b[1][1],b[1][2])));
+  bounds = bounds.getUnion((*this)(Vector3(b[1][0], b[1][1],b[0][2])));
+  bounds = bounds.getUnion((*this)(Vector3(b[1][0], b[0][1],b[1][2])));
+  bounds = bounds.getUnion((*this)(Vector3(b[1][0], b[1][1],b[1][2])));
+
+  return bounds;
+}

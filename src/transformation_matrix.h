@@ -1,5 +1,6 @@
 #pragma once
 #include "matrix.h"
+#include "bounds.h"
 
 class TransformationMatrix {
 private:
@@ -16,4 +17,5 @@ public:
   void setMatrix(Matrix4x4* matrix);
 
   Vector3 operator()(Vector3 b);
+  Bounds3 operator()(Bounds3 b);
 };
