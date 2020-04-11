@@ -7,17 +7,17 @@
 
 class Bounds3 {
 private:
-  Vector3 pointMin;
-  Vector3 pointMax;
+  Vector4 pointMin;
+  Vector4 pointMax;
 public:
   Bounds3();
-  Bounds3(Vector3 point);
-  Bounds3(Vector3 a, Vector3 b);
+  Bounds3(Vector4 point);
+  Bounds3(Vector4 a, Vector4 b);
 
-  Vector3& operator[](int index);
-  Vector3 getCorner(int corner);
+  Vector4& operator[](int index);
+  Vector4 getCorner(int corner);
 
-  Bounds3 getUnion(Vector3 b);
+  Bounds3 getUnion(Vector4 b);
 
   bool checkRayIntersection(Ray* ray, float* firstHit, float* secondHit);
 };

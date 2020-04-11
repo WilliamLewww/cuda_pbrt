@@ -101,23 +101,23 @@ void Parser::parseFunctionStack(ParserMemory* memory) {
   }
 
   if (memory->getCurrentFunctionType() == FunctionType::Translate) {
-    Vector3 position(std::stof(propertyMap["position"][0]), std::stof(propertyMap["position"][1]), std::stof(propertyMap["position"][2]));
+    Vector4 position(std::stof(propertyMap["position"][0]), std::stof(propertyMap["position"][1]), std::stof(propertyMap["position"][2]), 1);
   
     TransformationMatrix* transformationMatrix = memory->getLastTransformationMatrix();
     transformationMatrix->setMatrix(multiplyMatrix4x4(createTranslateMatrix4x4(position), transformationMatrix->getMatrix()));
   }
 
   if (memory->getCurrentFunctionType() == FunctionType::Scale) {
-    Vector3 size(std::stof(propertyMap["size"][0]), std::stof(propertyMap["size"][1]), std::stof(propertyMap["size"][2]));
+    Vector4 size(std::stof(propertyMap["size"][0]), std::stof(propertyMap["size"][1]), std::stof(propertyMap["size"][2]), 0);
   
     TransformationMatrix* transformationMatrix = memory->getLastTransformationMatrix();
     transformationMatrix->setMatrix(multiplyMatrix4x4(createScaleMatrix4x4(size), transformationMatrix->getMatrix()));
   }
 
   if (memory->getCurrentFunctionType() == FunctionType::LookAt) {
-    Vector3 position(std::stof(propertyMap["position"][0]), std::stof(propertyMap["position"][1]), std::stof(propertyMap["position"][2]));
-    Vector3 target(std::stof(propertyMap["target"][0]), std::stof(propertyMap["target"][1]), std::stof(propertyMap["target"][2]));
-    Vector3 up(std::stof(propertyMap["up"][0]), std::stof(propertyMap["up"][1]), std::stof(propertyMap["up"][2]));
+    Vector4 position(std::stof(propertyMap["position"][0]), std::stof(propertyMap["position"][1]), std::stof(propertyMap["position"][2]), 1);
+    Vector4 target(std::stof(propertyMap["target"][0]), std::stof(propertyMap["target"][1]), std::stof(propertyMap["target"][2]), 1);
+    Vector4 up(std::stof(propertyMap["up"][0]), std::stof(propertyMap["up"][1]), std::stof(propertyMap["up"][2]), 0);
 
     TransformationMatrix* transformationMatrix = memory->getLastTransformationMatrix();
     transformationMatrix->setMatrix(multiplyMatrix4x4(createLookAtMatrix4x4(position, target, up), transformationMatrix->getMatrix()));

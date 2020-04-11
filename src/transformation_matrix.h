@@ -16,6 +16,6 @@ public:
 
   void setMatrix(Matrix4x4* matrix);
 
-  Vector3 operator()(Vector3 b);
+  Vector4 operator()(Vector4 b);
   Bounds3 operator()(Bounds3 b);
 };

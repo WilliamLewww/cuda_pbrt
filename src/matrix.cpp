@@ -73,7 +73,7 @@ Matrix4x4* createIdentityMatrix4x4() {
   return matrix;
 }
 
-Matrix4x4* createTranslateMatrix4x4(Vector3 position) {
+Matrix4x4* createTranslateMatrix4x4(Vector4 position) {
   Matrix4x4* matrix = new Matrix4x4;
   (*matrix)[0] = 1.0;  (*matrix)[1] = 0.0;  (*matrix)[2] = 0.0;  (*matrix)[3] = position[0];
   (*matrix)[4] = 0.0;  (*matrix)[5] = 1.0;  (*matrix)[6] = 0.0;  (*matrix)[7] = position[1];
@@ -83,7 +83,7 @@ Matrix4x4* createTranslateMatrix4x4(Vector3 position) {
   return matrix;
 }
 
-Matrix4x4* createScaleMatrix4x4(Vector3 size) {
+Matrix4x4* createScaleMatrix4x4(Vector4 size) {
   Matrix4x4* matrix = new Matrix4x4;
   (*matrix)[0] = size[0];  (*matrix)[1] = 0.0;  (*matrix)[2] = 0.0;  (*matrix)[3] = 0.0;
   (*matrix)[4] = 0.0;  (*matrix)[5] = size[1];  (*matrix)[6] = 0.0;  (*matrix)[7] = 0.0;
@@ -93,10 +93,10 @@ Matrix4x4* createScaleMatrix4x4(Vector3 size) {
   return matrix;
 }
 
-Matrix4x4* createLookAtMatrix4x4(Vector3 position, Vector3 target, Vector3 up) {
-  Vector3 direction = normalize(target - position);
-  Vector3 left = normalize(cross(normalize(up), direction));
-  Vector3 updatedUp = cross(direction, left);
+Matrix4x4* createLookAtMatrix4x4(Vector4 position, Vector4 target, Vector4 up) {
+  Vector4 direction = normalize(target - position);
+  Vector4 left = normalize(cross(normalize(up), direction));
+  Vector4 updatedUp = cross(direction, left);
 
   Matrix4x4* matrix = new Matrix4x4;
   (*matrix)[0] = left[0];  (*matrix)[1] = updatedUp[0];  (*matrix)[2] = direction[0];  (*matrix)[3] = position[0];
