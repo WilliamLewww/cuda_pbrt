@@ -40,45 +40,28 @@ Bounds3 Bounds3::getUnion(Vector3 b) {
   float minY = fmin((*this)[0][1], b[1]);
   float minZ = fmin((*this)[0][2], b[2]);
 
-  float maxX = fmin((*this)[1][0], b[0]);
-  float maxY = fmin((*this)[1][1], b[1]);
-  float maxZ = fmin((*this)[1][2], b[2]);
+  float maxX = fmax((*this)[1][0], b[0]);
+  float maxY = fmax((*this)[1][1], b[1]);
+  float maxZ = fmax((*this)[1][2], b[2]);
 
   return Bounds3(Vector3(minX, minY, minZ), Vector3(maxX, maxY, maxZ));
 }
 
 bool Bounds3::checkRayIntersection(Ray* ray, float* firstHit, float* secondHit) {
-  float t0 = 0;
-  float t1 = ray->tMax;
+  float t0 = 0, t1 = ray->tMax;
+  for (int i = 0; i < 3; ++i) {
+    float invRayDir = 1 / ray->direction[i];
+    float tNear = (pointMin[i] - ray->origin[i]) * invRayDir;
+    float tFar = (pointMax[i] - ray->origin[i]) * invRayDir;
 
-  for (int x = 0; x < 3; x++) {
-    float inverseRayDirection = 1.0 / ray->direction[x];
-    float tNear = (pointMin[x] - ray->origin[x]) * inverseRayDirection;
-    float tFar = (pointMax[x] - ray->origin[x]) * inverseRayDirection;
-
-    if (tNear > tFar) {
-      float temp = tNear;
-      tNear = tFar;
-      tFar = temp;
-    }
-
-    tFar *= 1.0 + 2.0 * ((3.0 * std::numeric_limits<float>::epsilon() * 0.5) / (1.0 - 3.0 * std::numeric_limits<float>::epsilon() * 0.5));
+    if (tNear > tFar) std::swap(tNear, tFar);
 
     t0 = tNear > t0 ? tNear : t0;
     t1 = tFar < t1 ? tFar : t1;
-
-    if (t0 > t1) {
-      return false;
-    }
+    if (t0 > t1) return false;
   }
 
-  if (firstHit) {
-    *firstHit = t0;
-  }
-
-  if (secondHit) {
-    *secondHit = t1;
-  }
-
+  if (firstHit) *firstHit = t0;
+  if (secondHit) *secondHit = t1;
   return true;
 }

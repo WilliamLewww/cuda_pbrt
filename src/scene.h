@@ -4,6 +4,7 @@
 #include "vector.h"
 #include "shape.h"
 #include "camera.h"
+#include "sphere.h"
 
 class Scene {
 private:

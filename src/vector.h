@@ -11,22 +11,22 @@ public:
   float& operator[](int index);
 };
 
-class Vector3 {
+class Vector4 {
 private:
-  float x, y, z;
+  float x, y, z, w;
 public:
-  Vector3();
-  Vector3(float x, float y, float z);
-  Vector3& operator=(Vector3 b);
+  Vector4();
+  Vector4(float x, float y, float z, float w);
+  Vector4& operator=(Vector4 b);
 
   float getLength();
   
   float& operator[](int index);
-  Vector3 operator*(float value);
-  Vector3 operator/(float value);
-  Vector3 operator+(Vector3 b);
-  Vector3 operator-(Vector3 b);
+  Vector4 operator*(float value);
+  Vector4 operator/(float value);
+  Vector4 operator+(Vector4 b);
+  Vector4 operator-(Vector4 b);
 };
 
-Vector3 normalize(Vector3 a);
-Vector3 cross(Vector3 a, Vector3 b);
+Vector4 normalize(Vector4 a);
+Vector4 cross(Vector4 a, Vector4 b);

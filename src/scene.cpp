@@ -35,6 +35,17 @@ char* Scene::render(Vector2 resolution) {
       };
 
       Ray* ray = cameraList[0]->generateRay(sample);
+
+      for (int shapeIndex = 0; shapeIndex < shapeList.size(); shapeIndex++) {
+        float hit0, hit1;
+        bool intersect = shapeList[shapeIndex]->worldBounds().checkRayIntersection(ray, &hit0, &hit1);
+
+        if (intersect) {
+          printf("\n%f %f\n", hit0, hit1);
+          printf("%f %f %f\n", ray->origin[0], ray->origin[1], ray->origin[2]);
+          printf("%f %f %f\n", ray->direction[0], ray->direction[1], ray->direction[2]);
+        }
+      }
     }
   }
 

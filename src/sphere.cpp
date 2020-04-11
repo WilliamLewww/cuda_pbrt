@@ -43,3 +43,7 @@ void Sphere::setConstructorDataMembers(float radius, float zMin, float zMax, flo
 
   this->phiMax = fmax(0.0, fmin(phiMax, 360.0)) * (M_PI / 180.0);
 }
+
+Bounds3 Sphere::objectBounds() {
+  return Bounds3(Vector3(-radius, -radius, zMin), Vector3(radius, radius, zMax));
+}

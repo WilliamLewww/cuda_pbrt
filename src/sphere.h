@@ -12,4 +12,6 @@ public:
   ~Sphere();
 
   void setConstructorDataMembers(float radius, float zMin, float zMax, float phiMax);
+
+  Bounds3 objectBounds();
 };

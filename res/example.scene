@@ -6,30 +6,15 @@ World {
       up = [ 0.0 1.0 0.0 ]
     )
   }
-  
-  Sphere sphereA {
-    Function translate (
-      position = [ 5.0 1.0 2.0 ]
-    )
-
-    radius = 1.0
-    zMax = 1.5
-    zMin = 1.5
-    phiMax = 360
-  }
 
   Sphere sphereB {
     Function translate (
-      position = [ 7.0 12.0 3.0 ]
+      position = [ 0.0 0.0 5.0 ]
     )
 
-    Function scale (
-      size = [ 1.5 1.5 1.5 ]
-    )
-
-    radius = 0.5
+    radius = 1.0
     zMax = 1.0
-    zMin = 1.0
-    phiMax = 180
+    zMin = 0.0
+    phiMax = 360
   }
 }
