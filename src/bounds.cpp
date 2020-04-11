@@ -25,3 +25,12 @@ Bounds3::Bounds3(Vector3 a, Vector3 b) {
   pointMin = Vector3(minX, minY, minZ);
   pointMax = Vector3(maxX, maxY, maxZ);
 }
+
+Vector3& Bounds3::operator[](int index) {
+  if (index == 0) { return pointMin; }
+  if (index == 1) { return pointMax; }
+}
+
+Vector3 Bounds3::getCorner(int corner) {
+  return Vector3((*this)[(corner & 1)][0], (*this)[(corner & 2) ? 1 : 0][1], (*this)[(corner & 4) ? 1 : 0][2]);
+}

@@ -11,4 +11,7 @@ public:
   Bounds3();
   Bounds3(Vector3 point);
   Bounds3(Vector3 a, Vector3 b);
+
+  Vector3& operator[](int index);
+  Vector3 getCorner(int corner);
 };
