@@ -65,6 +65,10 @@ Vector4 Vector4::operator-(Vector4 b) {
   return Vector4(x - b[0], y - b[1], z - b[2], w - b[3]);
 }
 
+bool Vector4::operator!=(Vector4 b) {
+  return (x != b[0] || y != b[1] || z != b[2] || w != b[3]);
+}
+
 Vector4 normalize(Vector4 a) {
   return a / a.getLength();
 }
