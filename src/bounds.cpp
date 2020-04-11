@@ -54,14 +54,29 @@ bool Bounds3::checkRayIntersection(Ray* ray, float* firstHit, float* secondHit) 
     float tNear = (pointMin[i] - ray->origin[i]) * invRayDir;
     float tFar = (pointMax[i] - ray->origin[i]) * invRayDir;
 
-    if (tNear > tFar) std::swap(tNear, tFar);
+    if (tNear > tFar) {
+      float temp = tNear;
+      tNear = tFar;
+      tFar = temp;
+    }
+
+    tFar *= 1.0 + 2.0 * ((3.0 * std::numeric_limits<float>::epsilon() * 0.5) / (1.0 - 3.0 * std::numeric_limits<float>::epsilon() * 0.5));
 
     t0 = tNear > t0 ? tNear : t0;
     t1 = tFar < t1 ? tFar : t1;
-    if (t0 > t1) return false;
+
+    if (t0 > t1) {
+      return false;
+    }
   }
 
-  if (firstHit) *firstHit = t0;
-  if (secondHit) *secondHit = t1;
+  if (firstHit) {
+    *firstHit = t0;
+  }
+
+  if (secondHit) {
+    *secondHit = t1;
+  }
+  
   return true;
 }
