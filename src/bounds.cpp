@@ -48,11 +48,13 @@ Bounds3 Bounds3::getUnion(Vector4 b) {
 }
 
 bool Bounds3::checkRayIntersection(Ray* ray, float* firstHit, float* secondHit) {
-  float t0 = 0, t1 = ray->tMax;
-  for (int i = 0; i < 3; ++i) {
-    float invRayDir = 1 / ray->direction[i];
-    float tNear = (pointMin[i] - ray->origin[i]) * invRayDir;
-    float tFar = (pointMax[i] - ray->origin[i]) * invRayDir;
+  float t0 = 0; 
+  float t1 = ray->tMax;
+  
+  for (int x = 0; x < 3; x++) {
+    float inverseRayDirectionCoordinate = 1 / ray->direction[x];
+    float tNear = (pointMin[x] - ray->origin[x]) * inverseRayDirectionCoordinate;
+    float tFar = (pointMax[x] - ray->origin[x]) * inverseRayDirectionCoordinate;
 
     if (tNear > tFar) {
       float temp = tNear;
@@ -77,6 +79,6 @@ bool Bounds3::checkRayIntersection(Ray* ray, float* firstHit, float* secondHit) 
   if (secondHit) {
     *secondHit = t1;
   }
-  
+
   return true;
 }
