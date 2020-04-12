@@ -23,10 +23,14 @@ TransformationMatrix* Shape::getObjectToWorld() {
   return objectToWorld;
 }
 
-Bounds3 Shape::objectBounds() {
-  return Bounds3();
-}
-
 Bounds3 Shape::worldBounds() {
   return (*objectToWorld)(objectBounds());
+}
+
+Bounds3 Shape::objectBounds() {
+
+}
+
+bool Shape::checkRayIntersection(Ray* ray, float* firstHit, SurfaceInteraction* surfaceInteraction, bool testAlphaTexture) {
+
 }

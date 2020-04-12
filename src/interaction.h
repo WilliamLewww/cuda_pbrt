@@ -1,6 +1,7 @@
 #pragma once
 #include "vector.h"
-#include "shape.h"
+
+class Shape;
 
 struct Interaction {
   Vector4 position;

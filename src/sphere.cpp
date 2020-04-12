@@ -47,3 +47,7 @@ void Sphere::setConstructorDataMembers(float radius, float zMin, float zMax, flo
 Bounds3 Sphere::objectBounds() {
   return Bounds3(Vector4(-radius, -radius, zMin, 1), Vector4(radius, radius, zMax, 1));
 }
+
+bool Sphere::checkRayIntersection(Ray* ray, float* firstHit, SurfaceInteraction* surfaceInteraction, bool testAlphaTexture) {
+
+}

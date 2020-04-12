@@ -1,6 +1,7 @@
 #pragma once
 #include "transformation_matrix.h"
 #include "bounds.h"
+#include "interaction.h"
 
 class Shape {
 private:
@@ -15,6 +16,8 @@ public:
 
   TransformationMatrix* getObjectToWorld();
 
-  virtual Bounds3 objectBounds();
   Bounds3 worldBounds();
+
+  virtual Bounds3 objectBounds();
+  virtual bool checkRayIntersection(Ray* ray, float* firstHit, SurfaceInteraction* surfaceInteraction, bool testAlphaTexture = true);
 };

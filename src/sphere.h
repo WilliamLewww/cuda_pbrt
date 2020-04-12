@@ -14,4 +14,5 @@ public:
   void setConstructorDataMembers(float radius, float zMin, float zMax, float phiMax);
 
   Bounds3 objectBounds();
+  bool checkRayIntersection(Ray* ray, float* firstHit, SurfaceInteraction* surfaceInteraction, bool testAlphaTexture = true);
 };
