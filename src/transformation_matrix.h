@@ -1,6 +1,7 @@
 #pragma once
 #include "matrix.h"
 #include "bounds.h"
+#include "interaction.h"
 
 class TransformationMatrix {
 private:
@@ -19,4 +20,5 @@ public:
   Vector4 operator()(Vector4 b);
   Bounds3 operator()(Bounds3 b);
   Ray operator()(Ray b);
+  SurfaceInteraction operator()(SurfaceInteraction b);
 };

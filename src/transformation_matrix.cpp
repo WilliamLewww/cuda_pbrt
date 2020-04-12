@@ -61,3 +61,26 @@ Ray TransformationMatrix::operator()(Ray b) {
 
   return Ray(origin, direction, b.tMax, b.time);
 }
+
+SurfaceInteraction TransformationMatrix::operator()(SurfaceInteraction b) {
+  SurfaceInteraction surfaceInteraction;
+  surfaceInteraction.position = (*this)(b.position);
+
+  surfaceInteraction.normal = normalize((*this)(b.normal));
+  surfaceInteraction.direction = normalize((*this)(b.direction));
+  surfaceInteraction.time = b.time;
+  surfaceInteraction.uv = b.uv;
+  surfaceInteraction.shape = b.shape;
+  surfaceInteraction.dpdu = (*this)(b.dpdu);
+  surfaceInteraction.dpdv = (*this)(b.dpdv);
+  surfaceInteraction.dndu = (*this)(b.dndu);
+  surfaceInteraction.dndv = (*this)(b.dndv);
+
+  surfaceInteraction.shading.normal = normalize((*this)(b.shading.normal));
+  surfaceInteraction.shading.dpdu = (*this)(b.shading.dpdu);
+  surfaceInteraction.shading.dpdv = (*this)(b.shading.dpdv);
+  surfaceInteraction.shading.dndu = (*this)(b.shading.dndu);
+  surfaceInteraction.shading.dndv = (*this)(b.shading.dndv);
+
+  return surfaceInteraction;
+}
