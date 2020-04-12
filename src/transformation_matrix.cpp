@@ -54,3 +54,10 @@ Bounds3 TransformationMatrix::operator()(Bounds3 b) {
 
   return bounds;
 }
+
+Ray TransformationMatrix::operator()(Ray b) {
+  Vector4 origin = (*this)(b.origin);
+  Vector4 direction = (*this)(b.direction);
+
+  return Ray(origin, direction, b.tMax, b.time);
+}

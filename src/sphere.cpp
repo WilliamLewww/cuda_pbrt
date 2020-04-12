@@ -49,5 +49,43 @@ Bounds3 Sphere::objectBounds() {
 }
 
 bool Sphere::checkRayIntersection(Ray* ray, float* firstHit, SurfaceInteraction* surfaceInteraction, bool testAlphaTexture) {
+  float phi;
+  Vector4 positionHit;
 
+  Ray objectRay = (*worldToObject)(*ray);
+  float a = objectRay.direction[0] * objectRay.direction[0] + objectRay.direction[1] * objectRay.direction[1] + objectRay.direction[2] * objectRay.direction[2];
+  float b = 2 * (objectRay.direction[0] * objectRay.origin[0] + objectRay.direction[1] * objectRay.origin[1] + objectRay.direction[2] * objectRay.origin[2]);
+  float c = objectRay.origin[0] * objectRay.origin[0] + objectRay.origin[1] * objectRay.origin[1] + objectRay.origin[2] * objectRay.origin[2] - radius * radius;
+
+  float t0, t1;
+  if (!checkQuadratic(a, b, c, &t0, &t1)) {
+    return false;
+  }
+}
+
+bool Sphere::checkQuadratic(float a, float b, float c, float* firstHit, float* secondHit) {
+  double discriminant = (double)b * (double)b - 4.0 * (double)a * (double)c;
+
+  if (discriminant < 0) {
+    return false;
+  }
+
+  double q;
+  if (b < 0) {
+    q = -0.5 * (b - sqrt(discriminant));
+  }
+  else {
+    q = -0.5 * (b + sqrt(discriminant));
+  }
+
+  *firstHit = q / a;
+  *secondHit = c / q;
+
+  if (*firstHit > *secondHit) {
+    float temp = *firstHit;
+    *firstHit = *secondHit;
+    *secondHit = temp;
+  }
+
+  return true;
 }

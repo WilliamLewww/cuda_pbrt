@@ -4,7 +4,7 @@
 #include "interaction.h"
 
 class Shape {
-private:
+protected:
   TransformationMatrix* objectToWorld;
   TransformationMatrix* worldToObject;
 public:

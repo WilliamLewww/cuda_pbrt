@@ -18,4 +18,5 @@ public:
 
   Vector4 operator()(Vector4 b);
   Bounds3 operator()(Bounds3 b);
+  Ray operator()(Ray b);
 };
