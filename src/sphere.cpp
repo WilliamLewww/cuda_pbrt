@@ -139,6 +139,7 @@ bool Sphere::checkRayIntersection(Ray* ray, float* firstHit, SurfaceInteraction*
   Vector4 dndv = Vector4(dpdu * inverseEGF2 * (g * F - f * G) + dpdv * inverseEGF2 * (f * F - g * E));
 
   *surfaceInteraction = (*objectToWorld)(SurfaceInteraction(positionHit, Vector4(), Vector2(u, v), -objectRay.direction, dpdu, dpdv, dndu, dndv, objectRay.time, this));
+  *firstHit = tShapeHit;
 }
 
 bool Sphere::checkQuadratic(float a, float b, float c, float* firstHit, float* secondHit) {
