@@ -61,6 +61,10 @@ Vector4 Vector4::operator+(Vector4 b) {
   return Vector4(x + b[0], y + b[1], z + b[2], w + b[3]);
 }
 
+Vector4 Vector4::operator-() {
+  return Vector4(-x, -y, -z, -w);
+}
+
 Vector4 Vector4::operator-(Vector4 b) {
   return Vector4(x - b[0], y - b[1], z - b[2], w - b[3]);
 }
@@ -80,4 +84,8 @@ Vector4 cross(Vector4 a, Vector4 b) {
     (a[0] * b[1]) - (a[1] * b[0]),
     1.0
   );
+}
+
+float dot(Vector4 a, Vector4 b) {
+  return (a[0] * b[0]) + (a[1] * b[1]) + (a[2] * b[2]) + (a[3] * b[3]);
 }

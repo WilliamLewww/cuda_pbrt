@@ -25,9 +25,11 @@ public:
   Vector4 operator*(float value);
   Vector4 operator/(float value);
   Vector4 operator+(Vector4 b);
+  Vector4 operator-();
   Vector4 operator-(Vector4 b);
   bool operator!=(Vector4 b);
 };
 
 Vector4 normalize(Vector4 a);
 Vector4 cross(Vector4 a, Vector4 b);
+float dot(Vector4 a, Vector4 b);
