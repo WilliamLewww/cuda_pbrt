@@ -67,7 +67,7 @@ bool Sphere::checkRayIntersection(Ray* ray, float* firstHit, SurfaceInteraction*
     return false;
   }
 
-  if (t0.value > objectRay.tMax || t1.value <= 0) {
+  if (t0.getUpperBound() > objectRay.tMax || t1.getLowerBound() <= 0) {
     return false;
   }
 
