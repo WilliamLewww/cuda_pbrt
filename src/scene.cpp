@@ -21,32 +21,42 @@ void Scene::addShape(Shape* shape) {
   shapeList.push_back(shape);
 }
 
-char Scene::getRayIntersection(Ray* ray) {
+Vector4 Scene::getRayIntersection(Ray* ray) {
+  Vector4 color = Vector4(0, 0, 0, 255);
+
   for (int shapeIndex = 0; shapeIndex < shapeList.size(); shapeIndex++) {
     float hit0, hit1;
     bool intersect = shapeList[shapeIndex]->worldBounds().checkRayIntersection(ray, &hit0, &hit1);
 
     if (intersect) {
-      printf("\n%f %f\n", hit0, hit1);
-      printf("%f %f %f\n", ray->origin[0], ray->origin[1], ray->origin[2]);
-      printf("%f %f %f\n", ray->direction[0], ray->direction[1], ray->direction[2]);
+      float shapeHit0;
+      SurfaceInteraction surfaceInteraction;
+      bool shapeIntersect = shapeList[shapeIndex]->checkRayIntersection(ray, &shapeHit0, &surfaceInteraction);
+
+      if (shapeIntersect) {
+        color = Vector4(255, 255, 255, 255);
+      }
     }
   }
+
+  return color;
 }
 
-char* Scene::render(Vector2 resolution) {
-  for (int x = 0; x < resolution[0]; x++) {
-    for (int y = 0; y < resolution[1]; y++) {
-      CameraSample sample = { 
+Vector4* Scene::render(Vector2 resolution) {
+  Vector4* image = (Vector4*)malloc(resolution[0] * resolution[1] * sizeof(Vector4));
+
+  for (int y = 0; y < resolution[1]; y++) {
+    for (int x = 0; x < resolution[0]; x++) {
+      CameraSample sample = {
         Vector2(x, y),
         Vector2(resolution[0] / 2, resolution[1] / 2),
         0.0
       };
 
       Ray* ray = cameraList[0]->generateRay(sample);
-      getRayIntersection(ray);
+      image[y * (int)resolution[0] + x] = getRayIntersection(ray);
     }
   }
 
-  return nullptr;
+  return image;
 }

@@ -17,6 +17,6 @@ public:
   void addCamera(Camera* camera);
   void addShape(Shape* shape);
 
-  char getRayIntersection(Ray* ray);
-  char* render(Vector2 resolution);
+  Vector4 getRayIntersection(Ray* ray);
+  Vector4* render(Vector2 resolution);
 };

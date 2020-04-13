@@ -8,13 +8,17 @@ World {
   }
 
   Sphere sphereB {
+    Function scale (
+      size = [ 25.0 25.0 25.0 ]
+    )
+
     Function translate (
-      position = [ 0.0 0.0 5.0 ]
+      position = [ 100.0 50.0 25.0 ]
     )
 
     radius = 1.0
     zMax = 1.0
-    zMin = 0.0
+    zMin = -1.0
     phiMax = 360
   }
 }
