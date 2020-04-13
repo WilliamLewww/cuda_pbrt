@@ -101,12 +101,7 @@ Vector4 TransformationMatrix::operator()(Vector4 vector, Vector4* vectorError) {
   float zAbsSum = (fabs((*matrix)[8] * vector[0]) + fabs((*matrix)[9] * vector[1]) + fabs((*matrix)[10] * vector[2]) + fabs((*matrix)[11]));
 
   *vectorError = Vector4(xAbsSum, yAbsSum, zAbsSum, 0) * ErrorFloat::gamma(3);
-  if (resultVector[3] == 1) {
-    return resultVector;
-  }
-  else {
-    return resultVector / resultVector[3];
-  }
+  return resultVector;
 }
 
 Ray TransformationMatrix::operator()(Ray ray, Vector4* originError, Vector4* directionError) {

@@ -1,7 +1,8 @@
 #include "error.h"
 
+float ErrorFloat::machineEpsilon = std::numeric_limits<float>::epsilon() * 0.5;
+
 float ErrorFloat::gamma(int n) {
-  float machineEpsilon = std::numeric_limits<float>::epsilon() * 0.5;
   return (n * machineEpsilon) / (1 - n * machineEpsilon);
 }
 
@@ -18,4 +19,32 @@ ErrorFloat::ErrorFloat(float value, float error) {
 ErrorFloat& ErrorFloat::operator=(ErrorFloat errorFloat) {
   this->value = errorFloat.value;
   this->error = errorFloat.error;
+}
+
+ErrorFloat ErrorFloat::operator*(ErrorFloat b) {
+  ErrorFloat errorFloat;
+  errorFloat.value = value * b.value;
+
+  return errorFloat;
+}
+
+ErrorFloat ErrorFloat::operator/(ErrorFloat b) {
+  ErrorFloat errorFloat;
+  errorFloat.value = value / b.value;
+
+  return errorFloat;
+}
+
+ErrorFloat ErrorFloat::operator+(ErrorFloat b) {
+  ErrorFloat errorFloat;
+  errorFloat.value = value + b.value;
+
+  return errorFloat;
+}
+
+ErrorFloat ErrorFloat::operator-(ErrorFloat b) {
+  ErrorFloat errorFloat;
+  errorFloat.value = value - b.value;
+
+  return errorFloat;
 }
