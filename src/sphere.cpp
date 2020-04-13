@@ -61,15 +61,15 @@ bool Sphere::checkRayIntersection(Ray* ray, float* firstHit, SurfaceInteraction*
   ErrorFloat a = dx * dx + dy * dy + dz * dz;
   ErrorFloat b = ErrorFloat(2) * (dx * ox + dy * oy + dz * oz);
   ErrorFloat c = ox * ox + oy * oy + oz * oz - ErrorFloat(radius) * ErrorFloat(radius);
-  
+
   ErrorFloat t0, t1;
   if (!checkQuadratic(a, b, c, &t0, &t1)) {
     return false;
   }
 
-  // if (t0 > objectRay.tMax || t1 <= 0) {
-  //   return false;
-  // }
+  if (t0.value > objectRay.tMax || t1.value <= 0) {
+    return false;
+  }
 
   // float tShapeHit = t0;
   // if (tShapeHit <= 0) {
@@ -147,6 +147,33 @@ bool Sphere::checkRayIntersection(Ray* ray, float* firstHit, SurfaceInteraction*
   // *firstHit = tShapeHit;
 }
 
+bool Sphere::checkQuadratic(float a, float b, float c, float* firstHit, float* secondHit) {
+  double discriminant = (double)b * (double)b - 4.0 * (double)a * (double)c;
+
+  if (discriminant < 0) {
+    return false;
+  }
+
+  double q;
+  if (b < 0) {
+    q = -0.5 * (b - sqrt(discriminant));
+  }
+  else {
+    q = -0.5 * (b + sqrt(discriminant));
+  }
+
+  *firstHit = q / a;
+  *secondHit = c / q;
+
+  if (*firstHit > *secondHit) {
+    float temp = *firstHit;
+    *firstHit = *secondHit;
+    *secondHit = temp;
+  }
+
+  return true;
+}
+
 bool Sphere::checkQuadratic(ErrorFloat a, ErrorFloat b, ErrorFloat c, ErrorFloat* firstHit, ErrorFloat* secondHit) {
   double discriminant = (double)b.value * (double)b.value - 4.0 * (double)a.value * (double)c.value;
 
@@ -156,23 +183,21 @@ bool Sphere::checkQuadratic(ErrorFloat a, ErrorFloat b, ErrorFloat c, ErrorFloat
 
   double rootDiscriminant = sqrt(discriminant);
 
-  ErrorFloat floatRootDiscriminant(rootDiscriminant, ErrorFloat::machineEpsilon * rootDiscriminant);
-
   ErrorFloat q;
   if ((float)b < 0) {
-    q = ErrorFloat(0.5) * (b - floatRootDiscriminant);
+    q = ErrorFloat(-0.5) * (b - ErrorFloat(rootDiscriminant, ErrorFloat::machineEpsilon * rootDiscriminant));
   }
   else {
-    q = ErrorFloat(-0.5) * (b + floatRootDiscriminant);
+    q = ErrorFloat(-0.5) * (b + ErrorFloat(rootDiscriminant, ErrorFloat::machineEpsilon * rootDiscriminant));
   }
 
   *firstHit = q / a;
   *secondHit = c / q;
 
   if ((float)*firstHit > (float)*secondHit) {
-    ErrorFloat temp = *firstHit;
-    *firstHit = *secondHit;
-    *secondHit = temp;
+    float temp = firstHit->value;
+    firstHit->value = secondHit->value;
+    secondHit->value = temp;
   }
 
   return true;
