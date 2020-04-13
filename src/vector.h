@@ -19,12 +19,16 @@ public:
   Vector4(float x, float y, float z, float w);
   Vector4& operator=(Vector4 b);
 
+  float getLengthSquared();
   float getLength();
+
+  Vector4 getAbsolute();
   
   float& operator[](int index);
   Vector4 operator*(float value);
   Vector4 operator/(float value);
   Vector4 operator+(Vector4 b);
+  Vector4 operator+=(Vector4 b);
   Vector4 operator-();
   Vector4 operator-(Vector4 b);
   bool operator!=(Vector4 b);

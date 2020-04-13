@@ -55,11 +55,19 @@ Bounds3 TransformationMatrix::operator()(Bounds3 b) {
   return bounds;
 }
 
-Ray TransformationMatrix::operator()(Ray b) {
-  Vector4 origin = (*this)(b.origin);
-  Vector4 direction = (*this)(b.direction);
+Ray TransformationMatrix::operator()(Ray ray) {
+  Vector4 originError;
+  Vector4 origin = (*this)(ray.origin, &originError);
+  Vector4 direction = (*this)(ray.direction);
 
-  return Ray(origin, direction, b.tMax, b.time);
+  float lengthSquared = direction.getLengthSquared();
+  float tMax = ray.tMax;
+  if (lengthSquared > 0) {
+      float dt = dot(direction.getAbsolute(), originError) / lengthSquared;
+      origin += direction * dt;
+      tMax -= dt;
+  }
+  return Ray(origin, direction, tMax, ray.time);
 }
 
 SurfaceInteraction TransformationMatrix::operator()(SurfaceInteraction b) {
@@ -83,4 +91,33 @@ SurfaceInteraction TransformationMatrix::operator()(SurfaceInteraction b) {
   surfaceInteraction.shading.dndv = (*this)(b.shading.dndv);
 
   return surfaceInteraction;
+}
+
+Vector4 TransformationMatrix::operator()(Vector4 vector, Vector4* vectorError) {
+  Vector4 resultVector = (*this)(vector);
+
+  float xAbsSum = (fabs((*matrix)[0] * vector[0]) + fabs((*matrix)[1] * vector[1]) + fabs((*matrix)[2] * vector[2]) + fabs((*matrix)[3]));
+  float yAbsSum = (fabs((*matrix)[4] * vector[0]) + fabs((*matrix)[5] * vector[1]) + fabs((*matrix)[6] * vector[2]) + fabs((*matrix)[7]));
+  float zAbsSum = (fabs((*matrix)[8] * vector[0]) + fabs((*matrix)[9] * vector[1]) + fabs((*matrix)[10] * vector[2]) + fabs((*matrix)[11]));
+
+  *vectorError = Vector4(xAbsSum, yAbsSum, zAbsSum, 0) * ErrorFloat::gamma(3);
+  if (resultVector[3] == 1) {
+    return resultVector;
+  }
+  else {
+    return resultVector / resultVector[3];
+  }
+}
+
+Ray TransformationMatrix::operator()(Ray ray, Vector4* originError, Vector4* directionError) {
+  Vector4 origin = (*this)(ray.origin, originError);
+  Vector4 direction = (*this)(ray.direction, directionError);
+  float tMax = ray.tMax;
+  float lengthSquared = direction.getLengthSquared();
+  if (lengthSquared > 0) {
+    float dt = dot(direction.getAbsolute(), *originError) / lengthSquared;
+    origin += direction * dt;
+  }
+
+  return Ray(origin, direction, tMax, ray.time);
 }

@@ -38,8 +38,16 @@ Vector4& Vector4::operator=(Vector4 b) {
   return *this;
 }
 
+float Vector4::getLengthSquared() {
+  return ((x * x) + (y * y) + (z * z));
+}
+
 float Vector4::getLength() {
-  return sqrt((x * x) + (y * y) + (z * z));
+  return sqrt(getLengthSquared());
+}
+
+Vector4 Vector4::getAbsolute() {
+  return Vector4(fabs(x), fabs(y), fabs(z), fabs(w));
 }
 
 float& Vector4::operator[](int index) {
@@ -59,6 +67,15 @@ Vector4 Vector4::operator/(float value) {
 
 Vector4 Vector4::operator+(Vector4 b) {
   return Vector4(x + b[0], y + b[1], z + b[2], w + b[3]);
+}
+
+Vector4 Vector4::operator+=(Vector4 b) {
+  x += b[0];
+  y += b[1];
+  z += b[2];
+  w += b[3];
+
+  return *this;
 }
 
 Vector4 Vector4::operator-() {

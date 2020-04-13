@@ -3,6 +3,7 @@
 
 #include "vector.h"
 #include "ray.h"
+#include "error.h"
 
 class Bounds3 {
 private:

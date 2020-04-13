@@ -62,8 +62,8 @@ bool Bounds3::checkRayIntersection(Ray* ray, float* firstHit, float* secondHit) 
       tFar = temp;
     }
 
-    tFar *= 1.0 + 2.0 * ((3.0 * std::numeric_limits<float>::epsilon() * 0.5) / (1.0 - 3.0 * std::numeric_limits<float>::epsilon() * 0.5));
-
+    tFar *= 1 + 2 * ErrorFloat::gamma(3);
+    
     t0 = tNear > t0 ? tNear : t0;
     t1 = tFar < t1 ? tFar : t1;
 
