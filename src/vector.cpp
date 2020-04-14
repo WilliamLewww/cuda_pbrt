@@ -61,6 +61,15 @@ Vector4 Vector4::operator*(float value) {
   return Vector4(x * value, y * value, z * value, w * value);
 }
 
+Vector4 Vector4::operator*=(float value) {
+  x *= value;
+  y *= value;
+  z *= value;
+  w *= value;
+  
+  return *this;
+}
+
 Vector4 Vector4::operator/(float value) {
   return Vector4(x / value, y / value, z / value, w / value);
 }

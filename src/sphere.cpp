@@ -80,6 +80,7 @@ bool Sphere::checkRayIntersection(Ray* ray, float* firstHit, SurfaceInteraction*
   }
 
   positionHit = objectRay((float)tShapeHit);
+  positionHit *= radius / sqrt(positionHit[0] * positionHit[0] + positionHit[1] * positionHit[1] + positionHit[2] * positionHit[2]);
 
   if (positionHit[0] == 0 && positionHit[1] == 0) {
     positionHit[0] = 1e-5f * radius;
@@ -100,6 +101,7 @@ bool Sphere::checkRayIntersection(Ray* ray, float* firstHit, SurfaceInteraction*
 
     tShapeHit = t1;
     positionHit = objectRay((float)tShapeHit);
+    positionHit *= radius / sqrt(positionHit[0] * positionHit[0] + positionHit[1] * positionHit[1] + positionHit[2] * positionHit[2]);
 
     if (positionHit[0] == 0 && positionHit[1] == 0) {
       positionHit[0] = 1e-5f * radius;

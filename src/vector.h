@@ -26,6 +26,7 @@ public:
   
   float& operator[](int index);
   Vector4 operator*(float value);
+  Vector4 operator*=(float value);
   Vector4 operator/(float value);
   Vector4 operator+(Vector4 b);
   Vector4 operator+=(Vector4 b);
