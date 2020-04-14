@@ -149,33 +149,6 @@ bool Sphere::checkRayIntersection(Ray* ray, float* firstHit, SurfaceInteraction*
   *firstHit = (float)tShapeHit;
 }
 
-bool Sphere::checkQuadratic(float a, float b, float c, float* firstHit, float* secondHit) {
-  double discriminant = (double)b * (double)b - 4.0 * (double)a * (double)c;
-
-  if (discriminant < 0) {
-    return false;
-  }
-
-  double q;
-  if (b < 0) {
-    q = -0.5 * (b - sqrt(discriminant));
-  }
-  else {
-    q = -0.5 * (b + sqrt(discriminant));
-  }
-
-  *firstHit = q / a;
-  *secondHit = c / q;
-
-  if (*firstHit > *secondHit) {
-    float temp = *firstHit;
-    *firstHit = *secondHit;
-    *secondHit = temp;
-  }
-
-  return true;
-}
-
 bool Sphere::checkQuadratic(ErrorFloat a, ErrorFloat b, ErrorFloat c, ErrorFloat* firstHit, ErrorFloat* secondHit) {
   double discriminant = (double)b.value * (double)b.value - 4.0 * (double)a.value * (double)c.value;
 
