@@ -73,6 +73,10 @@ ErrorFloat& ErrorFloat::operator=(ErrorFloat errorFloat) {
   this->error = errorFloat.error;
 }
 
+bool ErrorFloat::operator==(ErrorFloat b) {
+  return (this->value == b.value && this->error == b.error);
+}
+
 ErrorFloat ErrorFloat::operator*(ErrorFloat b) {
   ErrorFloat errorFloat;
   errorFloat.value = value * b.value;

@@ -71,80 +71,82 @@ bool Sphere::checkRayIntersection(Ray* ray, float* firstHit, SurfaceInteraction*
     return false;
   }
 
-  // float tShapeHit = t0;
-  // if (tShapeHit <= 0) {
-  //   tShapeHit = t1;
-  //   if (tShapeHit > objectRay.tMax) {
-  //     return false;
-  //   }
-  // }
+  ErrorFloat tShapeHit = t0;
+  if (tShapeHit.getLowerBound() <= 0) {
+    tShapeHit = t1;
+    if (tShapeHit.getUpperBound() > objectRay.tMax) {
+      return false;
+    }
+  }
 
-  // positionHit = objectRay(tShapeHit);
+  positionHit = objectRay((float)tShapeHit);
 
-  // if (positionHit[0] == 0 && positionHit[1] == 0) {
-  //   positionHit[0] = 1e-5f * radius;
-  // }
+  if (positionHit[0] == 0 && positionHit[1] == 0) {
+    positionHit[0] = 1e-5f * radius;
+  }
 
-  // phi = atan2(positionHit[1], positionHit[0]);
-  // if (phi < 0) {
-  //   phi += 2.0 * M_PI;
-  // }
+  phi = atan2(positionHit[1], positionHit[0]);
+  if (phi < 0) {
+    phi += 2.0 * M_PI;
+  }
 
-  // if ((zMin > -radius && positionHit[2] < zMin) || (zMax < radius && positionHit[2] > zMax) || phi > phiMax) {
-  //   if (tShapeHit == t1) {
-  //     return false;
-  //   }
-  //   if (t1 > objectRay.tMax) {
-  //     return false;
-  //   }
+  if ((zMin > -radius && positionHit[2] < zMin) || (zMax < radius && positionHit[2] > zMax) || phi > phiMax) {
+    if (tShapeHit == t1) {
+      return false;
+    }
+    if (t1.getUpperBound() > objectRay.tMax) {
+      return false;
+    }
 
-  //   tShapeHit = t1;
-  //   positionHit = objectRay(tShapeHit);
+    tShapeHit = t1;
+    positionHit = objectRay((float)tShapeHit);
 
-  //   if (positionHit[0] == 0 && positionHit[1] == 0) {
-  //     positionHit[0] = 1e-5f * radius;
-  //   }
+    if (positionHit[0] == 0 && positionHit[1] == 0) {
+      positionHit[0] = 1e-5f * radius;
+    }
 
-  //   phi = atan2(positionHit[1], positionHit[0]);
-  //   if (phi < 0) {
-  //     phi += 2.0 * M_PI;
-  //   }
+    phi = atan2(positionHit[1], positionHit[0]);
+    if (phi < 0) {
+      phi += 2.0 * M_PI;
+    }
 
-  //   if ((zMin > -radius && positionHit[2] < zMin) || (zMax < radius && positionHit[2] > zMax) || phi > phiMax) {
-  //     return false;
-  //   }
-  // }
+    if ((zMin > -radius && positionHit[2] < zMin) || (zMax < radius && positionHit[2] > zMax) || phi > phiMax) {
+      return false;
+    }
+  }
 
-  // float u = phi / phiMax;
-  // float theta = acos(fmax(-1, fmin(positionHit[2] / radius, 1)));
-  // float v = (theta - thetaMin) / (thetaMax - thetaMin);
+  float u = phi / phiMax;
+  float theta = acos(fmax(-1, fmin(positionHit[2] / radius, 1)));
+  float v = (theta - thetaMin) / (thetaMax - thetaMin);
 
-  // float zRadius = sqrt(positionHit[0] * positionHit[0] + positionHit[1] * positionHit[1]);
-  // float inverseZRadius = 1.0 / zRadius;
-  // float cosPhi = positionHit[0] * inverseZRadius;
-  // float sinPhi = positionHit[1] * inverseZRadius;
+  float zRadius = sqrt(positionHit[0] * positionHit[0] + positionHit[1] * positionHit[1]);
+  float inverseZRadius = 1.0 / zRadius;
+  float cosPhi = positionHit[0] * inverseZRadius;
+  float sinPhi = positionHit[1] * inverseZRadius;
 
-  // Vector4 dpdu(-phiMax * positionHit[1], phiMax * positionHit[0], 0, 0);
-  // Vector4 dpdv = Vector4(positionHit[2] * cosPhi, positionHit[2] * sinPhi, -radius * sin(theta), 0) * (thetaMax - thetaMin);
+  Vector4 dpdu(-phiMax * positionHit[1], phiMax * positionHit[0], 0, 0);
+  Vector4 dpdv = Vector4(positionHit[2] * cosPhi, positionHit[2] * sinPhi, -radius * sin(theta), 0) * (thetaMax - thetaMin);
 
-  // Vector4 d2Pduu = Vector4(positionHit[0], positionHit[1], 0, 0) * (-phiMax * phiMax);
-  // Vector4 d2Pduv = Vector4(-sinPhi, cosPhi, 0.0, 0) * (thetaMax - thetaMin) * positionHit[2] * phiMax;
-  // Vector4 d2Pdvv = Vector4(positionHit[0], positionHit[1], positionHit[2], 0) * -(thetaMax - thetaMin) * (thetaMax - thetaMin);
+  Vector4 d2Pduu = Vector4(positionHit[0], positionHit[1], 0, 0) * (-phiMax * phiMax);
+  Vector4 d2Pduv = Vector4(-sinPhi, cosPhi, 0.0, 0) * (thetaMax - thetaMin) * positionHit[2] * phiMax;
+  Vector4 d2Pdvv = Vector4(positionHit[0], positionHit[1], positionHit[2], 0) * -(thetaMax - thetaMin) * (thetaMax - thetaMin);
 
-  // float E = dot(dpdu, dpdu);
-  // float F = dot(dpdu, dpdv);
-  // float G = dot(dpdv, dpdv);
-  // Vector4 normal = normalize(cross(dpdu, dpdv));
-  // float e = dot(normal, d2Pduu);
-  // float f = dot(normal, d2Pduv);
-  // float g = dot(normal, d2Pdvv);
+  float E = dot(dpdu, dpdu);
+  float F = dot(dpdu, dpdv);
+  float G = dot(dpdv, dpdv);
+  Vector4 normal = normalize(cross(dpdu, dpdv));
+  float e = dot(normal, d2Pduu);
+  float f = dot(normal, d2Pduv);
+  float g = dot(normal, d2Pdvv);
 
-  // float inverseEGF2 = 1.0 / (E * G - F * F);
-  // Vector4 dndu = Vector4(dpdu * inverseEGF2 * (f * F - e * G) + dpdv * inverseEGF2 * (e * F - f * E));
-  // Vector4 dndv = Vector4(dpdu * inverseEGF2 * (g * F - f * G) + dpdv * inverseEGF2 * (f * F - g * E));
+  float inverseEGF2 = 1.0 / (E * G - F * F);
+  Vector4 dndu = Vector4(dpdu * inverseEGF2 * (f * F - e * G) + dpdv * inverseEGF2 * (e * F - f * E));
+  Vector4 dndv = Vector4(dpdu * inverseEGF2 * (g * F - f * G) + dpdv * inverseEGF2 * (f * F - g * E));
 
-  // *surfaceInteraction = (*objectToWorld)(SurfaceInteraction(positionHit, Vector4(), Vector2(u, v), -objectRay.direction, dpdu, dpdv, dndu, dndv, objectRay.time, this));
-  // *firstHit = tShapeHit;
+  Vector4 pError = positionHit.getAbsolute() * gamma(5);
+
+  *surfaceInteraction = (*objectToWorld)(SurfaceInteraction(positionHit, pError, Vector2(u, v), -objectRay.direction, dpdu, dpdv, dndu, dndv, objectRay.time, this));
+  *firstHit = (float)tShapeHit;
 }
 
 bool Sphere::checkQuadratic(float a, float b, float c, float* firstHit, float* secondHit) {

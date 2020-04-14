@@ -22,6 +22,8 @@ public:
   ErrorFloat(float value, float error = 0.0);
   ErrorFloat& operator=(ErrorFloat errorFloat);
 
+  bool operator==(ErrorFloat b);
+
   ErrorFloat operator*(ErrorFloat b);
   ErrorFloat operator/(ErrorFloat b);
   ErrorFloat operator+(ErrorFloat b);
