@@ -72,7 +72,7 @@ Ray TransformationMatrix::operator()(Ray ray) {
 
 SurfaceInteraction TransformationMatrix::operator()(SurfaceInteraction b) {
   SurfaceInteraction surfaceInteraction;
-  surfaceInteraction.position = (*this)(b.position);
+  surfaceInteraction.position = (*this)(b.position, b.positionError, &surfaceInteraction.positionError);
 
   surfaceInteraction.normal = normalize((*this)(b.normal));
   surfaceInteraction.direction = normalize((*this)(b.direction));
@@ -101,6 +101,21 @@ Vector4 TransformationMatrix::operator()(Vector4 vector, Vector4* vectorError) {
   float zAbsSum = (fabs((*matrix)[8] * vector[0]) + fabs((*matrix)[9] * vector[1]) + fabs((*matrix)[10] * vector[2]) + fabs((*matrix)[11]));
 
   *vectorError = Vector4(xAbsSum, yAbsSum, zAbsSum, 0) * ErrorFloat::gamma(3);
+  return resultVector;
+}
+
+Vector4 TransformationMatrix::operator()(Vector4 vector, Vector4 vectorError, Vector4* vectorAbsoluteError) {
+  Vector4 resultVector = (*this)(vector);
+
+  (*vectorAbsoluteError)[0] = (ErrorFloat::gamma(3) + 1) * (fabs((*matrix)[0]) * vectorError[0] + fabs((*matrix)[1]) * vectorError[1] + fabs((*matrix)[2]) * vectorError[2]) +
+                               ErrorFloat::gamma(3) * (fabs((*matrix)[0] * vector[0]) + fabs((*matrix)[1] * vector[1]) + fabs((*matrix)[2] * vector[2]) + fabs((*matrix)[3]));
+
+  (*vectorAbsoluteError)[1] = (ErrorFloat::gamma(3) + 1) * (fabs((*matrix)[4]) * vectorError[0] + fabs((*matrix)[5]) * vectorError[1] + fabs((*matrix)[6]) * vectorError[2]) +
+                               ErrorFloat::gamma(3) * (fabs((*matrix)[4] * vector[0]) + fabs((*matrix)[5] * vector[1]) + fabs((*matrix)[6] * vector[2]) + fabs((*matrix)[7]));
+
+  (*vectorAbsoluteError)[2] = (ErrorFloat::gamma(3) + 1) * (fabs((*matrix)[8]) * vectorError[0] + fabs((*matrix)[9]) * vectorError[1] + fabs((*matrix)[10]) * vectorError[2]) +
+                               ErrorFloat::gamma(3) * (fabs((*matrix)[8] * vector[0]) + fabs((*matrix)[9] * vector[1]) + fabs((*matrix)[10] * vector[2]) + fabs((*matrix)[11]));
+
   return resultVector;
 }
 

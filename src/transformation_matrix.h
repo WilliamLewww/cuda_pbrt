@@ -25,4 +25,5 @@ public:
 
   Ray operator()(Ray ray, Vector4* originError, Vector4* directionError);
   Vector4 operator()(Vector4 vector, Vector4* vectorError);
+  Vector4 operator()(Vector4 vector, Vector4 vectorError, Vector4* vectorAbsoluteError);
 };
