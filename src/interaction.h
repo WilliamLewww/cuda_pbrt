@@ -1,5 +1,6 @@
 #pragma once
 #include "vector.h"
+#include "ray.h"
 
 class Shape;
 
@@ -12,6 +13,8 @@ struct Interaction {
   Vector4 positionError;
 
   bool isSurfaceInteraction();
+  Ray spawnRay(Vector4 direction);
+  Ray spawnRayToPosition(Vector4 targetPosition);
 };
 
 struct InteractionShading {

@@ -1,6 +1,7 @@
 #include "error.h"
 
 float ErrorFloat::machineEpsilon = std::numeric_limits<float>::epsilon() * 0.5;
+float ErrorFloat::shadownEpsilon = 0.0001;
 
 float ErrorFloat::gamma(int n) {
   return (n * machineEpsilon) / (1 - n * machineEpsilon);

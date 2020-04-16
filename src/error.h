@@ -10,6 +10,7 @@ public:
   float error;
 
   static float machineEpsilon;
+  static float shadownEpsilon;
   static float gamma(int n);
 
   static float getBitsToFloat(uint32_t value);

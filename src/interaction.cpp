@@ -4,6 +4,17 @@ bool Interaction::isSurfaceInteraction() {
   return normal != Vector4();
 }
 
+Ray Interaction::spawnRay(Vector4 direction) {
+  Vector4 origin = offsetRayOrigin(position, positionError, normal, direction);
+  return Ray(origin, direction, std::numeric_limits<float>::max(), time);
+}
+
+Ray Interaction::spawnRayToPosition(Vector4 targetPosition) {
+  Vector4 origin = offsetRayOrigin(position, positionError, normal, targetPosition - position);
+  Vector4 direction = targetPosition - origin;
+  return Ray(origin, direction, 1 - ErrorFloat::shadownEpsilon, time);
+}
+
 SurfaceInteraction::SurfaceInteraction() {
 
 }
