@@ -2,6 +2,7 @@
 #include <limits>
 
 #include "vector.h"
+#include "error.h"
 
 class Ray {  
 public:
@@ -16,3 +17,5 @@ public:
 
   Vector4 operator()(float t);
 };
+
+Vector4 offsetRayOrigin(Vector4 position, Vector4 positionError, Vector4 normal, Vector4 direction);
