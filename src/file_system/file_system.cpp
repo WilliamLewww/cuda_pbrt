@@ -1,6 +1,6 @@
 #include "file_system.h"
 
-FileSystem::FileSystem(std::string driveName, uint64_t driveSize, uint64_t blockSize) {
+FileSystem::FileSystem(std::string driveName, uint64_t blockCount, uint64_t blockSize) {
   this->driveName = driveName;
 
   if (access(driveName.c_str(), F_OK) != 0) {

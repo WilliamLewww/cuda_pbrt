@@ -15,15 +15,21 @@ CUDA_FLAGS=--gpu-architecture=sm_30
 EXEC=cuda-pbrt.out
 EXEC_ARGS=res/example.scene
 
-all: clean $(EXEC)
-
-SRCS := $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)
+SRCS := $(filter-out $(wildcard src/file_system/*.cpp), $(wildcard src/*.cpp) $(wildcard src/*/*.cpp))
 OBJS := $(notdir $(SRCS:%.cpp=%.o))
+
+FILESYSTEM_SRCS := $(wildcard src/file_system/*.cpp)
+FILESYSTEM_OBJS := $(notdir $(FILESYSTEM_SRCS:%.cpp=%.o))
 
 CUDA_SRCS := $(wildcard src/*.cu)
 CUDA_OBJS := $(notdir $(CUDA_SRCS:%.cu=%.o))
 
-$(EXEC): $(OBJS) $(CUDA_OBJS)
+all: clean $(EXEC)
+
+filesystem: clean-dump $(FILESYSTEM_OBJS)
+	$(NVCC) $(CUDA_FLAGS) $(BUILD_PATH)/*.o -o $(BIN_PATH)/$(EXEC)
+
+$(EXEC): $(OBJS) $(FILESYSTEM_OBJS) $(CUDA_OBJS)
 	$(NVCC) $(CUDA_FLAGS) $(BUILD_PATH)/*.o -o $(BIN_PATH)/$(EXEC)
 
 %.o: $(SRC_PATH)/%.cpp
@@ -42,7 +48,13 @@ run:
 	$(BIN_PATH)/$(EXEC) $(EXEC_ARGS)
 
 clean: SHELL:=/bin/bash
-clean:
+clean: clean-bin clean-build clean-dump
+
+clean-bin:
 	find $(BIN_PATH) -type f -not -name '.gitignore' -delete
+
+clean-build:
 	find $(BUILD_PATH) -type f -not -name '.gitignore' -delete
+
+clean-dump:
 	find $(DUMP_PATH) -type f -not -name '.gitignore' -delete

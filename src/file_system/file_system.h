@@ -10,6 +10,6 @@ private:
 
   FILE* drive;
 public:
-  FileSystem(std::string driveName, uint64_t driveSize, uint64_t blockSize);
+  FileSystem(std::string driveName, uint64_t blockCount, uint64_t blockSize);
   ~FileSystem();
 };
