@@ -18,10 +18,13 @@ FileSystem::FileSystem(std::string driveName, uint64_t driveSize, uint64_t block
     memcpy(firstBlock, "raytrace-file-system\0", 21);
 
     fwrite(firstBlock, sizeof(char), blockSize, drive);
+    free(firstBlock);
   }
   else {
 
   }
+
+  free(buffer);
 }
 
 FileSystem::~FileSystem() {
