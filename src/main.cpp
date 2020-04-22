@@ -1,7 +1,7 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb/stb_image_write.h"
 
-#include "parser/parser.h"
+#include "scene_parser/parser.h"
 
 int main(int argn, const char** argv) {
   const char* filename = argv[1];

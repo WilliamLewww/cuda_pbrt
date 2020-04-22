@@ -12,7 +12,7 @@ NVCC=$(CUDA_PATH)/bin/nvcc
 
 CUDA_FLAGS=--gpu-architecture=sm_30
 
-EXEC=cuda-rst.out
+EXEC=cuda-pbrt.out
 EXEC_ARGS=res/example.scene
 
 all: clean $(EXEC)
