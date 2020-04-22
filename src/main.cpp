@@ -2,9 +2,13 @@
 #include "stb/stb_image_write.h"
 
 #include "scene_parser/parser.h"
+#include "file_system/file_system.h"
 
 int main(int argn, const char** argv) {
   const char* filename = argv[1];
+
+  FileSystem* fileSystem = new FileSystem("dump/drive", 100000, 512);
+  delete fileSystem;
 
   Parser* parser = new Parser();
   Scene* scene = parser->createSceneFromFile(filename);
@@ -18,7 +22,7 @@ int main(int argn, const char** argv) {
     imageData[(x * 4) + 3] = image[x][3];
   }
 
-  stbi_write_png("image.png", 250, 250, 4, imageData, 250*4*sizeof(unsigned char));
+  stbi_write_png("dump/image.png", 250, 250, 4, imageData, 250*4*sizeof(unsigned char));
 
   delete image;
   delete scene;
