@@ -51,10 +51,10 @@ clean: SHELL:=/bin/bash
 clean: clean-bin clean-build clean-dump
 
 clean-bin:
-	find $(BIN_PATH) -type f -not -name '.gitignore' -delete
+	find $(BIN_PATH) -type f -not -name '.gitkeep' -delete
 
 clean-build:
-	find $(BUILD_PATH) -type f -not -name '.gitignore' -delete
+	find $(BUILD_PATH) -type f -not -name '.gitkeep' -delete
 
 clean-dump:
-	find $(DUMP_PATH) -type f -not -name '.gitignore' -delete
+	find $(DUMP_PATH) -type f -not -name '.gitkeep' -delete

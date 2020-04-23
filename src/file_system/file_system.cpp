@@ -19,6 +19,8 @@ FileSystem::FileSystem(std::string driveName, uint64_t blockCount, uint64_t bloc
 
     fwrite(firstBlock, sizeof(char), blockSize, drive);
     free(firstBlock);
+
+    fseek(drive, blockSize, SEEK_SET);
   }
   else {
 
