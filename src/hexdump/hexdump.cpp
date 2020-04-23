@@ -17,6 +17,8 @@ int main(int argn, const char** argv) {
     uint64_t bytesPerLine = 32;
     uint64_t numberOfLines = fileSize / bytesPerLine;
 
+    printf("Hexdump for %s with %ld blocks:\n\n", argv[1], fileSize / blockSize);
+
     char* buffer = (char*)malloc(bytesPerLine);
     for (int x = 0; x < numberOfLines; x++) {
       if (x != 0 && x * bytesPerLine % blockSize == 0) {
@@ -33,9 +35,16 @@ int main(int argn, const char** argv) {
         printf("%02X ", buffer[y] & 0xff);
       }
 
+      printf(" | ");
+
+      for (int y = 0; y < bytesPerLine; y++) {
+        printf("%c", buffer[y] < 32 ? '.' : buffer[y]);
+      }
+
       printf("\n");
     }
 
+    free(buffer);
     fclose(file);
   }
 
