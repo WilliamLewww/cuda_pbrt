@@ -25,6 +25,8 @@ FileSystemDriver::FileSystemDriver(std::string driveName, uint64_t blockCount, u
     fileSystem->blockCount = blockCount;
     fileSystem->blockSize = blockSize;
 
+    fileSystem->rootDirectoryBlock = 0;
+
     fileSystem->endSignature = FILE_SYSTEM_SIGNATURE_END;
 
     fwrite(fileSystem, 1, blockSize, drive);

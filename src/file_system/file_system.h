@@ -11,6 +11,8 @@ struct FileSystem {
   uint64_t blockCount;
   uint64_t blockSize;
 
+  uint64_t rootDirectoryBlock;
+
   uint64_t endSignature;
 };
 

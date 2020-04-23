@@ -15,16 +15,28 @@ CUDA_FLAGS=--gpu-architecture=sm_30
 EXEC=cuda-pbrt.out
 EXEC_ARGS=res/example.scene
 
-SRCS := $(filter-out $(wildcard src/file_system/*.cpp), $(wildcard src/*.cpp) $(wildcard src/*/*.cpp))
-OBJS := $(notdir $(SRCS:%.cpp=%.o))
+HEXDUMP_EXEC=hexdump.out
+HEXDUMP_EXEC_ARGS=dump/drive
+HEXDUMP_EXEC_OUTPUT=output.txt
+
+SRCS := $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)
+SRCS := $(filter-out $(wildcard src/file_system/*.cpp), $(SRCS))
+SRCS := $(filter-out $(wildcard src/hexdump/*.cpp), $(SRCS))
 
 FILESYSTEM_SRCS := $(wildcard src/file_system/*.cpp)
+HEXDUMP_SRCS := $(wildcard src/hexdump/*.cpp)
+
+OBJS := $(notdir $(SRCS:%.cpp=%.o))
 FILESYSTEM_OBJS := $(notdir $(FILESYSTEM_SRCS:%.cpp=%.o))
+HEXDUMP_OBJS := $(notdir $(HEXDUMP_SRCS:%.cpp=%.o))
 
 CUDA_SRCS := $(wildcard src/*.cu)
 CUDA_OBJS := $(notdir $(CUDA_SRCS:%.cu=%.o))
 
-all: clean $(EXEC)
+all: clean-build $(EXEC)
+
+hexdump: clean-build $(HEXDUMP_OBJS)
+	$(NVCC) $(CUDA_FLAGS) $(BUILD_PATH)/*.o -o $(BIN_PATH)/$(HEXDUMP_EXEC)
 
 filesystem: clean-dump $(FILESYSTEM_OBJS)
 	$(NVCC) $(CUDA_FLAGS) $(BUILD_PATH)/*.o -o $(BIN_PATH)/$(EXEC)
@@ -44,8 +56,13 @@ $(EXEC): $(OBJS) $(FILESYSTEM_OBJS) $(CUDA_OBJS)
 %.o: $(SRC_PATH)/*/%.cu
 	$(NVCC) $(CUDA_FLAGS) --device-c $^ -o $(BUILD_PATH)/$@
 
-run:
+run: run-core run-hexdump
+
+run-core:
 	$(BIN_PATH)/$(EXEC) $(EXEC_ARGS)
+
+run-hexdump:
+	$(BIN_PATH)/$(HEXDUMP_EXEC) $(HEXDUMP_EXEC_ARGS) > $(DUMP_PATH)/$(HEXDUMP_EXEC_OUTPUT)
 
 clean: SHELL:=/bin/bash
 clean: clean-bin clean-build clean-dump
