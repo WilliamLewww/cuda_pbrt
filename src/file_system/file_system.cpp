@@ -28,6 +28,10 @@ FileSystemDriver::FileSystemDriver(std::string driveName, uint64_t blockCount, u
     fileSystem->endSignature = FILE_SYSTEM_SIGNATURE_END;
 
     fwrite(fileSystem, 1, blockSize, drive);
+
+    char* clearBuffer = (char*)malloc(fileSystem->blockCount*fileSystem->blockSize);
+    writeBlock(clearBuffer, fileSystem->blockCount, 0);
+    free(clearBuffer);
   }
 }
 
