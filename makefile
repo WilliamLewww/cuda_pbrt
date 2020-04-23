@@ -33,7 +33,7 @@ HEXDUMP_OBJS := $(notdir $(HEXDUMP_SRCS:%.cpp=%.o))
 CUDA_SRCS := $(wildcard src/*.cu)
 CUDA_OBJS := $(notdir $(CUDA_SRCS:%.cu=%.o))
 
-all: clean-build $(EXEC)
+all: clean-build clean-dump $(EXEC)
 
 hexdump: clean-build $(HEXDUMP_OBJS)
 	$(NVCC) $(CUDA_FLAGS) $(BUILD_PATH)/*.o -o $(BIN_PATH)/$(HEXDUMP_EXEC)
