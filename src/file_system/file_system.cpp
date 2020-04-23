@@ -42,6 +42,13 @@ FileSystemDriver::FileSystemDriver(std::string driveName, uint64_t blockCount, u
 
   currentDirectory = (Directory*)malloc(blockSize);
   readBlock(currentDirectory, 1, 1);
+
+  std::vector<char*> tokenList;
+  int type = parsePath("./root/test/first/second", tokenList);
+
+  for (int x = 0; x < tokenList.size(); x++) {
+    printf("%s\n", tokenList[x]);
+  }
 }
 
 FileSystemDriver::~FileSystemDriver() {
@@ -60,6 +67,22 @@ void FileSystemDriver::writeBlock(void* buffer, uint64_t blockCount, uint64_t bl
   fwrite(buffer, 1, currentFileSystem->blockSize * blockCount, drive);
 }
 
+int FileSystemDriver::parsePath(const char* path, std::vector<char*>& tokenList) {
+  char* tempPath = (char*)malloc(strlen(path) + 1);
+  strcpy(tempPath, path);
+
+  char* token = strtok(tempPath, "/");
+  while (token != NULL) {
+    char* tempToken = (char*)malloc(strlen(token) + 1);
+    strcpy(tempToken, token);
+
+    tokenList.push_back(tempToken);
+    token = strtok(NULL, "/");
+  }
+
+  free(tempPath);
+}
+
 void FileSystemDriver::createRootDirectory() {
   Directory* rootDirectory = (Directory*)malloc(currentFileSystem->blockSize);
   rootDirectory->signatureStart = DIRECTORY_SIGNATURE_START;
@@ -70,7 +93,7 @@ void FileSystemDriver::createRootDirectory() {
   rootDirectory->block = 1;
 
   rootDirectory->freeBlock = rootDirectory->block + 1;
-  rootDirectory->freeBlockCount = currentFileSystem->blockCount - 1;
+  rootDirectory->freeBlockCount = currentFileSystem->blockCount - 2;
 
   rootDirectory->parentDirectoryBlock = 1;
   rootDirectory->subDirectoryBlock = 0;
@@ -80,4 +103,46 @@ void FileSystemDriver::createRootDirectory() {
 
   writeBlock(rootDirectory, 1, 1);
   free(rootDirectory);
+}
+
+void FileSystemDriver::createDirectory(const char* name, uint64_t freeBlockCount) {
+  Directory* directory = (Directory*)malloc(currentFileSystem->blockSize);
+  directory->signatureStart = DIRECTORY_SIGNATURE_START;
+
+  strcpy(directory->name, name);
+  directory->type = DIRECTORY_TYPE_DIRECTORY;
+
+  directory->block = currentDirectory->freeBlock;
+
+  directory->freeBlock = directory->block + 1;
+  directory->freeBlockCount = freeBlockCount;
+
+  directory->parentDirectoryBlock = currentDirectory->block;
+  directory->subDirectoryBlock = 0;
+  directory->nextDirectoryBlock = 0;
+
+  directory->signatureEnd = DIRECTORY_SIGNATURE_END;
+  writeBlock(directory, 1, currentDirectory->freeBlock);
+
+  currentDirectory->freeBlock = directory->block + directory->freeBlockCount + 1;
+  currentDirectory->freeBlockCount -= directory->freeBlockCount + 1;
+
+  if (currentDirectory->subDirectoryBlock == 0) {
+    currentDirectory->subDirectoryBlock = directory->block;
+  }
+  else {
+    Directory* previousDirectory = (Directory*)malloc(currentFileSystem->blockSize);
+    readBlock(previousDirectory, 1, currentDirectory->subDirectoryBlock);
+
+    while (previousDirectory->nextDirectoryBlock != 0) {
+      readBlock(previousDirectory, 1, previousDirectory->nextDirectoryBlock);
+    }
+
+    previousDirectory->nextDirectoryBlock = directory->block;
+    writeBlock(previousDirectory, 1, previousDirectory->block);
+    free(previousDirectory);
+  }
+
+  writeBlock(currentDirectory, 1, currentDirectory->block);
+  free(directory);
 }

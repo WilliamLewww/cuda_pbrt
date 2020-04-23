@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <cstring>
 #include <unistd.h>
+#include <vector>
 
 #include "directory.h"
 
@@ -33,8 +34,12 @@ private:
   void readBlock(void* buffer, uint64_t blockCount, uint64_t blockPosition);
   void writeBlock(void* buffer, uint64_t blockCount, uint64_t blockPosition);
 
+  int parsePath(const char* path, std::vector<char*>& tokenList);
+
   void createRootDirectory();
 public:
   FileSystemDriver(std::string driveName, uint64_t blockCount, uint64_t blockSize);
   ~FileSystemDriver();
+
+  void createDirectory(const char* name, uint64_t freeBlockCount);
 };
