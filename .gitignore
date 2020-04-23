@@ -1,11 +1,11 @@
-!bin/
 bin/*
+!bin/.gitkeep
 
-!build/
 build/*
+!build/.gitkeep
 
-!dump/
 dump/*
+!dump/.gitkeep
 
 # Prerequisites
 *.d
