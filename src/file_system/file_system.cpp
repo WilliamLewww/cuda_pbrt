@@ -39,3 +39,11 @@ FileSystemDriver::FileSystemDriver(std::string driveName, uint64_t blockCount, u
 FileSystemDriver::~FileSystemDriver() {
   fclose(drive);
 }
+
+void readBlock(void* buffer, uint64_t blockCount, uint64_t blockPosition) {
+
+}
+
+void writeBlock(void* buffer, uint64_t blockCount, uint64_t blockPosition) {
+
+}
