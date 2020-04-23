@@ -1,8 +1,10 @@
 #include "file_system.h"
 
-FileSystem::FileSystem(std::string driveName, uint64_t blockCount, uint64_t blockSize) {
-  this->driveName = driveName;
+const std::string FileSystemDriver::FILE_SYSTEM_PREFIX = "raytrace-file-system";
+const uint64_t FileSystemDriver::FILE_SYSTEM_SIGNATURE_START = 0x26F7726624502524;
+const uint64_t FileSystemDriver::FILE_SYSTEM_SIGNATURE_END = 0x26F7726624502525;
 
+FileSystemDriver::FileSystemDriver(std::string driveName, uint64_t blockCount, uint64_t blockSize) {
   if (access(driveName.c_str(), F_OK) != 0) {
     drive = fopen(driveName.c_str(), "w");
     fclose(drive);
@@ -10,25 +12,30 @@ FileSystem::FileSystem(std::string driveName, uint64_t blockCount, uint64_t bloc
 
   drive = fopen(driveName.c_str(), "r+");
 
-  char* buffer = (char*)malloc(blockSize);
-  fread(buffer, sizeof(char), blockSize, drive);
+  FileSystem* fileSystemBuffer = (FileSystem*)malloc(blockSize);
+  fread(fileSystemBuffer, 1, blockSize, drive);
 
-  if (strcmp(buffer, "raytrace-file-system") != 0) {
-    char* firstBlock = (char*)malloc(blockSize);
-    memcpy(firstBlock, "raytrace-file-system\0", 21);
+  if (strcmp(fileSystemBuffer->prefix, FILE_SYSTEM_PREFIX.c_str()) != 0) {
+    free(fileSystemBuffer);
 
-    fwrite(firstBlock, sizeof(char), blockSize, drive);
-    free(firstBlock);
+    fileSystemBuffer->startSignature = FILE_SYSTEM_SIGNATURE_START;
 
-    fseek(drive, blockSize, SEEK_SET);
+    fileSystemBuffer = (FileSystem*)malloc(blockSize);
+    strcpy(fileSystemBuffer->prefix, FILE_SYSTEM_PREFIX.c_str());
+    fileSystemBuffer->blockCount = blockCount;
+    fileSystemBuffer->blockSize = blockSize;
+
+    fileSystemBuffer->endSignature = FILE_SYSTEM_SIGNATURE_END;
+
+    fwrite(fileSystemBuffer, 1, blockSize, drive);
   }
   else {
 
   }
 
-  free(buffer);
+  free(fileSystemBuffer);
 }
 
-FileSystem::~FileSystem() {
+FileSystemDriver::~FileSystemDriver() {
   fclose(drive);
 }
