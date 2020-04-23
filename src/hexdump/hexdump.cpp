@@ -53,6 +53,10 @@ int main(int argn, const char** argv) {
         printf("%c", buffer[y] < 32 ? '.' : buffer[y]);
       }
 
+      if (x * bytesPerLine % blockSize == 0) {
+        printf("        block: %ld", x * bytesPerLine / blockSize);
+      }
+
       printf("\n");
     }
 
