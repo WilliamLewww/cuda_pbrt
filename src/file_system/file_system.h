@@ -7,6 +7,10 @@
 
 #include "directory.h"
 
+enum PathType {
+  PATH_TYPE_ABSOLUTE, PATH_TYPE_RELATIVE
+};
+
 struct FileSystem {
   uint64_t signatureStart;
 

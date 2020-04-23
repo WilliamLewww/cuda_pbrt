@@ -44,11 +44,7 @@ FileSystemDriver::FileSystemDriver(std::string driveName, uint64_t blockCount, u
   readBlock(currentDirectory, 1, 1);
 
   std::vector<char*> tokenList;
-  int type = parsePath("./root/test/first/second", tokenList);
-
-  for (int x = 0; x < tokenList.size(); x++) {
-    printf("%s\n", tokenList[x]);
-  }
+  int type = parsePath("/root/test/first/second", tokenList);
 }
 
 FileSystemDriver::~FileSystemDriver() {
@@ -81,6 +77,12 @@ int FileSystemDriver::parsePath(const char* path, std::vector<char*>& tokenList)
   }
 
   free(tempPath);
+
+  if (path[0] == '/') {
+    return PATH_TYPE_ABSOLUTE;
+  }
+
+  return PATH_TYPE_RELATIVE;
 }
 
 void FileSystemDriver::createRootDirectory() {
