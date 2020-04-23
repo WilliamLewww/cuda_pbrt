@@ -12,38 +12,36 @@ FileSystemDriver::FileSystemDriver(std::string driveName, uint64_t blockCount, u
 
   drive = fopen(driveName.c_str(), "r+");
 
-  FileSystem* fileSystemBuffer = (FileSystem*)malloc(blockSize);
-  fread(fileSystemBuffer, 1, blockSize, drive);
+  fileSystem = (FileSystem*)malloc(blockSize);
+  fread(fileSystem, 1, blockSize, drive);
 
-  if (strcmp(fileSystemBuffer->prefix, FILE_SYSTEM_PREFIX.c_str()) != 0) {
-    free(fileSystemBuffer);
+  if (strcmp(fileSystem->prefix, FILE_SYSTEM_PREFIX.c_str()) != 0) {
+    free(fileSystem);
 
-    fileSystemBuffer->startSignature = FILE_SYSTEM_SIGNATURE_START;
+    fileSystem->startSignature = FILE_SYSTEM_SIGNATURE_START;
 
-    fileSystemBuffer = (FileSystem*)malloc(blockSize);
-    strcpy(fileSystemBuffer->prefix, FILE_SYSTEM_PREFIX.c_str());
-    fileSystemBuffer->blockCount = blockCount;
-    fileSystemBuffer->blockSize = blockSize;
+    fileSystem = (FileSystem*)malloc(blockSize);
+    strcpy(fileSystem->prefix, FILE_SYSTEM_PREFIX.c_str());
+    fileSystem->blockCount = blockCount;
+    fileSystem->blockSize = blockSize;
 
-    fileSystemBuffer->endSignature = FILE_SYSTEM_SIGNATURE_END;
+    fileSystem->endSignature = FILE_SYSTEM_SIGNATURE_END;
 
-    fwrite(fileSystemBuffer, 1, blockSize, drive);
+    fwrite(fileSystem, 1, blockSize, drive);
   }
-  else {
-
-  }
-
-  free(fileSystemBuffer);
 }
 
 FileSystemDriver::~FileSystemDriver() {
+  free(fileSystem);
   fclose(drive);
 }
 
-void readBlock(void* buffer, uint64_t blockCount, uint64_t blockPosition) {
-
+void FileSystemDriver::readBlock(void* buffer, uint64_t blockCount, uint64_t blockPosition) {
+  fseek(drive, (fileSystem->blockSize * (blockPosition + 1)), SEEK_SET);
+  fread(buffer, 1, fileSystem->blockSize * blockCount, drive);
 }
 
-void writeBlock(void* buffer, uint64_t blockCount, uint64_t blockPosition) {
-
+void FileSystemDriver::writeBlock(void* buffer, uint64_t blockCount, uint64_t blockPosition) {
+  fseek(drive, (fileSystem->blockSize * (blockPosition + 1)), SEEK_SET);
+  fwrite(buffer, 1, fileSystem->blockSize * blockCount, drive);
 }
