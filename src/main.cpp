@@ -1,14 +1,11 @@
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb/stb_image_write.h"
-
-#include "scene_parser/parser.h"
-#include "file_system/file_system.h"
+#include "shell.h"
 
 int main(int argn, const char** argv) {
-  const char* filename = argv[1];
+  Shell* shell = new Shell(argn, argv);
+  delete shell;
 
-  FileSystemDriver* fileSystem = new FileSystemDriver("dump/drive", 50, 512);
-  delete fileSystem;
+  // FileSystemDriver* fileSystem = new FileSystemDriver("dump/drive", 50, 512);
+  // delete fileSystem;
 
   // Parser* parser = new Parser();
   // Scene* scene = parser->createSceneFromFile(filename);
