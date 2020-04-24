@@ -174,7 +174,12 @@ void FileSystemDriver::createDirectory(const char* path, uint64_t freeBlockCount
 
   char* parentPath = (char*)malloc(strlen(path) + 1);
   strcpy(parentPath, path);
-  parentPath[strlen(parentPath) - strlen(lastToken) - 1] = 0;
+  if (strlen(parentPath) - strlen(lastToken) == 0) {
+    strcpy(parentPath, "."); 
+  }
+  else {
+    parentPath[strlen(parentPath) - strlen(lastToken) - 1] = 0;
+  }
 
   Directory* parentDirectory = (Directory*)malloc(currentFileSystem->blockSize);
   readBlock(parentDirectory, 1, getDirectoryBlockFromPath(parentPath));
@@ -222,4 +227,15 @@ void FileSystemDriver::createDirectory(const char* path, uint64_t freeBlockCount
   free(parentDirectory);
 
   free(lastToken);
+}
+
+void FileSystemDriver::changeDirectory(const char* path) {
+  uint64_t directoryBlock = getDirectoryBlockFromPath(path);
+
+  if (directoryBlock == 0) {
+    printf("Directory does not exists!\n");
+  }
+  else {
+    readBlock(currentDirectory, 1, directoryBlock);
+  }
 }
