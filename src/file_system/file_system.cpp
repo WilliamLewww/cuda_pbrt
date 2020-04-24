@@ -77,13 +77,20 @@ uint64_t FileSystemDriver::getDirectoryBlockFromPath(const char* path) {
 
   bool doesNotExist = false;
   for (int x = 0; x < tokenList.size(); x++) {
-    readBlock(directory, 1, directory->subDirectoryBlock);
-    while (strcmp(directory->name, tokenList[x]) != 0 && directory->nextDirectoryBlock != 0) {
-      readBlock(directory, 1, directory->nextDirectoryBlock);
+    if (strcmp(tokenList[x], "..") == 0) {
+      readBlock(directory, 1, directory->parentDirectoryBlock);
     }
+    else {
+      if (strcmp(tokenList[x], ".") != 0) {
+        readBlock(directory, 1, directory->subDirectoryBlock);
+        while (strcmp(directory->name, tokenList[x]) != 0 && directory->nextDirectoryBlock != 0) {
+          readBlock(directory, 1, directory->nextDirectoryBlock);
+        }
 
-    if (strcmp(directory->name, tokenList[x]) != 0) {
-      doesNotExist = true;
+        if (strcmp(directory->name, tokenList[x]) != 0) {
+          doesNotExist = true;
+        }
+      }
     }
 
     free(tokenList[x]);
