@@ -7,8 +7,7 @@
 int main(int argn, const char** argv) {
   const char* filename = argv[1];
 
-  FileSystemDriver* fileSystem = new FileSystemDriver("dump/drive", 10, 512);
-  fileSystem->createDirectory("first", 4);
+  FileSystemDriver* fileSystem = new FileSystemDriver("dump/drive", 50, 512);
   delete fileSystem;
 
   // Parser* parser = new Parser();

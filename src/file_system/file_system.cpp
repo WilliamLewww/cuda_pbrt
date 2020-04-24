@@ -27,7 +27,7 @@ FileSystemDriver::FileSystemDriver(std::string driveName, uint64_t blockCount, u
     currentFileSystem->blockCount = blockCount;
     currentFileSystem->blockSize = blockSize;
 
-    currentFileSystem->rootDirectoryBlock = 0;
+    currentFileSystem->rootDirectoryBlock = 1;
 
     currentFileSystem->signatureEnd = FILE_SYSTEM_SIGNATURE_END;
 
@@ -41,10 +41,7 @@ FileSystemDriver::FileSystemDriver(std::string driveName, uint64_t blockCount, u
   }
 
   currentDirectory = (Directory*)malloc(blockSize);
-  readBlock(currentDirectory, 1, 1);
-
-  std::vector<char*> tokenList;
-  int type = parsePath("/root/test/first/second", tokenList);
+  readBlock(currentDirectory, 1, currentFileSystem->rootDirectoryBlock);
 }
 
 FileSystemDriver::~FileSystemDriver() {
@@ -61,6 +58,44 @@ void FileSystemDriver::readBlock(void* buffer, uint64_t blockCount, uint64_t blo
 void FileSystemDriver::writeBlock(void* buffer, uint64_t blockCount, uint64_t blockPosition) {
   fseek(drive, (currentFileSystem->blockSize * (blockPosition + 1)), SEEK_SET);
   fwrite(buffer, 1, currentFileSystem->blockSize * blockCount, drive);
+}
+
+uint64_t FileSystemDriver::getDirectoryBlockFromPath(const char* path) {
+  if (strcmp(path, "") == 0) {
+    return currentFileSystem->rootDirectoryBlock;
+  }
+  std::vector<char*> tokenList;
+  int pathType = parsePath(path, tokenList);
+
+  Directory* directory = (Directory*)malloc(currentFileSystem->blockSize);
+  if (pathType == PATH_TYPE_ABSOLUTE) {
+    readBlock(directory, 1, currentFileSystem->rootDirectoryBlock);
+  }
+  else {
+    readBlock(directory, 1, currentDirectory->block);
+  }
+
+  bool doesNotExist = false;
+  for (int x = 0; x < tokenList.size(); x++) {
+    readBlock(directory, 1, directory->subDirectoryBlock);
+    while (strcmp(directory->name, tokenList[x]) != 0 && directory->nextDirectoryBlock != 0) {
+      readBlock(directory, 1, directory->nextDirectoryBlock);
+    }
+
+    if (strcmp(directory->name, tokenList[x]) != 0) {
+      doesNotExist = true;
+    }
+
+    free(tokenList[x]);
+  }
+
+  if (doesNotExist) {
+    return 0;
+  }
+
+  uint64_t directoryBlock = directory->block;
+  free(directory);
+  return directoryBlock;
 }
 
 int FileSystemDriver::parsePath(const char* path, std::vector<char*>& tokenList) {
@@ -107,34 +142,64 @@ void FileSystemDriver::createRootDirectory() {
   free(rootDirectory);
 }
 
-void FileSystemDriver::createDirectory(const char* name, uint64_t freeBlockCount) {
+void FileSystemDriver::createDirectory(const char* path, uint64_t freeBlockCount) {
+  std::vector<char*> tokenList;
+  parsePath(path, tokenList);
+
+  char* lastToken;
+  if (getDirectoryBlockFromPath(path) == 0) {
+    lastToken = (char*)malloc(strlen(tokenList[tokenList.size() - 1]) + 1);
+    strcpy(lastToken, tokenList[tokenList.size() - 1]);
+
+    for (int x = 0; x < tokenList.size(); x++) {
+      free(tokenList[x]);
+    }
+  }
+  else {
+    printf("Directory already exists!\n");
+
+    for (int x = 0; x < tokenList.size(); x++) {
+      free(tokenList[x]);
+    }
+
+    return;
+  }
+
+  char* parentPath = (char*)malloc(strlen(path) + 1);
+  strcpy(parentPath, path);
+  parentPath[strlen(parentPath) - strlen(lastToken) - 1] = 0;
+
+  Directory* parentDirectory = (Directory*)malloc(currentFileSystem->blockSize);
+  readBlock(parentDirectory, 1, getDirectoryBlockFromPath(parentPath));
+  free(parentPath);
+
   Directory* directory = (Directory*)malloc(currentFileSystem->blockSize);
   directory->signatureStart = DIRECTORY_SIGNATURE_START;
 
-  strcpy(directory->name, name);
+  strcpy(directory->name, lastToken);
   directory->type = DIRECTORY_TYPE_DIRECTORY;
 
-  directory->block = currentDirectory->freeBlock;
+  directory->block = parentDirectory->freeBlock;
 
   directory->freeBlock = directory->block + 1;
   directory->freeBlockCount = freeBlockCount;
 
-  directory->parentDirectoryBlock = currentDirectory->block;
+  directory->parentDirectoryBlock = parentDirectory->block;
   directory->subDirectoryBlock = 0;
   directory->nextDirectoryBlock = 0;
 
   directory->signatureEnd = DIRECTORY_SIGNATURE_END;
-  writeBlock(directory, 1, currentDirectory->freeBlock);
+  writeBlock(directory, 1, parentDirectory->freeBlock);
 
-  currentDirectory->freeBlock = directory->block + directory->freeBlockCount + 1;
-  currentDirectory->freeBlockCount -= directory->freeBlockCount + 1;
+  parentDirectory->freeBlock = directory->block + directory->freeBlockCount + 1;
+  parentDirectory->freeBlockCount -= directory->freeBlockCount + 1;
 
-  if (currentDirectory->subDirectoryBlock == 0) {
-    currentDirectory->subDirectoryBlock = directory->block;
+  if (parentDirectory->subDirectoryBlock == 0) {
+    parentDirectory->subDirectoryBlock = directory->block;
   }
   else {
     Directory* previousDirectory = (Directory*)malloc(currentFileSystem->blockSize);
-    readBlock(previousDirectory, 1, currentDirectory->subDirectoryBlock);
+    readBlock(previousDirectory, 1, parentDirectory->subDirectoryBlock);
 
     while (previousDirectory->nextDirectoryBlock != 0) {
       readBlock(previousDirectory, 1, previousDirectory->nextDirectoryBlock);
@@ -145,6 +210,9 @@ void FileSystemDriver::createDirectory(const char* name, uint64_t freeBlockCount
     free(previousDirectory);
   }
 
-  writeBlock(currentDirectory, 1, currentDirectory->block);
+  writeBlock(parentDirectory, 1, parentDirectory->block);
   free(directory);
+  free(parentDirectory);
+
+  free(lastToken);
 }
