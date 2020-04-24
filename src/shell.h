@@ -16,7 +16,8 @@ private:
   std::vector<std::string> arguments;
 
   void parseArguments();
-  void runInteractive();
+
+  void interactive();
 public:
   Shell(int argn, const char** argv);
   ~Shell();

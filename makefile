@@ -13,7 +13,7 @@ NVCC=$(CUDA_PATH)/bin/nvcc
 CUDA_FLAGS=--gpu-architecture=sm_30
 
 EXEC=cuda-pbrt.out
-EXEC_ARGS=res/example.scene
+EXEC_ARGS=--help
 
 HEXDUMP_EXEC=hexdump.out
 HEXDUMP_EXEC_ARGS=dump/drive
