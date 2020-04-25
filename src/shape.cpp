@@ -1,5 +1,8 @@
 #include "shape.h"
 
+Bounds3 Shape::objectBounds() {}
+bool Shape::checkRayIntersection(Ray* ray, float* firstHit, SurfaceInteraction* surfaceInteraction, bool testAlphaTexture) {}
+
 Shape::Shape() {
   this->objectToWorld = nullptr;
   this->worldToObject = nullptr;
@@ -25,12 +28,4 @@ TransformationMatrix* Shape::getObjectToWorld() {
 
 Bounds3 Shape::worldBounds() {
   return (*objectToWorld)(objectBounds());
-}
-
-Bounds3 Shape::objectBounds() {
-
-}
-
-bool Shape::checkRayIntersection(Ray* ray, float* firstHit, SurfaceInteraction* surfaceInteraction, bool testAlphaTexture) {
-
 }

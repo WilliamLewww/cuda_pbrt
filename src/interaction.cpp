@@ -16,7 +16,8 @@ Ray Interaction::spawnRayToPosition(Vector4 targetPosition) {
 }
 
 SurfaceInteraction::SurfaceInteraction() {
-
+  shape = nullptr;
+  primitive = nullptr;
 }
 
 SurfaceInteraction::SurfaceInteraction(Vector4 position, Vector4 positionError, Vector2 uv, Vector4 direction, Vector4 dpdu, Vector4 dpdv, Vector4 dndu, Vector4 dndv, float time, Shape* shape) {
@@ -41,4 +42,6 @@ SurfaceInteraction::SurfaceInteraction(Vector4 position, Vector4 positionError, 
   this->shading.dpdv = this->dpdv;
   this->shading.dndu = this->dndu;
   this->shading.dndv = this->dndv;
+
+  primitive = nullptr;
 }

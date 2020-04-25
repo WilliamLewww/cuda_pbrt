@@ -3,6 +3,7 @@
 #include "ray.h"
 
 class Shape;
+class Primitive;
 
 struct Interaction {
   Vector4 position;
@@ -31,6 +32,8 @@ public:
 
   Shape* shape;
   InteractionShading shading;
+
+  Primitive* primitive;
 
   SurfaceInteraction();
   SurfaceInteraction(Vector4 position, Vector4 positionError, Vector2 uv, Vector4 direction, Vector4 dpdu, Vector4 dpdv, Vector4 dndu, Vector4 dndv, float time, Shape* shape);

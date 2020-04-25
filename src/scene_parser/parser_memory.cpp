@@ -132,13 +132,5 @@ TransformationMatrix* ParserMemory::getLastTransformationMatrix() {
 Scene* ParserMemory::createScene() {
   Scene* scene = new Scene();
 
-  for (int x = 0; x < cameraList.size(); x++) {
-    scene->addCamera(cameraList[x]);
-  }
-
-  for (int x = 0; x < shapeList.size(); x++) {
-    scene->addShape(shapeList[x]);
-  }
-
   return scene;
 }
