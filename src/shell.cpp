@@ -187,8 +187,8 @@ void Shell::interactiveFileSystem() {
       }
     }
 
-    if (strcmp(commandBufferSeparated[0], "pwdd") == 0) {
-      printf("%s\n", fileSystemDriver->getWorkingDirectoryDetails().c_str());
+    if (strcmp(commandBufferSeparated[0], "details") == 0) {
+      printf("%s\n", fileSystemDriver->getDirectoryDetails(commandBufferSeparated[1]).c_str());
     }
 
     if (strcmp(commandBufferSeparated[0], "exit") == 0) {

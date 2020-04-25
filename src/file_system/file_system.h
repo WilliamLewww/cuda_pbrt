@@ -60,5 +60,5 @@ public:
   std::vector<std::string> getDirectoryContents();
   std::vector<std::string> getDirectoryContentsColored();
 
-  std::string getWorkingDirectoryDetails();
+  std::string getDirectoryDetails(char* path);
 };

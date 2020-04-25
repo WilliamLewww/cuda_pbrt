@@ -306,6 +306,8 @@ std::vector<std::string> FileSystemDriver::getDirectoryContents() {
       readBlock(directory, 1, directory->nextDirectoryBlock);
       contentList.push_back(std::string(directory->name));
     }
+
+    free(directory);
   }
 
   return contentList;
@@ -329,26 +331,31 @@ std::vector<std::string> FileSystemDriver::getDirectoryContentsColored() {
       std::string content = directoryTypeColorStringStartMap[directory->type] + std::string(directory->name) + colorStringEnd;
       contentList.push_back(content);
     }
+
+    free(directory);
   }
 
   return contentList;
 }
 
-std::string FileSystemDriver::getWorkingDirectoryDetails() {
-  readBlock(currentDirectory, 1, currentDirectory->block);
+std::string FileSystemDriver::getDirectoryDetails(char* path) {
+  Directory* directory = (Directory*)malloc(currentFileSystem->blockSize);
+  readBlock(directory, 1, getDirectoryBlockFromPath(path));
 
   std::string details = "";
-  details += "\033[1;36mname:\033[0m.....................\033[1;34m" + std::string(currentDirectory->name) + "\033[0m\n";
-  details += "\033[1;36mtype:\033[0m.....................\033[1;34m" + directoryTypeStringMap[currentDirectory->type] + "\033[0m\n";
+  details += "\033[1;36mname:\033[0m.....................\033[1;34m" + std::string(directory->name) + "\033[0m\n";
+  details += "\033[1;36mtype:\033[0m.....................\033[1;34m" + directoryTypeStringMap[directory->type] + "\033[0m\n";
 
-  details += "\033[1;36mblock:\033[0m....................\033[1;34m" + std::to_string(currentDirectory->block) + "\033[0m\n";
+  details += "\033[1;36mblock:\033[0m....................\033[1;34m" + std::to_string(directory->block) + "\033[0m\n";
   
-  details += "\033[1;36mfreeBlock:\033[0m................\033[1;34m" + std::to_string(currentDirectory->freeBlock) + "\033[0m\n";
-  details += "\033[1;36mfreeBlockCount:\033[0m...........\033[1;34m" + std::to_string(currentDirectory->freeBlockCount) + "\033[0m\n";
+  details += "\033[1;36mfreeBlock:\033[0m................\033[1;34m" + std::to_string(directory->freeBlock) + "\033[0m\n";
+  details += "\033[1;36mfreeBlockCount:\033[0m...........\033[1;34m" + std::to_string(directory->freeBlockCount) + "\033[0m\n";
   
-  details += "\033[1;36mparentDirectoryBlock:\033[0m.....\033[1;34m" + std::to_string(currentDirectory->parentDirectoryBlock) + "\033[0m\n";
-  details += "\033[1;36msubDirectoryBlock:\033[0m........\033[1;34m" + std::to_string(currentDirectory->subDirectoryBlock) + "\033[0m\n";
-  details += "\033[1;36mnextDirectoryBlock:\033[0m.......\033[1;34m" + std::to_string(currentDirectory->nextDirectoryBlock) + "\033[0m";
+  details += "\033[1;36mparentDirectoryBlock:\033[0m.....\033[1;34m" + std::to_string(directory->parentDirectoryBlock) + "\033[0m\n";
+  details += "\033[1;36msubDirectoryBlock:\033[0m........\033[1;34m" + std::to_string(directory->subDirectoryBlock) + "\033[0m\n";
+  details += "\033[1;36mnextDirectoryBlock:\033[0m.......\033[1;34m" + std::to_string(directory->nextDirectoryBlock) + "\033[0m";
+
+  free(directory);
 
   return details;
 }
