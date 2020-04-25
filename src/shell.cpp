@@ -41,6 +41,15 @@ void Shell::parseArguments() {
   }
 }
 
+void Shell::clearInputBuffer() {
+  char* clearBuffer = (char*)malloc(2);
+  fread(clearBuffer, sizeof(char), 1, stdin);
+  while (clearBuffer[0] != '\n' && clearBuffer[0] != EOF) {
+    fread(clearBuffer, sizeof(char), 1, stdin);
+  }
+  free(clearBuffer);
+}
+
 void Shell::interactive() {
   printf("\033[1;32m  ██████╗██╗   ██╗██████╗  █████╗     ██████╗ ██████╗ ██████╗ ████████╗ \033[0m\n");
   printf("\033[1;32m ██╔════╝██║   ██║██╔══██╗██╔══██╗    ██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝ \033[0m\n");
@@ -74,9 +83,7 @@ void Shell::interactive() {
       interactiveMode = InteractiveMode::Parser;
     }
 
-    while (optionBuffer[0] != '\n' && optionBuffer[0] != EOF) {
-      fread(optionBuffer, sizeof(char), 1, stdin);
-    }
+    clearInputBuffer();
   }
 
   free(optionBuffer);
@@ -126,9 +133,15 @@ void Shell::interactiveFileSystem() {
   FileSystemDriver* fileSystemDriver = new FileSystemDriver(pathBuffer, blockCount, blockSize);
   free(pathBuffer);
 
+  clearInputBuffer();
+
+  char* commandBuffer = (char*)malloc(128);
   while (interactiveMode == InteractiveMode::FileSystem) {
-    printf("\033[1;32m%s\033[0m:\033[1;35m%s\033[0m$\n", "rfs", fileSystemDriver->getWorkingDirectory().c_str());
+    printf("\033[1;32m%s\033[0m:\033[1;35m%s\033[0m$ ", "rfs", fileSystemDriver->getWorkingDirectory().c_str());
+    fgets(commandBuffer, 128, stdin);
+    strtok(pathBuffer, "\n");
   }
+  free(commandBuffer);
 
   delete fileSystemDriver;
 }

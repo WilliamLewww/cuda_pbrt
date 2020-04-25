@@ -18,10 +18,11 @@ class Shell {
 private:
   ShellMode shellMode;
   InteractiveMode interactiveMode;
-  
+
   std::vector<std::string> arguments;
 
   void parseArguments();
+  void clearInputBuffer();
 
   void interactive();
   void interactiveFileSystem();
