@@ -1,5 +1,10 @@
 #include "file_system.h"
 
+std::map<int, std::string> FileSystemDriver::directoryTypeColorStringStartMap = {
+  {DIRECTORY_TYPE_DIRECTORY, "\033[1;34m"}, {DIRECTORY_TYPE_FILE, "\033[1;32m"}
+};
+std::string FileSystemDriver::colorStringEnd = "\033[0m";
+
 const std::string FileSystemDriver::FILE_SYSTEM_PREFIX = "raytrace-file-system";
 const uint64_t FileSystemDriver::FILE_SYSTEM_SIGNATURE_START = 0x26F7726624502524;
 const uint64_t FileSystemDriver::FILE_SYSTEM_SIGNATURE_END = 0x26F7726624502525;
@@ -169,7 +174,7 @@ void FileSystemDriver::createRootDirectory() {
   free(rootDirectory);
 }
 
-void FileSystemDriver::createDirectory(const char* path, uint64_t freeBlockCount) {
+void FileSystemDriver::createDirectory(char* path, uint64_t freeBlockCount) {
   std::vector<char*> tokenList;
   parsePath(path, tokenList);
 
@@ -249,7 +254,7 @@ void FileSystemDriver::createDirectory(const char* path, uint64_t freeBlockCount
   free(lastToken);
 }
 
-void FileSystemDriver::changeDirectory(const char* path) {
+void FileSystemDriver::changeDirectory(char* path) {
   uint64_t directoryBlock = getDirectoryBlockFromPath(path);
 
   if (directoryBlock == 0) {
@@ -280,4 +285,45 @@ std::string FileSystemDriver::getWorkingDirectory() {
 
   free(directory);
   return path;
+}
+
+std::vector<std::string> FileSystemDriver::getDirectoryContents() {
+  readBlock(currentDirectory, 1, currentDirectory->block);
+
+  std::vector<std::string> contentList;
+
+  if (currentDirectory->subDirectoryBlock != 0) {
+    Directory* directory = (Directory*)malloc(currentFileSystem->blockSize);
+    readBlock(directory, 1, currentDirectory->subDirectoryBlock);
+
+    contentList.push_back(std::string(directory->name));
+
+    while (directory->nextDirectoryBlock != 0) {
+      readBlock(directory, 1, directory->nextDirectoryBlock);
+      contentList.push_back(std::string(directory->name));
+    }
+  }
+
+  return contentList;
+}
+
+std::vector<std::string> FileSystemDriver::getDirectoryContentsColored() {
+  readBlock(currentDirectory, 1, currentDirectory->block);
+  
+  std::vector<std::string> contentList;
+
+  if (currentDirectory->subDirectoryBlock != 0) {
+    Directory* directory = (Directory*)malloc(currentFileSystem->blockSize);
+    readBlock(directory, 1, currentDirectory->subDirectoryBlock);
+
+    std::string content = directoryTypeColorStringStartMap[directory->type] + std::string(directory->name) + colorStringEnd;
+    contentList.push_back(content);
+
+    while (directory->nextDirectoryBlock != 0) {
+      readBlock(directory, 1, directory->nextDirectoryBlock);
+      contentList.push_back(std::string(directory->name));
+    }
+  }
+
+  return contentList;
 }

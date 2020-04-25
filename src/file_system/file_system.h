@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <cstring>
 #include <unistd.h>
+#include <map>
 #include <vector>
 
 #include "directory.h"
@@ -25,6 +26,9 @@ struct FileSystem {
 
 class FileSystemDriver {
 private:
+  static std::map<int, std::string> directoryTypeColorStringStartMap;
+  static std::string colorStringEnd;
+
   static const std::string FILE_SYSTEM_PREFIX;
   static const uint64_t FILE_SYSTEM_SIGNATURE_START;
   static const uint64_t FILE_SYSTEM_SIGNATURE_END;
@@ -48,7 +52,10 @@ public:
 
   static bool checkValidFileSystem(const char* path, uint64_t blockSize);
 
-  void createDirectory(const char* path, uint64_t freeBlockCount);
-  void changeDirectory(const char* path);
+  void createDirectory(char* path, uint64_t freeBlockCount);
+  void changeDirectory(char* path);
+
   std::string getWorkingDirectory();
+  std::vector<std::string> getDirectoryContents();
+  std::vector<std::string> getDirectoryContentsColored();
 };

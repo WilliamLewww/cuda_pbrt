@@ -23,6 +23,7 @@ private:
 
   void parseArguments();
   void clearInputBuffer();
+  void separateBuffer(char* buffer, std::vector<char*>& bufferSeparated);
 
   void interactive();
   void interactiveFileSystem();

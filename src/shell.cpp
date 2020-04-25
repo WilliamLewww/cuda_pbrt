@@ -50,6 +50,22 @@ void Shell::clearInputBuffer() {
   free(clearBuffer);
 }
 
+void Shell::separateBuffer(char* buffer, std::vector<char*>& bufferSeparated) {
+  char* tempBuffer = (char*)malloc(strlen(buffer) + 1);
+  strcpy(tempBuffer, buffer);
+
+  char* token = strtok(tempBuffer, " ");
+  while (token != NULL) {
+    char* tempToken = (char*)malloc(strlen(token) + 1);
+    strcpy(tempToken, token);
+
+    bufferSeparated.push_back(tempToken);
+    token = strtok(NULL, " ");
+  }
+
+  free(tempBuffer);
+}
+
 void Shell::interactive() {
   printf("\033[1;32m  ██████╗██╗   ██╗██████╗  █████╗     ██████╗ ██████╗ ██████╗ ████████╗ \033[0m\n");
   printf("\033[1;32m ██╔════╝██║   ██║██╔══██╗██╔══██╗    ██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝ \033[0m\n");
@@ -140,6 +156,36 @@ void Shell::interactiveFileSystem() {
     printf("\033[1;32m%s\033[0m:\033[1;35m%s\033[0m$ ", "rfs", fileSystemDriver->getWorkingDirectory().c_str());
     fgets(commandBuffer, 128, stdin);
     strtok(pathBuffer, "\n");
+
+    std::vector<char*> commandBufferSeparated;
+    separateBuffer(commandBuffer, commandBufferSeparated);
+
+    if (strcmp(commandBufferSeparated[0], "mkdir") == 0) {
+      fileSystemDriver->createDirectory(commandBufferSeparated[1], (uint64_t)atoi(commandBufferSeparated[2]));
+    }
+
+    if (strcmp(commandBufferSeparated[0], "cd") == 0) {
+      fileSystemDriver->changeDirectory(commandBufferSeparated[1]);
+    }
+
+    if (strcmp(commandBufferSeparated[0], "pwd") == 0) {
+      printf("%s\n", fileSystemDriver->getWorkingDirectory().c_str());
+    }
+
+    if (strcmp(commandBufferSeparated[0], "ls") == 0) {
+      std::vector<std::string> directoryContents = fileSystemDriver->getDirectoryContentsColored();
+
+      if (directoryContents.size() > 0) {
+        for (int x = 0; x < directoryContents.size(); x++) {
+          printf("%s  ", directoryContents[x].c_str());
+        }
+        printf("\n");
+      }
+    }
+
+    for (int x = 0; x < commandBufferSeparated.size(); x++) {
+      free(commandBufferSeparated[x]);
+    }
   }
   free(commandBuffer);
 
