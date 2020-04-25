@@ -67,6 +67,7 @@ void Shell::separateBuffer(char* buffer, std::vector<char*>& bufferSeparated) {
 }
 
 void Shell::interactive() {
+  printf("\n");
   printf("\033[1;32m  ██████╗██╗   ██╗██████╗  █████╗     ██████╗ ██████╗ ██████╗ ████████╗ \033[0m\n");
   printf("\033[1;32m ██╔════╝██║   ██║██╔══██╗██╔══██╗    ██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝ \033[0m\n");
   printf("\033[1;32m ██║     ██║   ██║██║  ██║███████║    ██████╔╝██████╔╝██████╔╝   ██║    \033[0m\n");
@@ -125,6 +126,7 @@ void Shell::interactiveFileSystem() {
   if (!validFileSystem && access(pathBuffer, F_OK) != 0) {
     printf("\033[1;36m%s\033[0m", "enter block count: ");
     scanf("%ld", &blockCount);
+    clearInputBuffer();
   }
 
   // printf("enter block size: ");
@@ -148,8 +150,6 @@ void Shell::interactiveFileSystem() {
 
   FileSystemDriver* fileSystemDriver = new FileSystemDriver(pathBuffer, blockCount, blockSize);
   free(pathBuffer);
-
-  clearInputBuffer();
 
   char* commandBuffer = (char*)malloc(128);
   while (interactiveMode == InteractiveMode::FileSystem) {
