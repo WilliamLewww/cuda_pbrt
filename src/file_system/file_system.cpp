@@ -178,7 +178,7 @@ void FileSystemDriver::createRootDirectory() {
   free(rootDirectory);
 }
 
-void FileSystemDriver::createDirectory(char* path, uint64_t freeBlockCount) {
+void FileSystemDriver::createDirectory(char* path, uint64_t freeBlockCount, DirectoryType directoryType) {
   std::vector<char*> tokenList;
   parsePath(path, tokenList);
 
@@ -192,7 +192,7 @@ void FileSystemDriver::createDirectory(char* path, uint64_t freeBlockCount) {
     }
   }
   else {
-    printf("Directory already exists!\n");
+    printf("Directory/File already exists!\n");
 
     for (int x = 0; x < tokenList.size(); x++) {
       free(tokenList[x]);
@@ -218,7 +218,7 @@ void FileSystemDriver::createDirectory(char* path, uint64_t freeBlockCount) {
   directory->signatureStart = DIRECTORY_SIGNATURE_START;
 
   strcpy(directory->name, lastToken);
-  directory->type = DIRECTORY_TYPE_DIRECTORY;
+  directory->type = directoryType;
 
   directory->block = parentDirectory->freeBlock;
 
@@ -325,7 +325,9 @@ std::vector<std::string> FileSystemDriver::getDirectoryContentsColored() {
 
     while (directory->nextDirectoryBlock != 0) {
       readBlock(directory, 1, directory->nextDirectoryBlock);
-      contentList.push_back(std::string(directory->name));
+
+      std::string content = directoryTypeColorStringStartMap[directory->type] + std::string(directory->name) + colorStringEnd;
+      contentList.push_back(content);
     }
   }
 
@@ -334,7 +336,7 @@ std::vector<std::string> FileSystemDriver::getDirectoryContentsColored() {
 
 std::string FileSystemDriver::getWorkingDirectoryDetails() {
   readBlock(currentDirectory, 1, currentDirectory->block);
-  
+
   std::string details = "";
   details += "\033[1;36mname:\033[0m.....................\033[1;34m" + std::string(currentDirectory->name) + "\033[0m\n";
   details += "\033[1;36mtype:\033[0m.....................\033[1;34m" + directoryTypeStringMap[currentDirectory->type] + "\033[0m\n";

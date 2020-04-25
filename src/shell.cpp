@@ -161,7 +161,11 @@ void Shell::interactiveFileSystem() {
     separateBuffer(commandBuffer, commandBufferSeparated);
 
     if (strcmp(commandBufferSeparated[0], "mkdir") == 0) {
-      fileSystemDriver->createDirectory(commandBufferSeparated[1], (uint64_t)atoi(commandBufferSeparated[2]));
+      fileSystemDriver->createDirectory(commandBufferSeparated[1], (uint64_t)atoi(commandBufferSeparated[2]), DIRECTORY_TYPE_DIRECTORY);
+    }
+
+    if (strcmp(commandBufferSeparated[0], "touch") == 0) {
+      fileSystemDriver->createDirectory(commandBufferSeparated[1], (uint64_t)atoi(commandBufferSeparated[2]), DIRECTORY_TYPE_FILE);
     }
 
     if (strcmp(commandBufferSeparated[0], "cd") == 0) {

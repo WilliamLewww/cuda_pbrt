@@ -53,7 +53,7 @@ public:
 
   static bool checkValidFileSystem(const char* path, uint64_t blockSize);
 
-  void createDirectory(char* path, uint64_t freeBlockCount);
+  void createDirectory(char* path, uint64_t freeBlockCount, DirectoryType directoryType);
   void changeDirectory(char* path);
 
   std::string getWorkingDirectory();
