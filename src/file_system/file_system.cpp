@@ -259,3 +259,25 @@ void FileSystemDriver::changeDirectory(const char* path) {
     readBlock(currentDirectory, 1, directoryBlock);
   }
 }
+
+std::string FileSystemDriver::getWorkingDirectory() {
+  Directory* directory = (Directory*)malloc(currentFileSystem->blockSize);
+  readBlock(directory, 1, currentDirectory->block);
+
+  std::string path;
+  if (directory->block == currentFileSystem->rootDirectoryBlock) {
+    path = "";
+  }
+  else {
+    path = std::string(directory->name);
+  }
+
+  while (directory->parentDirectoryBlock != currentFileSystem->rootDirectoryBlock) {
+    readBlock(directory, 1, directory->parentDirectoryBlock);
+    path = std::string(directory->name) + "/" + path;
+  }
+  path = "/" + path;
+
+  free(directory);
+  return path;
+}

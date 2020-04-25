@@ -56,7 +56,7 @@ void Shell::interactive() {
   printf("------------------------------------------------------------------------\n");
 
   char* optionBuffer = (char*)malloc(2);
-  InteractiveMode interactiveMode = InteractiveMode::None;
+  interactiveMode = InteractiveMode::None;
 
   while (interactiveMode == InteractiveMode::None) {
     printf("enter an option: ");
@@ -121,8 +121,14 @@ void Shell::interactiveFileSystem() {
     }
   }
 
+  printf("\n");
+
   FileSystemDriver* fileSystemDriver = new FileSystemDriver(pathBuffer, blockCount, blockSize);
   free(pathBuffer);
+
+  while (interactiveMode == InteractiveMode::FileSystem) {
+    printf("rfs:%s$\n", fileSystemDriver->getWorkingDirectory().c_str());
+  }
 
   delete fileSystemDriver;
 }

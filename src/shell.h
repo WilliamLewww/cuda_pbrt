@@ -17,6 +17,8 @@ enum class InteractiveMode {
 class Shell {
 private:
   ShellMode shellMode;
+  InteractiveMode interactiveMode;
+  
   std::vector<std::string> arguments;
 
   void parseArguments();

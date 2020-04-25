@@ -50,4 +50,5 @@ public:
 
   void createDirectory(const char* path, uint64_t freeBlockCount);
   void changeDirectory(const char* path);
+  std::string getWorkingDirectory();
 };
