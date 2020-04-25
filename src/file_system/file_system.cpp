@@ -1,5 +1,9 @@
 #include "file_system.h"
 
+std::map<int, std::string> FileSystemDriver::directoryTypeStringMap = {
+  {DIRECTORY_TYPE_DIRECTORY, "directory"}, {DIRECTORY_TYPE_FILE, "file"}
+};
+
 std::map<int, std::string> FileSystemDriver::directoryTypeColorStringStartMap = {
   {DIRECTORY_TYPE_DIRECTORY, "\033[1;34m"}, {DIRECTORY_TYPE_FILE, "\033[1;32m"}
 };
@@ -326,4 +330,21 @@ std::vector<std::string> FileSystemDriver::getDirectoryContentsColored() {
   }
 
   return contentList;
+}
+
+std::string FileSystemDriver::getWorkingDirectoryDetails() {
+  std::string details = "";
+  details += "\033[1;36mname:\033[0m \033[1;34m" + std::string(currentDirectory->name) + "\033[0m\n";
+  details += "\033[1;36mtype:\033[0m \033[1;34m" + directoryTypeStringMap[currentDirectory->type] + "\033[0m\n";
+
+  details += "\033[1;36mblock:\033[0m \033[1;34m" + std::to_string(currentDirectory->block) + "\033[0m\n";
+  
+  details += "\033[1;36mfreeBlock:\033[0m \033[1;34m" + std::to_string(currentDirectory->freeBlock) + "\033[0m\n";
+  details += "\033[1;36mfreeBlockCount:\033[0m \033[1;34m" + std::to_string(currentDirectory->freeBlockCount) + "\033[0m\n";
+  
+  details += "\033[1;36mparentDirectoryBlock:\033[0m \033[1;34m" + std::to_string(currentDirectory->parentDirectoryBlock) + "\033[0m\n";
+  details += "\033[1;36msubDirectoryBlock:\033[0m \033[1;34m" + std::to_string(currentDirectory->subDirectoryBlock) + "\033[0m\n";
+  details += "\033[1;36mnextDirectoryBlock:\033[0m \033[1;34m" + std::to_string(currentDirectory->nextDirectoryBlock) + "\033[0m";
+
+  return details;
 }

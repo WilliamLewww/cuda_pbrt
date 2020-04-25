@@ -26,6 +26,7 @@ struct FileSystem {
 
 class FileSystemDriver {
 private:
+  static std::map<int, std::string> directoryTypeStringMap;
   static std::map<int, std::string> directoryTypeColorStringStartMap;
   static std::string colorStringEnd;
 
@@ -58,4 +59,6 @@ public:
   std::string getWorkingDirectory();
   std::vector<std::string> getDirectoryContents();
   std::vector<std::string> getDirectoryContentsColored();
+
+  std::string getWorkingDirectoryDetails();
 };

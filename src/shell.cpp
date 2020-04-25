@@ -183,6 +183,10 @@ void Shell::interactiveFileSystem() {
       }
     }
 
+    if (strcmp(commandBufferSeparated[0], "pwdd") == 0) {
+      printf("%s\n", fileSystemDriver->getWorkingDirectoryDetails().c_str());
+    }
+
     for (int x = 0; x < commandBufferSeparated.size(); x++) {
       free(commandBufferSeparated[x]);
     }
