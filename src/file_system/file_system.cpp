@@ -333,6 +333,8 @@ std::vector<std::string> FileSystemDriver::getDirectoryContentsColored() {
 }
 
 std::string FileSystemDriver::getWorkingDirectoryDetails() {
+  readBlock(currentDirectory, 1, currentDirectory->block);
+  
   std::string details = "";
   details += "\033[1;36mname:\033[0m.....................\033[1;34m" + std::string(currentDirectory->name) + "\033[0m\n";
   details += "\033[1;36mtype:\033[0m.....................\033[1;34m" + directoryTypeStringMap[currentDirectory->type] + "\033[0m\n";
