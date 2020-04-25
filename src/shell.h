@@ -10,14 +10,19 @@ enum class ShellMode {
   RunOnce, Interactive, Help
 };
 
+enum class InteractiveMode {
+  None, Exit, FileSystem, Parser
+};
+
 class Shell {
 private:
-  ShellMode mode;
+  ShellMode shellMode;
   std::vector<std::string> arguments;
 
   void parseArguments();
 
   void interactive();
+  void interactiveFileSystem();
 public:
   Shell(int argn, const char** argv);
   ~Shell();

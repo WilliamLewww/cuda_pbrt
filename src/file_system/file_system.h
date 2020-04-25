@@ -46,6 +46,8 @@ public:
   FileSystemDriver(std::string driveName, uint64_t blockCount, uint64_t blockSize);
   ~FileSystemDriver();
 
+  static bool checkValidFileSystem(const char* path, uint64_t blockSize);
+
   void createDirectory(const char* path, uint64_t freeBlockCount);
   void changeDirectory(const char* path);
 };

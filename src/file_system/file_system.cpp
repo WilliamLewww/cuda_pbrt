@@ -50,6 +50,26 @@ FileSystemDriver::~FileSystemDriver() {
   fclose(drive);
 }
 
+bool FileSystemDriver::checkValidFileSystem(const char* path, uint64_t blockSize) {
+  if (access(path, F_OK) != 0) {
+    return false;
+  }
+
+  FILE* file = fopen(path, "r");
+  FileSystem* fileSystem = (FileSystem*)malloc(blockSize);
+  fread(fileSystem, 1, blockSize, file);
+
+  bool validFileSystem = false;
+
+  if (fileSystem->signatureStart == FILE_SYSTEM_SIGNATURE_START && fileSystem->signatureEnd == FILE_SYSTEM_SIGNATURE_END) {
+    validFileSystem = true;
+  }
+
+  free(fileSystem);
+  fclose(file);
+  return validFileSystem;
+}
+
 void FileSystemDriver::readBlock(void* buffer, uint64_t blockCount, uint64_t blockPosition) {
   fseek(drive, (currentFileSystem->blockSize * (blockPosition + 1)), SEEK_SET);
   fread(buffer, 1, currentFileSystem->blockSize * blockCount, drive);
