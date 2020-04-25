@@ -187,6 +187,13 @@ void Shell::interactiveFileSystem() {
       printf("%s\n", fileSystemDriver->getWorkingDirectoryDetails().c_str());
     }
 
+    if (strcmp(commandBufferSeparated[0], "exit") == 0) {
+      for (int x = 0; x < commandBufferSeparated.size(); x++) {
+        free(commandBufferSeparated[x]);
+      }
+      return;
+    }
+
     for (int x = 0; x < commandBufferSeparated.size(); x++) {
       free(commandBufferSeparated[x]);
     }
