@@ -42,16 +42,16 @@ void Shell::parseArguments() {
 }
 
 void Shell::interactive() {
-  printf("  ██████╗██╗   ██╗██████╗  █████╗     ██████╗ ██████╗ ██████╗ ████████╗ \n");
-  printf(" ██╔════╝██║   ██║██╔══██╗██╔══██╗    ██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝ \n");
-  printf(" ██║     ██║   ██║██║  ██║███████║    ██████╔╝██████╔╝██████╔╝   ██║    \n");
-  printf(" ██║     ██║   ██║██║  ██║██╔══██║    ██╔═══╝ ██╔══██╗██╔══██╗   ██║    \n");
-  printf(" ╚██████╗╚██████╔╝██████╔╝██║  ██║    ██║     ██████╔╝██║  ██║   ██║    \n");
-  printf("  ╚═════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝    ╚═╝     ╚═════╝ ╚═╝  ╚═╝   ╚═╝    \n");
+  printf("\033[1;32m  ██████╗██╗   ██╗██████╗  █████╗     ██████╗ ██████╗ ██████╗ ████████╗ \033[0m\n");
+  printf("\033[1;32m ██╔════╝██║   ██║██╔══██╗██╔══██╗    ██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝ \033[0m\n");
+  printf("\033[1;32m ██║     ██║   ██║██║  ██║███████║    ██████╔╝██████╔╝██████╔╝   ██║    \033[0m\n");
+  printf("\033[1;32m ██║     ██║   ██║██║  ██║██╔══██║    ██╔═══╝ ██╔══██╗██╔══██╗   ██║    \033[0m\n");
+  printf("\033[1;32m ╚██████╗╚██████╔╝██████╔╝██║  ██║    ██║     ██████╔╝██║  ██║   ██║    \033[0m\n");
+  printf("\033[1;32m  ╚═════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝    ╚═╝     ╚═════╝ ╚═╝  ╚═╝   ╚═╝    \033[0m\n");
   printf("\n");
-  printf("  1 - start file system\n");
-  printf("  2 - parse scene file\n");
-  printf("  0 - exit program\n");
+  printf("  \033[1;34m%s\033[0m - \033[1;36m%s\033[0m\n", "1", "start file system");
+  printf("  \033[1;34m%s\033[0m - \033[1;36m%s\033[0m\n", "2", "parse scene file");
+  printf("  \033[1;34m%s\033[0m - \033[1;36m%s\033[0m\n", "0", "exit program");
   printf("\n");
   printf("------------------------------------------------------------------------\n");
 
@@ -59,7 +59,7 @@ void Shell::interactive() {
   interactiveMode = InteractiveMode::None;
 
   while (interactiveMode == InteractiveMode::None) {
-    printf("enter an option: ");
+    printf("\033[1;36m%s\033[0m", "enter an option: ");
     fgets(optionBuffer, 2, stdin);
 
     if (optionBuffer[0] == '0') {
@@ -88,7 +88,7 @@ void Shell::interactive() {
 
 void Shell::interactiveFileSystem() {
   printf("\n");
-  printf("enter path of file system: ");
+  printf("\033[1;36m%s\033[0m", "enter path of file system: ");
 
   char* pathBuffer = (char*)malloc(128);
   fgets(pathBuffer, 128, stdin);
@@ -100,7 +100,7 @@ void Shell::interactiveFileSystem() {
   bool validFileSystem = FileSystemDriver::checkValidFileSystem(pathBuffer, blockSize);
 
   if (!validFileSystem && access(pathBuffer, F_OK) != 0) {
-    printf("enter block count: ");
+    printf("\033[1;36m%s\033[0m", "enter block count: ");
     scanf("%ld", &blockCount);
   }
 
@@ -108,14 +108,14 @@ void Shell::interactiveFileSystem() {
   // scanf("%ld", &blockSize);
 
   if (validFileSystem) {
-    printf("using file system: %s\n", pathBuffer);
+    printf("\033[1;33m%s\033[0m\033[1;37m%s\033[0m", "using file system: ", pathBuffer);
   }
   else {
     if (access(pathBuffer, F_OK) != 0) {
-      printf("creating new file system: %s\n", pathBuffer);
+      printf("\033[1;33m%s\033[0m\033[1;37m%s\033[0m", "created new file system: ", pathBuffer);
     }
     else {
-      printf("not a valid file system: %s\n", pathBuffer);
+      printf("\033[1;33m%s\033[0m\033[1;37m%s\033[0m", "not a valid file system: ", pathBuffer);
       free(pathBuffer);
       return;
     }
@@ -127,7 +127,7 @@ void Shell::interactiveFileSystem() {
   free(pathBuffer);
 
   while (interactiveMode == InteractiveMode::FileSystem) {
-    printf("rfs:%s$\n", fileSystemDriver->getWorkingDirectory().c_str());
+    printf("\033[1;32m%s\033[0m:\033[1;35m%s\033[0m$\n", "rfs", fileSystemDriver->getWorkingDirectory().c_str());
   }
 
   delete fileSystemDriver;
