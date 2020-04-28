@@ -19,5 +19,7 @@ public:
   Bounds3 worldBounds();
 
   virtual Bounds3 objectBounds();
+
+  virtual bool checkRayIntersectionPredicate(Ray* ray, bool testAlphaTexture = true);
   virtual bool checkRayIntersection(Ray* ray, float* firstHit, SurfaceInteraction* surfaceInteraction, bool testAlphaTexture = true);
 };

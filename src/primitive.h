@@ -26,6 +26,4 @@ public:
   bool checkRayIntersection(Ray* ray, SurfaceInteraction* surfaceInteraction);
 };
 
-class Aggregate : public Primitive {
-  
-};
+class Aggregate : public Primitive {};

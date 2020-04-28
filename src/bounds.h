@@ -19,5 +19,5 @@ public:
 
   Bounds3 getUnion(Vector4 b);
 
-  bool checkRayIntersection(Ray* ray, float* firstHit, float* secondHit);
+  bool checkRayIntersectionPredicate(Ray* ray, float* firstHit, float* secondHit);
 };

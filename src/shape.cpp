@@ -29,3 +29,9 @@ TransformationMatrix* Shape::getObjectToWorld() {
 Bounds3 Shape::worldBounds() {
   return (*objectToWorld)(objectBounds());
 }
+
+bool Shape::checkRayIntersectionPredicate(Ray* ray, bool testAlphaTexture) {
+  float tHit = ray->tMax;
+  SurfaceInteraction surfaceInteraction;
+  return checkRayIntersection(ray, &tHit, &surfaceInteraction, testAlphaTexture);
+}
