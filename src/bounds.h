@@ -9,7 +9,7 @@ class Bounds3 {
 private:
   Vector4 pointMin;
   Vector4 pointMax;
-public:
+public:  
   Bounds3();
   Bounds3(Vector4 point);
   Bounds3(Vector4 a, Vector4 b);
@@ -18,6 +18,7 @@ public:
   Vector4 getCorner(int corner);
 
   Bounds3 getUnion(Vector4 b);
+  Bounds3 getUnion(Bounds3 b);
 
   bool checkRayIntersectionPredicate(Ray* ray, float* firstHit, float* secondHit);
 };

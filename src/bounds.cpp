@@ -47,6 +47,13 @@ Bounds3 Bounds3::getUnion(Vector4 b) {
   return Bounds3(Vector4(minX, minY, minZ, 1), Vector4(maxX, maxY, maxZ, 1));
 }
 
+Bounds3 Bounds3::getUnion(Bounds3 b) {
+  Vector4 min = Vector4(fmin((*this)[0][0], b[0][0]), fmin((*this)[0][1], b[0][1]), fmin((*this)[0][2], b[0][2]), 1);
+  Vector4 max = Vector4(fmax((*this)[1][0], b[1][0]), fmax((*this)[1][1], b[1][1]), fmax((*this)[1][2], b[1][2]), 1);
+
+  return Bounds3(min, max);
+}
+
 bool Bounds3::checkRayIntersectionPredicate(Ray* ray, float* firstHit, float* secondHit) {
   float t0 = 0; 
   float t1 = ray->tMax;
