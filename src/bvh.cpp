@@ -79,6 +79,41 @@ BVHBuildNode* BVH::recursiveBuild(MemoryArea& area, std::vector<BVHPrimitiveInfo
       centroidBounds = centroidBounds.getUnion(primitiveInformationList[x].centroid);
     }
     int dimension = centroidBounds.getMaximumExtent();
+
+    int mid = (start + end) / 2;
+    if (centroidBounds[1][dimension] == centroidBounds[0][dimension]) {
+      int firstPrimitiveOffset = orderedPrimitiveList.size();
+      for (int x = start; x < end; x++) {
+        int primitiveNumber = primitiveInformationList[x].primitiveNumber;
+        orderedPrimitiveList.push_back(primitiveList[primitiveNumber]);
+      }
+      node->initializeLeaf(firstPrimitiveOffset, primitiveCount, bounds);
+      return node;
+    }
+    else {
+      if (splitMethod == SplitMethod::Middle) {
+        float splitPosition = (centroidBounds[0][dimension] + centroidBounds[1][dimension]) / 2;
+        BVHPrimitiveInformation* midPointer = std::partition(&primitiveInformationList[start], &primitiveInformationList[end - 1] + 1,
+          [dimension, splitPosition](BVHPrimitiveInformation primitiveInformation) {
+            return primitiveInformation.centroid[dimension] < splitPosition;
+          }
+        );
+
+        mid = midPointer - &primitiveInformationList[0];
+      }
+      if (splitMethod == SplitMethod::EqualCounts) {
+        std::nth_element(&primitiveInformationList[start], &primitiveInformationList[mid], &primitiveInformationList[end - 1] + 1,
+          [dimension](BVHPrimitiveInformation a, BVHPrimitiveInformation b) {
+            return a.centroid[dimension] < b.centroid[dimension];
+          }
+        );
+      }
+      node->initializeInterior(
+        dimension,
+        recursiveBuild(area, primitiveInformationList, start, mid, totalNodes, orderedPrimitiveList),
+        recursiveBuild(area, primitiveInformationList, mid, end, totalNodes, orderedPrimitiveList)
+      );
+    }
   }
 
   return node;
