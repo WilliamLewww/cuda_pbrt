@@ -12,6 +12,7 @@ enum class TransportMode {
 class Primitive {
 public:
   virtual Bounds3 worldBounds();
+  virtual bool checkRayIntersectionPredicate(Ray* ray);
   virtual bool checkRayIntersection(Ray* ray, SurfaceInteraction* surfaceInteraction);
 };
 
@@ -23,6 +24,7 @@ public:
   ~GeometricPrimitive();
 
   Bounds3 worldBounds();
+  bool checkRayIntersectionPredicate(Ray* ray);
   bool checkRayIntersection(Ray* ray, SurfaceInteraction* surfaceInteraction);
 };
 

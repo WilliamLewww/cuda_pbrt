@@ -130,7 +130,7 @@ TransformationMatrix* ParserMemory::getLastTransformationMatrix() {
 }
 
 Scene* ParserMemory::createScene() {
-  Scene* scene = new Scene();
+  // Scene* scene = new Scene();
 
-  return scene;
+  // return scene;
 }
