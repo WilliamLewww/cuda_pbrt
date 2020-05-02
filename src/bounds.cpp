@@ -54,6 +54,25 @@ Bounds3 Bounds3::getUnion(Bounds3 b) {
   return Bounds3(min, max);
 }
 
+Vector4 Bounds3::getDiagonal() {
+  return pointMax - pointMin;
+}
+
+int Bounds3::getMaximumExtent() {
+  Vector4 d = getDiagonal();
+  if (d[0] > d[1] && d[0] > d[2]) {
+    return 0;
+  }
+  else {
+    if (d[1] > d[2]) {
+      return 1;
+    }
+    else {
+      return 2;
+    }
+  }
+}
+
 bool Bounds3::checkRayIntersectionPredicate(Ray* ray, float* firstHit, float* secondHit) {
   float t0 = 0; 
   float t1 = ray->tMax;

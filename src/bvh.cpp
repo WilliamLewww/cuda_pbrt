@@ -42,4 +42,44 @@ BVH::BVH(std::vector<Primitive*> primitiveList, int maxPrimitivesInNode, SplitMe
   int totalNodes = 0;
 
   std::vector<Primitive*> orderedPrimitiveList;
+  BVHBuildNode* root;
+
+  if (splitMethod == SplitMethod::HLBVH) {
+
+  }
+  else {
+    root = recursiveBuild(area, primitiveInformationList, 0, primitiveList.size(), &totalNodes, orderedPrimitiveList);
+  }
+
+  primitiveList.swap(orderedPrimitiveList);
+}
+
+BVHBuildNode* BVH::recursiveBuild(MemoryArea& area, std::vector<BVHPrimitiveInformation>& primitiveInformationList, int start, int end, int* totalNodes, std::vector<Primitive*>& orderedPrimitiveList) {
+  BVHBuildNode* node = area.allocate<BVHBuildNode>();
+  *totalNodes += 1;
+
+  Bounds3 bounds = primitiveInformationList[start].bounds;
+  for (int x = start + 1; x < end; x++) {
+    bounds = bounds.getUnion(primitiveInformationList[x].bounds);
+  }
+
+  int primitiveCount = end - start;
+  if (primitiveCount == 1) {
+    int firstPrimitiveOffset = orderedPrimitiveList.size();
+    for (int x = start; x < end; x++) {
+      int primitiveNumber = primitiveInformationList[x].primitiveNumber;
+      orderedPrimitiveList.push_back(primitiveList[primitiveNumber]);
+    }
+    node->initializeLeaf(firstPrimitiveOffset, primitiveCount, bounds);
+    return node;
+  }
+  else {
+    Bounds3 centroidBounds = Bounds3(primitiveInformationList[start].centroid);
+    for (int x = start + 1; x < end; x++) {
+      centroidBounds = centroidBounds.getUnion(primitiveInformationList[x].centroid);
+    }
+    int dimension = centroidBounds.getMaximumExtent();
+  }
+
+  return node;
 }

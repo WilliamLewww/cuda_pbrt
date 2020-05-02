@@ -24,5 +24,20 @@ public:
   ~MemoryArea();
 
   void* allocate(uint64_t nBytes);
+
+  template <typename Type> 
+  Type* allocate(uint64_t n = 1, bool runConstructor = true);
+
   void reset();
 };
+
+template <typename Type>
+Type* MemoryArea::allocate(uint64_t n, bool runConstructor) {
+  Type* space = (Type*)allocate(n * sizeof(Type));
+  if (runConstructor) {
+    for (uint64_t x = 0; x < n; x++) {
+      new (&space[x])Type();
+    }
+  }
+  return space;
+}

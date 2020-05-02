@@ -20,5 +20,8 @@ public:
   Bounds3 getUnion(Vector4 b);
   Bounds3 getUnion(Bounds3 b);
 
+  Vector4 getDiagonal();
+  int getMaximumExtent();
+
   bool checkRayIntersectionPredicate(Ray* ray, float* firstHit, float* secondHit);
 };
