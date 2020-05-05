@@ -39,6 +39,25 @@ std::string BVHBuildNode::toString() {
   return printString;
 }
 
+int BVH::flattenBuildTree(BVHBuildNode* buildNode, int* offset) {
+  BVHLinearNode* linearNode = &linearRoot[*offset];
+  linearNode->bounds = buildNode->bounds;
+  int tempOffset = *offset;
+  *offset += 1;
+  if (buildNode->primitiveCount > 0) {
+    linearNode->primitivesOffset = buildNode->firstPrimitiveOffset;
+    linearNode->primitiveCount = buildNode->primitiveCount;
+  }
+  else {
+    linearNode->axis = buildNode->splitAxis;
+    linearNode->primitiveCount = 0;
+    flattenBuildTree(buildNode->children[0], offset);
+    linearNode->secondChildOffset = flattenBuildTree(buildNode->children[1], offset);
+  }
+
+  return tempOffset;
+}
+
 BVH::BVH(std::vector<Primitive*> primitiveList, int maxPrimitivesInNode, SplitMethod splitMethod) {
   this->buildRoot = nullptr;
   this->linearRoot = nullptr;
@@ -71,6 +90,7 @@ BVH::BVH(std::vector<Primitive*> primitiveList, int maxPrimitivesInNode, SplitMe
 
   linearRoot = allocateAligned<BVHLinearNode>(totalNodes);
   int offset = 0;
+  flattenBuildTree(buildRoot, &offset);
 }
 
 BVHBuildNode* BVH::recursiveBuild(MemoryArea& area, std::vector<BVHPrimitiveInformation>& primitiveInformationList, int start, int end, int* totalNodes, std::vector<Primitive*>& orderedPrimitiveList) {
@@ -142,7 +162,7 @@ void BVH::printBuildTree(BVHBuildNode* root, int offset) {
   if (root == nullptr) {
     root = buildRoot;
   }
-  
+
   std::string offsetString(offset, ' ');
   printf("%s%s\n", offsetString.c_str(), root->toString().c_str());
 

@@ -53,6 +53,7 @@ private:
   std::vector<Primitive*> primitiveList;
 
   BVHBuildNode* recursiveBuild(MemoryArea& area, std::vector<BVHPrimitiveInformation>& primitiveInformationList, int start, int end, int* totalNodes, std::vector<Primitive*>& orderedPrimitiveList);
+  int flattenBuildTree(BVHBuildNode* buildNode, int* offset);
 public:
   BVH(std::vector<Primitive*> primitiveList, int maxPrimitivesInNode, SplitMethod splitMethod);
   ~BVH();
