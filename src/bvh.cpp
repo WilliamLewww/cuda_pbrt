@@ -28,11 +28,14 @@ std::string BVHBuildNode::toString() {
   std::string printString = "";
 
   if (children[0] == nullptr && children[1] == nullptr) {
-    printString += "Leaf";
+    printString += "Leaf: ";
   }
   else {
-    printString += "Interior";
+    printString += std::string("Interior: ");
   }
+  printString += std::string("(") + std::to_string((int)bounds[0][0]) + std::string(", ") + std::to_string((int)bounds[0][1]) + std::string(") ");
+  printString += std::string("(") + std::to_string((int)bounds[1][0]) + std::string(", ") + std::to_string((int)bounds[1][1]) + std::string(")");
+  
   return printString;
 }
 
