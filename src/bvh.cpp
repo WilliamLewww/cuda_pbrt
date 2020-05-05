@@ -33,8 +33,8 @@ std::string BVHBuildNode::toString() {
   else {
     printString += std::string("Interior: ");
   }
-  printString += std::string("(") + std::to_string((int)bounds[0][0]) + std::string(", ") + std::to_string((int)bounds[0][1]) + std::string(") ");
-  printString += std::string("(") + std::to_string((int)bounds[1][0]) + std::string(", ") + std::to_string((int)bounds[1][1]) + std::string(")");
+  printString += std::string("(") + std::to_string((int)bounds[0][0]) + std::string(", ") + std::to_string((int)bounds[0][1]) + std::string(", ") + std::to_string((int)bounds[0][2]) + std::string(") ");
+  printString += std::string("(") + std::to_string((int)bounds[1][0]) + std::string(", ") + std::to_string((int)bounds[1][1]) + std::string(", ") + std::to_string((int)bounds[1][2]) + std::string(")");
   
   return printString;
 }
@@ -177,8 +177,8 @@ void BVH::printBuildTree(BVHBuildNode* root, int offset) {
 void BVH::printLinearTree(int nodeOffset, int offset) {
   std::string offsetString(offset, ' ');
   std::string nodeString = "";
-  nodeString += std::string("(") + std::to_string((int)linearNodes[nodeOffset].bounds[0][0]) + std::string(", ") + std::to_string((int)linearNodes[nodeOffset].bounds[0][1]) + std::string(") ");
-  nodeString += std::string("(") + std::to_string((int)linearNodes[nodeOffset].bounds[1][0]) + std::string(", ") + std::to_string((int)linearNodes[nodeOffset].bounds[1][1]) + std::string(")");
+  nodeString += std::string("(") + std::to_string((int)linearNodes[nodeOffset].bounds[0][0]) + std::string(", ") + std::to_string((int)linearNodes[nodeOffset].bounds[0][1]) + std::string(", ") + std::to_string((int)linearNodes[nodeOffset].bounds[0][2]) + std::string(") ");
+  nodeString += std::string("(") + std::to_string((int)linearNodes[nodeOffset].bounds[1][0]) + std::string(", ") + std::to_string((int)linearNodes[nodeOffset].bounds[1][1]) + std::string(", ") + std::to_string((int)linearNodes[nodeOffset].bounds[1][2]) + std::string(")");
 
   if (linearNodes[nodeOffset].primitiveCount > 0) {
     nodeString = std::string("Leaf: ") + nodeString;
