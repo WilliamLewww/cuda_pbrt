@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include <vector>
 #include <algorithm>
 
@@ -20,6 +21,7 @@ struct BVHPrimitiveInformation {
 struct BVHBuildNode {
   void initializeLeaf(int firstPrimitiveOffset, int primitiveCount, Bounds3 bounds);
   void initializeInterior(int splitAxis, BVHBuildNode* firstChild, BVHBuildNode* secondChild);
+  std::string toString();
   
   Bounds3 bounds;
   BVHBuildNode* children[2];
@@ -39,4 +41,6 @@ private:
 public:
   BVH(std::vector<Primitive*> primitiveList, int maxPrimitivesInNode, SplitMethod splitMethod);
   ~BVH();
+
+  void printTree(BVHBuildNode* root, int offset = 0);
 };

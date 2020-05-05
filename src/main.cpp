@@ -7,8 +7,8 @@ int main(int argn, const char** argv) {
   // FileSystemDriver* fileSystem = new FileSystemDriver("dump/drive", 50, 512);
   // delete fileSystem;
 
-  // Parser* parser = new Parser();
-  // Scene* scene = parser->createSceneFromFile(filename);
+  Parser* parser = new Parser();
+  Scene* scene = parser->createSceneFromFile("res/example.scene");
   // Vector4* image = scene->render(Vector2(250, 250));
 
   // unsigned char* imageData = (unsigned char*)malloc(250*250*4*sizeof(unsigned char));
@@ -22,8 +22,8 @@ int main(int argn, const char** argv) {
   // stbi_write_png("dump/image.png", 250, 250, 4, imageData, 250*4*sizeof(unsigned char));
 
   // delete image;
-  // delete scene;
-  // delete parser;
+  delete scene;
+  delete parser;
 
   return 0;
 }

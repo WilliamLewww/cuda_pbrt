@@ -9,6 +9,7 @@
 #include "../camera.h"
 #include "../transformation_matrix.h"
 #include "../scene.h"
+#include "../bvh.h"
 
 class ParserMemory {
 private:

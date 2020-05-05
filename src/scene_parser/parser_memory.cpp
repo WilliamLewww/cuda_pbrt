@@ -130,7 +130,13 @@ TransformationMatrix* ParserMemory::getLastTransformationMatrix() {
 }
 
 Scene* ParserMemory::createScene() {
-  // Scene* scene = new Scene();
+  std::vector<Primitive*> primitiveList;
+  for (int x = 0; x < shapeList.size(); x++) {
+    primitiveList.push_back(new GeometricPrimitive(shapeList[x]));
+  }
 
-  // return scene;
+  BVH* bvh = new BVH(primitiveList, 1, SplitMethod::Middle);
+
+  Scene* scene = new Scene(bvh);
+  return scene;
 }
