@@ -40,6 +40,9 @@ std::string BVHBuildNode::toString() {
 }
 
 BVH::BVH(std::vector<Primitive*> primitiveList, int maxPrimitivesInNode, SplitMethod splitMethod) {
+  this->buildRoot = nullptr;
+  this->linearRoot = nullptr;
+
   this->primitiveList = primitiveList;
   this->maxPrimitivesInNode = maxPrimitivesInNode;
   this->splitMethod = splitMethod;
@@ -55,19 +58,19 @@ BVH::BVH(std::vector<Primitive*> primitiveList, int maxPrimitivesInNode, SplitMe
 
   MemoryArea area(1024 * 1024);
   int totalNodes = 0;
-
   std::vector<Primitive*> orderedPrimitiveList;
-  BVHBuildNode* root;
 
   if (splitMethod == SplitMethod::HLBVH) {
 
   }
   else {
-    root = recursiveBuild(area, primitiveInformationList, 0, primitiveList.size(), &totalNodes, orderedPrimitiveList);
+    buildRoot = recursiveBuild(area, primitiveInformationList, 0, primitiveList.size(), &totalNodes, orderedPrimitiveList);
   }
-  printTree(root);
 
   primitiveList.swap(orderedPrimitiveList);
+
+  linearRoot = allocateAligned<BVHLinearNode>(totalNodes);
+  int offset = 0;
 }
 
 BVHBuildNode* BVH::recursiveBuild(MemoryArea& area, std::vector<BVHPrimitiveInformation>& primitiveInformationList, int start, int end, int* totalNodes, std::vector<Primitive*>& orderedPrimitiveList) {
@@ -135,14 +138,18 @@ BVHBuildNode* BVH::recursiveBuild(MemoryArea& area, std::vector<BVHPrimitiveInfo
   return node;
 }
 
-void BVH::printTree(BVHBuildNode* root, int offset) {
+void BVH::printBuildTree(BVHBuildNode* root, int offset) {
+  if (root == nullptr) {
+    root = buildRoot;
+  }
+  
   std::string offsetString(offset, ' ');
   printf("%s%s\n", offsetString.c_str(), root->toString().c_str());
 
   if (root->children[0] != nullptr) {
-    printTree(root->children[0], offset + 2);
+    printBuildTree(root->children[0], offset + 2);
   }
   if (root->children[1] != nullptr) {
-    printTree(root->children[1], offset + 2);
+    printBuildTree(root->children[1], offset + 2);
   }
 }

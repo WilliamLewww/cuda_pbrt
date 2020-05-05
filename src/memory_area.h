@@ -7,7 +7,9 @@
 void* allocateAligned(uint64_t size);
 
 template <typename Type>
-Type* allocateAligned(uint64_t count);
+Type* allocateAligned(uint64_t count) {
+  return (Type*)allocateAligned(count * sizeof(Type));
+}
 
 class MemoryArea {
 private:

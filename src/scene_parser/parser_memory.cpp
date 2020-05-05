@@ -136,6 +136,7 @@ Scene* ParserMemory::createScene() {
   }
 
   BVH* bvh = new BVH(primitiveList, 1, SplitMethod::Middle);
+  bvh->printBuildTree();
 
   Scene* scene = new Scene(bvh);
   return scene;

@@ -4,11 +4,6 @@ void* allocateAligned(uint64_t size) {
   return memalign(64, size);
 }
 
-template <typename Type>
-Type* allocateAligned(uint64_t count) {
-  return (Type*)allocateAligned(count * sizeof(Type));
-}
-
 MemoryArea::MemoryArea(uint64_t blockSize) {
   this->blockSize = blockSize;
 
