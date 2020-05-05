@@ -40,7 +40,7 @@ std::string BVHBuildNode::toString() {
 }
 
 int BVH::flattenBuildTree(BVHBuildNode* buildNode, int* offset) {
-  BVHLinearNode* linearNode = &linearRoot[*offset];
+  BVHLinearNode* linearNode = &linearNodes[*offset];
   linearNode->bounds = buildNode->bounds;
   int tempOffset = *offset;
   *offset += 1;
@@ -60,7 +60,7 @@ int BVH::flattenBuildTree(BVHBuildNode* buildNode, int* offset) {
 
 BVH::BVH(std::vector<Primitive*> primitiveList, int maxPrimitivesInNode, SplitMethod splitMethod) {
   this->buildRoot = nullptr;
-  this->linearRoot = nullptr;
+  this->linearNodes = nullptr;
 
   this->primitiveList = primitiveList;
   this->maxPrimitivesInNode = maxPrimitivesInNode;
@@ -88,7 +88,7 @@ BVH::BVH(std::vector<Primitive*> primitiveList, int maxPrimitivesInNode, SplitMe
 
   primitiveList.swap(orderedPrimitiveList);
 
-  linearRoot = allocateAligned<BVHLinearNode>(totalNodes);
+  linearNodes = allocateAligned<BVHLinearNode>(totalNodes);
   int offset = 0;
   flattenBuildTree(buildRoot, &offset);
 }
@@ -171,5 +171,24 @@ void BVH::printBuildTree(BVHBuildNode* root, int offset) {
   }
   if (root->children[1] != nullptr) {
     printBuildTree(root->children[1], offset + 2);
+  }
+}
+
+void BVH::printLinearTree(int nodeOffset, int offset) {
+  std::string offsetString(offset, ' ');
+  std::string nodeString = "";
+  nodeString += std::string("(") + std::to_string((int)linearNodes[nodeOffset].bounds[0][0]) + std::string(", ") + std::to_string((int)linearNodes[nodeOffset].bounds[0][1]) + std::string(") ");
+  nodeString += std::string("(") + std::to_string((int)linearNodes[nodeOffset].bounds[1][0]) + std::string(", ") + std::to_string((int)linearNodes[nodeOffset].bounds[1][1]) + std::string(")");
+
+  if (linearNodes[nodeOffset].primitiveCount > 0) {
+    nodeString = std::string("Leaf: ") + nodeString;
+    printf("%s%s\n", offsetString.c_str(), nodeString.c_str());
+  }
+  else {
+    nodeString = std::string("Interior: ") + nodeString;
+    printf("%s%s\n", offsetString.c_str(), nodeString.c_str());
+
+    printLinearTree(nodeOffset + 1, offset + 2);
+    printLinearTree(linearNodes[nodeOffset].secondChildOffset, offset + 2);
   }
 }

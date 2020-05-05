@@ -18,18 +18,6 @@ struct BVHPrimitiveInformation {
   Vector4 centroid;
 };
 
-struct BVHLinearNode {
-  Bounds3 bounds;
-  union {
-    int primitivesOffset;
-    int secondChildOffset;
-  };
-
-  uint16_t primitiveCount;
-  uint8_t axis;
-  uint8_t pad[1];
-};
-
 struct BVHBuildNode {
   void initializeLeaf(int firstPrimitiveOffset, int primitiveCount, Bounds3 bounds);
   void initializeInterior(int splitAxis, BVHBuildNode* firstChild, BVHBuildNode* secondChild);
@@ -43,10 +31,22 @@ struct BVHBuildNode {
   int primitiveCount;
 };
 
+struct BVHLinearNode {
+  Bounds3 bounds;
+  union {
+    int primitivesOffset;
+    int secondChildOffset;
+  };
+
+  uint16_t primitiveCount;
+  uint8_t axis;
+  uint8_t pad[1];
+};
+
 class BVH : public Aggregate {
 private:
   BVHBuildNode* buildRoot;
-  BVHLinearNode* linearRoot;
+  BVHLinearNode* linearNodes;
 
   int maxPrimitivesInNode;
   SplitMethod splitMethod;
@@ -59,4 +59,5 @@ public:
   ~BVH();
 
   void printBuildTree(BVHBuildNode* root = nullptr, int offset = 0);
+  void printLinearTree(int nodeOffset = 0, int offset = 0);
 };
