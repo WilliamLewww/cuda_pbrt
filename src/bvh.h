@@ -58,6 +58,8 @@ public:
   BVH(std::vector<Primitive*> primitiveList, int maxPrimitivesInNode, SplitMethod splitMethod);
   ~BVH();
 
+  bool checkRayIntersection(Ray* ray, SurfaceInteraction* surfaceInteraction);
+
   void printBuildTree(BVHBuildNode* root = nullptr, int offset = 0);
   void printLinearTree(int nodeOffset = 0, int offset = 0);
 };

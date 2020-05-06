@@ -108,3 +108,38 @@ bool Bounds3::checkRayIntersectionPredicate(Ray* ray, float* firstHit, float* se
 
   return true;
 }
+
+bool Bounds3::checkRayIntersectionPredicate(Ray* ray, Vector4 inverseDirection, bool directionIsNegative[3]) {
+  float tMin = ((*this)[directionIsNegative[0]][0] - ray->origin[0]) * inverseDirection[0];
+  float tMax = ((*this)[1 - directionIsNegative[0]][0] - ray->origin[0]) * inverseDirection[0];
+  float tyMin = ((*this)[directionIsNegative[1]][1] - ray->origin[1]) * inverseDirection[1];
+  float tyMax = ((*this)[1 - directionIsNegative[1]][1] - ray->origin[1]) * inverseDirection[1];
+
+  tMax *= 1.0f + 2 * ErrorFloat::gamma(3);
+  tyMax *= 1.0f + 2 * ErrorFloat::gamma(3);
+  if (tMin > tyMax || tyMin > tMax) {
+    return false;
+  }
+  if (tyMin > tMin) {
+    tMin = tyMin;
+  }
+  if (tyMax < tMax) {
+    tMax = tyMax;
+  }
+
+  float tzMin = ((*this)[directionIsNegative[2]][2] - ray->origin[2]) * inverseDirection[2];
+  float tzMax = ((*this)[1 - directionIsNegative[2]][2] - ray->origin[2]) * inverseDirection[2];
+
+  tzMax *= 1.0f + 2 * ErrorFloat::gamma(3);
+  if (tMin > tzMax || tzMin > tMax) {
+    return false;
+  }
+  if (tzMin > tMin) {
+    tMin = tzMin;
+  }
+  if (tzMax < tMax) {
+    tMax = tzMax;
+  }
+
+  return (tMin < ray->tMax) && (tMax > 0);
+}

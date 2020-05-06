@@ -24,4 +24,5 @@ public:
   int getMaximumExtent();
 
   bool checkRayIntersectionPredicate(Ray* ray, float* firstHit, float* secondHit);
+  bool checkRayIntersectionPredicate(Ray* ray, Vector4 inverseDirection, bool directionIsNegative[3]);
 };

@@ -158,6 +158,24 @@ BVHBuildNode* BVH::recursiveBuild(MemoryArea& area, std::vector<BVHPrimitiveInfo
   return node;
 }
 
+bool BVH::checkRayIntersection(Ray* ray, SurfaceInteraction* surfaceInteraction) {
+  bool hit = false;
+  Vector4 inverseDirection(1.0 / ray->direction[0], 1.0 / ray->direction[1], 1.0 / ray->direction[2], 0);
+  bool directionIsNegative[3] = { inverseDirection[0] < 0, inverseDirection[1] < 0, inverseDirection[2] < 0 };
+
+  int toVisitOffset = 0;
+  int currentNodeIndex = 0;
+  int nodesToVisit[64];
+  while (true) {
+    BVHLinearNode* node = &linearNodes[currentNodeIndex];
+    if (node->bounds.checkRayIntersectionPredicate(ray, inverseDirection, directionIsNegative)) {
+
+    }
+  }
+
+  return hit;
+}
+
 void BVH::printBuildTree(BVHBuildNode* root, int offset) {
   if (root == nullptr) {
     root = buildRoot;
