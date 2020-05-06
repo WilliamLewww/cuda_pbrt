@@ -169,7 +169,39 @@ bool BVH::checkRayIntersection(Ray* ray, SurfaceInteraction* surfaceInteraction)
   while (true) {
     BVHLinearNode* node = &linearNodes[currentNodeIndex];
     if (node->bounds.checkRayIntersectionPredicate(ray, inverseDirection, directionIsNegative)) {
+      if (node->primitiveCount >  0) {
+        for (int x = 0; x < node->primitiveCount; x++) {
+          if (primitiveList[node->primitivesOffset + x]->checkRayIntersection(ray, surfaceInteraction)) {
+            hit = true;
+          }
+        }
+        if (toVisitOffset == 0) {
+          break;
+        }
+        toVisitOffset -= 1;
+        currentNodeIndex = nodesToVisit[toVisitOffset];
+      }
+      else {
+        if (directionIsNegative[node->axis]) {
+          nodesToVisit[toVisitOffset] = currentNodeIndex + 1;
+          toVisitOffset += 1;
 
+          currentNodeIndex = node->secondChildOffset;
+        }
+        else {
+          nodesToVisit[toVisitOffset] = node->secondChildOffset;
+          toVisitOffset += 1;
+
+          currentNodeIndex = currentNodeIndex + 1;
+        }
+      }
+    }
+    else {
+      if (toVisitOffset == 0) {
+        break;
+      }
+      toVisitOffset -= 1;
+      currentNodeIndex = nodesToVisit[toVisitOffset];
     }
   }
 
