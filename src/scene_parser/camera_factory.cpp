@@ -1,15 +1,15 @@
 #include "camera_factory.h"
 
 Camera* CameraGenerator::create() {
-  return new Camera(nullptr);
+  return new Camera(nullptr, 0.0, 0.0);
 }
 
-Camera* SimpleCameraGenerator::create() {
-  return new SimpleCamera(nullptr);
+Camera* ProjectiveCameraGenerator::create() {
+  return new ProjectiveCamera(nullptr, 0.0, 0.0);
 }
 
 std::map<std::string, CameraGenerator*> CameraFactory::stringCameraGeneratorMap = {
-  {"SimpleCamera", new SimpleCameraGenerator()}
+  {"ProjectiveCamera", new ProjectiveCameraGenerator()}
 };
 
 Camera* CameraFactory::generateCameraFromString(std::string word) {

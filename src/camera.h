@@ -12,11 +12,14 @@ struct CameraSample {
 class Camera {
 protected:
   TransformationMatrix* cameraToWorld;
+  float shutterOpen;
+  float shutterClose;
 public:
-  Camera(TransformationMatrix* cameraToWorld);
+  Camera(TransformationMatrix* cameraToWorld, float shutterOpen, float shutterClose);
   ~Camera();
 
   void setTransformationMatrix(TransformationMatrix* cameraToWorld);
   
-  virtual Ray* generateRay(CameraSample sample);
+  virtual float generateRay(CameraSample sample, Ray* ray);
+  float generateRayDifferential(CameraSample sample, RayDifferential* rayDifferential);
 };
