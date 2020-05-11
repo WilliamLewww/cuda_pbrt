@@ -35,3 +35,5 @@ public:
 };
 
 Vector4 offsetRayOrigin(Vector4 position, Vector4 positionError, Vector4 normal, Vector4 direction);
+
+float linearInterpolate(float t, float v1, float v2);

@@ -61,3 +61,7 @@ Vector4 offsetRayOrigin(Vector4 position, Vector4 positionError, Vector4 normal,
 
   return positionOffset;
 }
+
+float linearInterpolate(float t, float v1, float v2) {
+  return (1 - t) * v1 + t * v2;
+}
