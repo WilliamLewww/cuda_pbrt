@@ -20,3 +20,5 @@ Matrix4x4* createTranslateMatrix4x4(Vector4 position);
 Matrix4x4* createScaleMatrix4x4(Vector4 size);
 
 Matrix4x4* createLookAtMatrix4x4(Vector4 position, Vector4 target, Vector4 up);
+
+Matrix4x4* createOrthographicMatrix4x4(float zNear, float zFar);

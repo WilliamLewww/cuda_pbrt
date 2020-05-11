@@ -3,7 +3,7 @@
 #include <string>
 
 #include "../camera.h"
-#include "../projective_camera.h"
+#include "../orthographic_camera.h"
 #include "../transformation_matrix.h"
 
 class CameraGenerator {
@@ -11,7 +11,7 @@ public:
   virtual Camera* create();
 };
 
-class ProjectiveCameraGenerator : public CameraGenerator {
+class OrthographicCameraGenerator : public CameraGenerator {
 public:
   virtual Camera* create();
 };

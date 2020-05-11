@@ -1,5 +1,5 @@
 World {
-  SimpleCamera cameraA {
+  OrthographicCamera cameraA {
     Function lookAt (
       position = [ 0.0 0.0 0.0 ]
       target = [ 0.0 0.0 1.0 ]

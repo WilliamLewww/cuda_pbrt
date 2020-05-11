@@ -4,12 +4,12 @@ Camera* CameraGenerator::create() {
   return new Camera(nullptr, 0.0, 0.0);
 }
 
-Camera* ProjectiveCameraGenerator::create() {
-  return new ProjectiveCamera(nullptr, 0.0, 0.0);
+Camera* OrthographicCameraGenerator::create() {
+  return new OrthographicCamera(nullptr, Bounds3(), 0.0, 0.0, 0.0, 0.0);
 }
 
 std::map<std::string, CameraGenerator*> CameraFactory::stringCameraGeneratorMap = {
-  {"ProjectiveCamera", new ProjectiveCameraGenerator()}
+  {"OrthographicCamera", new OrthographicCameraGenerator()}
 };
 
 Camera* CameraFactory::generateCameraFromString(std::string word) {

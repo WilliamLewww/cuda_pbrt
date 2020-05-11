@@ -106,3 +106,14 @@ Matrix4x4* createLookAtMatrix4x4(Vector4 position, Vector4 target, Vector4 up) {
 
   return matrix;
 }
+
+Matrix4x4* createOrthographicMatrix4x4(float zNear, float zFar) {
+  Matrix4x4* first = createScaleMatrix4x4(Vector4(1, 1, 1 / (zFar, zNear), 1));
+  Matrix4x4* second = createTranslateMatrix4x4(Vector4(0, 0, -zNear, 1));
+
+  Matrix4x4* result = multiplyMatrix4x4(first, second);
+  delete first;
+  delete second;
+
+  return result;
+}
