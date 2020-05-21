@@ -37,7 +37,11 @@ void Shell::parseArguments() {
   }
 
   if (shellMode == ShellMode::RunOnce) {
+    Parser* parser = new Parser();
+    Scene* scene = parser->createSceneFromFile("res/example.scene");
 
+    delete scene;
+    delete parser;
   }
 }
 
