@@ -81,6 +81,7 @@ void Shell::interactive() {
   printf("\n");
   printf("  \033[1;34m%s\033[0m - \033[1;36m%s\033[0m\n", "1", "start file system");
   printf("  \033[1;34m%s\033[0m - \033[1;36m%s\033[0m\n", "2", "parse scene file");
+  printf("  \033[1;34m%s\033[0m - \033[1;36m%s\033[0m\n", "3", "analyze GPU");
   printf("  \033[1;34m%s\033[0m - \033[1;36m%s\033[0m\n", "0", "exit program");
   printf("\n");
   printf("------------------------------------------------------------------------\n");
@@ -132,9 +133,6 @@ void Shell::interactiveFileSystem() {
     scanf("%ld", &blockCount);
     clearInputBuffer();
   }
-
-  // printf("enter block size: ");
-  // scanf("%ld", &blockSize);
 
   if (validFileSystem) {
     printf("\033[1;33m%s\033[0m\033[1;37m%s\033[0m", "using file system: ", pathBuffer);

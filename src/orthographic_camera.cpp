@@ -11,14 +11,14 @@ float OrthographicCamera::generateRay(CameraSample sample, Ray* ray) {
 
   *ray = Ray(cameraPosition, Vector4(0, 0, 1, 0));
 
-  // if (lensRadius > 0) {
-  //   Vector4 lensPosition = lensRadius * concentricSampleDisk(sample.lensPosition);
-  //   float ft = focalDistance / ray->d[2];
-  //   Vector4 focusPosition = (*ray)(ft);
+  if (lensRadius > 0) {
+    Vector4 lensPosition = concentricSampleDisk(Vector4(sample.lensPosition[0], sample.lensPosition[1], 0, 0)) * lensRadius;
+    float ft = focalDistance / ray->direction[2];
+    Vector4 focusPosition = (*ray)(ft);
 
-  //   ray->origin = Vector4(lensPosition[0], lensPosition[1], 0, 1);
-  //   ray->direction = normalize(focusPosition - ray->origin);
-  // }
+    ray->origin = Vector4(lensPosition[0], lensPosition[1], 0, 1);
+    ray->direction = normalize(focusPosition - ray->origin);
+  }
 
   ray->time = linearInterpolate(sample.time, shutterOpen, shutterClose);
   *ray = (*cameraToWorld)(*ray);

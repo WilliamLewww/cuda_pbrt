@@ -1,5 +1,6 @@
 #pragma once
 #include "projective_camera.h"
+#include "sampling.h"
 
 class OrthographicCamera : public ProjectiveCamera {
 private:
